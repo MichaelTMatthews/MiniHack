@@ -33,7 +33,7 @@ import os
 import numpy as np
 import multiprocessing as mp
 
-from nle.agent import polybeast_env, polybeast_learner
+from nle.agent.polybeast import polybeast_env, polybeast_learner
 
 import torch
 

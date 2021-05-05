@@ -18,7 +18,7 @@ from nle import nethack as nh
 
 from typing import NamedTuple, Union
 from collections import namedtuple
-from nle.agent.util.id_pairs import id_pairs_table
+from nle.agent.common.util.id_pairs import id_pairs_table
 import logging
 
 Ratio = Union[int, bool]

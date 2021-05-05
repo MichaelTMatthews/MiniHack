@@ -16,7 +16,6 @@ def _step_to_range(delta, num_steps):
     return delta * torch.arange(-num_steps // 2, num_steps // 2)
 
 
-@typechecked
 class Crop(nn.Module):
     """Helper class for NetHackNet below."""
 
@@ -72,7 +71,6 @@ class Crop(nn.Module):
         )
 
 
-@typechecked
 class NetHackNet(nn.Module):
     def __init__(
         self,
@@ -237,7 +235,7 @@ class NetHackNet(nn.Module):
 
 
 @typechecked
-class RLLibNLENetwork(TorchModelV2, nn.Module):
+class RLLibNLESmallNetwork(TorchModelV2, nn.Module):
     def __init__(
         self,
         observation_space: gym.spaces.Space,
@@ -270,4 +268,4 @@ class RLLibNLENetwork(TorchModelV2, nn.Module):
         return self.base(x["obs"]), None
 
 
-ModelCatalog.register_custom_model("rllib_nle_model", RLLibNLENetwork)
+ModelCatalog.register_custom_model("rllib_nle_model_small", RLLibNLESmallNetwork)
