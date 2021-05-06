@@ -2,7 +2,6 @@
 from gym.envs import registration
 
 from nle.env.base import NLE, DUNGEON_SHAPE
-from nle.env.mh_base import MiniHack
 
 registration.register(id="NetHack-v0", entry_point="nle.env.base:NLE")
 
@@ -28,30 +27,5 @@ registration.register(
     entry_point="nle.env.tasks:NetHackPickAndEat",
 )
 
-registration.register(
-    id="MiniHack-Empty-v0",
-    entry_point="nle.env.mh_tasks:MiniHackEmpty",
-)
-registration.register(
-    id="MiniHack-FourRooms-v0",
-    entry_point="nle.env.mh_tasks:MiniHackFourRooms",
-)
-registration.register(
-    id="MiniHack-Corridor-v0",
-    entry_point="nle.env.mh_tasks:MiniHackCorridor",
-)
-registration.register(
-    id="MiniHack-LavaCrossing-v0",
-    entry_point="nle.env.mh_tasks:MiniHackLavaCrossing",
-)
-registration.register(
-    id="MiniHack-SimpleCrossing-v0",
-    entry_point="nle.env.mh_tasks:MiniHackSimpleCrossing",
-)
-registration.register(
-    id="MiniHack-KeyDoor-v0",
-    entry_point="nle.env.mh_tasks:MiniHackKeyDoor",
-)
 
-
-__all__ = ["NLE", "DUNGEON_SHAPE", "MiniHack"]
+__all__ = ["NLE", "DUNGEON_SHAPE"]

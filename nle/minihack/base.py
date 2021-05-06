@@ -2,7 +2,7 @@
 
 from nle.env.base import FULL_ACTIONS, NLE_SPACE_ITEMS
 from nle.env.tasks import NetHackStaircase
-from nle import nethack
+from nle import nethack, _pynethack
 
 import pkg_resources
 import numpy as np
@@ -13,8 +13,39 @@ import gym
 PATH_DAT_DIR = os.path.join(os.path.dirname(os.path.realpath(__file__)), "dat")
 LIB_DIR = os.path.join(os.path.dirname(os.path.realpath(__file__)), "lib")
 PATCH_SCRIPT = os.path.join(
-    pkg_resources.resource_filename("nle", "scripts"), "mh_patch_nhdat.sh"
+    pkg_resources.resource_filename("nle", "minihack"),
+    "scripts",
+    "mh_patch_nhdat.sh",
 )
+MH_FULL_ACTIONS = list(FULL_ACTIONS)
+MH_FULL_ACTIONS.remove(nethack.MiscDirection.DOWN)
+MH_FULL_ACTIONS.remove(nethack.MiscDirection.UP)
+MH_FULL_ACTIONS = tuple(MH_FULL_ACTIONS)
+
+
+MINIHACK_SPACE_FUNCS = {
+    "glyphs_crop": lambda x, y: gym.spaces.Box(
+        low=0, high=nethack.MAX_GLYPH, shape=(x, y), dtype=np.uint16
+    ),
+    "chars_crop": lambda x, y: gym.spaces.Box(
+        low=0, high=255, shape=(x, y), dtype=np.uint8
+    ),
+    "colors_crop": lambda x, y: gym.spaces.Box(
+        low=0, high=15, shape=(x, y), dtype=np.uint8
+    ),
+    "tty_chars_crop": lambda x, y: gym.spaces.Box(
+        low=0, high=127, shape=(x, y), dtype=np.uint8
+    ),
+    "tty_colors_crop": lambda x, y: gym.spaces.Box(
+        low=0, high=127, shape=(x, y), dtype=np.uint8
+    ),
+    "screen_descriptions_crop": lambda x, y: gym.spaces.Box(
+        low=0,
+        high=127,
+        shape=(x, y, _pynethack.nethack.NLE_SCREEN_DESCRIPTION_LENGTH),
+        dtype=np.uint8,
+    ),
+}
 
 
 class MiniHack(NetHackStaircase):
@@ -42,11 +73,22 @@ class MiniHack(NetHackStaircase):
         - self.reset()
     """
 
-    def __init__(self, *args, des_file: str = None, **kwargs):
+    def __init__(
+        self,
+        *args,
+        des_file: str,
+        reward_win=1,
+        reward_lose=0,
+        obs_crop_h=5,
+        obs_crop_w=5,
+        obs_crop_pad=0,
+        **kwargs,
+    ):
         # No pet
         kwargs["options"] = kwargs.pop("options", list(nethack.NETHACKOPTIONS))
         # Actions space - move only
-        kwargs["actions"] = kwargs.pop("actions", FULL_ACTIONS)
+        kwargs["actions"] = kwargs.pop("actions", MH_FULL_ACTIONS)
+
         # Enter Wizard mode - turned off by default
         kwargs["wizard"] = kwargs.pop("wizard", False)
         # Allowing one-letter menu questions
@@ -62,18 +104,46 @@ class MiniHack(NetHackStaircase):
         self._minihack_obs_keys = kwargs.pop(
             "observation_keys", list(space_dict.keys())
         )
-        if des_file is None:
-            raise ValueError("Description file is not provided.")
 
         super().__init__(*args, **kwargs)
 
         # Patch the nhdat library by compling the given .des file
-        self._patch_nhdat(des_file)
+        self.update(des_file)
+
+        self.obs_crop_h = obs_crop_h
+        self.obs_crop_w = obs_crop_w
+        self.obs_crop_pad = obs_crop_pad
+
+        assert self.obs_crop_h % 2 == 1
+        assert self.obs_crop_w % 2 == 1
+
+        self.reward_win = reward_win
+        self.reward_lose = reward_lose
 
         self._scr_descr_index = self._observation_keys.index("screen_descriptions")
-        self.observation_space = gym.spaces.Dict(
-            {key: space_dict[key] for key in self._minihack_obs_keys}
-        )
+        self.observation_space = gym.spaces.Dict(self.get_obs_space_dict(space_dict))
+
+    def get_obs_space_dict(self, space_dict):
+        obs_space_dict = {}
+        for key in self._minihack_obs_keys:
+            if key in space_dict.keys():
+                obs_space_dict[key] = space_dict[key]
+            elif key in MINIHACK_SPACE_FUNCS.keys():
+                space_func = MINIHACK_SPACE_FUNCS[key]
+                obs_space_dict[key] = space_func(self.obs_crop_h, self.obs_crop_w)
+            else:
+                raise ValueError(f'Observation key "{key}" is not supported')
+
+        return obs_space_dict
+
+    def _reward_fn(self, last_response, response, end_status):
+        if end_status == self.StepStatus.TASK_SUCCESSFUL:
+            reward = self.reward_win
+        elif end_status == self.StepStatus.RUNNING:
+            reward = 0
+        else:  # death or aborted
+            reward = self.reward_lose
+        return reward + self._get_time_penalty(last_response, response)
 
     def update(self, des_file):
         """Update the current environment by replacing its description file """
@@ -85,45 +155,71 @@ class MiniHack(NetHackStaircase):
         hackdir directory of the environment.
         """
         if not des_file.endswith(".des"):
-            fname = "./mylevel.des"
+            fpath = os.path.join(self.env._vardir, "mylevel.des")
             # If the des-file is passed as a string
-            try:
-                with open(fname, "w") as f:
-                    f.writelines(des_file)
-                _ = subprocess.call(
-                    [PATCH_SCRIPT, self.env._vardir, nethack.HACKDIR, LIB_DIR]
+            with open(fpath, "w") as f:
+                f.writelines(des_file)
+            des_file = fpath
+
+        # Use the .des file if exists, otherwise search in minihack directory
+        des_path = os.path.abspath(des_file)
+        if not os.path.exists(des_path):
+            des_path = os.path.abspath(os.path.join(PATH_DAT_DIR, des_file))
+        if not os.path.exists(des_path):
+            print(
+                "{} file doesn't exist. Please provide a path to a valid .des \
+                    file".format(
+                    des_path
                 )
-            except subprocess.CalledProcessError as e:
-                print(e)
-            finally:
-                os.remove(fname)
-        else:
-            # Use the .des file if exists, otherwise search in minihack directory
-            des_path = os.path.abspath(des_file)
-            if not os.path.exists(des_path):
-                des_path = os.path.abspath(os.path.join(PATH_DAT_DIR, des_file))
-            if not os.path.exists(des_path):
-                print(
-                    "{} file doesn't exist. Please provide a path to a valid .des \
-                        file".format(
-                        des_path
-                    )
-                )
-            try:
-                _ = subprocess.call(
-                    [PATCH_SCRIPT, self.env._vardir, nethack.HACKDIR, LIB_DIR, des_path]
-                )
-            except subprocess.CalledProcessError as e:
-                print(e)
+            )
+        try:
+            _ = subprocess.call(
+                [
+                    PATCH_SCRIPT,
+                    self.env._vardir,
+                    nethack.HACKDIR,
+                    LIB_DIR,
+                    des_path,
+                ]
+            )
+        except subprocess.CalledProcessError as e:
+            raise RuntimeError(f"Couldn't patch the nhdat file.\n{e}")
 
     def _get_observation(self, observation):
         # Filter out observations that we don't need
         observation = super()._get_observation(observation)
-        return {
-            key: val
-            for key, val in observation.items()
-            if key in self._minihack_obs_keys
-        }
+        obs_dict = {}
+        for key in self._minihack_obs_keys:
+            if key in self._observation_keys:
+                obs_dict[key] = observation[key]
+            elif key in MINIHACK_SPACE_FUNCS.keys():
+                orig_key = key.replace("_crop", "")
+                if "tty" in orig_key:
+                    loc = observation["tty_cursor"][::-1]
+                else:
+                    loc = observation["blstats"][:2]
+                obs_dict[key] = self._crop_observation(observation[orig_key], loc)
+
+        return obs_dict
+
+    def _crop_observation(self, obs, loc):
+        dh = self.obs_crop_h // 2
+        dw = self.obs_crop_w // 2
+
+        (x, y) = loc
+        x += dw
+        y += dh
+
+        obs = np.pad(
+            obs,
+            pad_width=(dw, dh),
+            mode="constant",
+            constant_values=self.obs_crop_pad,
+        )
+        return obs[y - dh : y + dh + 1, x - dw : x + dw + 1]
+
+    def _no_rand_mon(self):
+        os.environ["NH_NO_RAND_MON"] = "1"
 
     def key_in_inventory(self, name):
         """Returns key of the object in the inventory.
@@ -207,3 +303,19 @@ class MiniHack(NetHackStaircase):
         symb_len = np.where(des_arr == 0)[0][0]
 
         return des_arr[:symb_len].tobytes().decode("utf-8")
+
+    def screen_contains(self, name, observation=None):
+        """Whether the given name is included in screen descriptions of
+        the observations.
+        """
+        if observation is None:
+            observation = self.last_observation
+
+        y, x = nethack.SCREEN_DESCRIPTIONS_SHAPE[0:2]
+        for j in range(y):
+            for i in range(x):
+                des_arr = observation[self._scr_descr_index][j, i]
+                symb_len = np.where(des_arr == 0)[0][0]
+                if name in des_arr[:symb_len].tobytes().decode("utf-8"):
+                    return True
+        return False
