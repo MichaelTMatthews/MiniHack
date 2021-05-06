@@ -76,6 +76,7 @@ class LevelGenerator:
         map=None,
         w=8,
         h=8,
+        fill=".",
         lit=True,
         message="Welcome to MiniHack!",
         flags=("hardfloor",),
@@ -93,19 +94,19 @@ GEOMETRY:center,center
 """
 
         self.mapify = lambda x: "MAP\n" + x + "ENDMAP\n"
-        self.init_map(map, w, h)
+        self.init_map(map, w, h, fill)
 
         litness = "lit" if lit else "unlit"
         self.footer = f'REGION:(0,0,{self.x},{self.y}),{litness},"ordinary"\n'
 
         self.stair_up_exist = False
 
-    def init_map(self, map=None, x=8, y=8):
+    def init_map(self, map=None, x=8, y=8, fill="."):
         if map is None:
             # Creating empty area
             self.x = x
             self.y = y
-            self.map = np.array([["."] * x] * y, dtype=str)
+            self.map = np.array([[fill] * x] * y, dtype=str)
         else:
             lines = [list(line) for line in map.split("\n") if len(line) > 0]
             self.y = len(lines)
@@ -203,6 +204,22 @@ GEOMETRY:center,center
             x, y = coord
             self.map[y, x] = flag
 
+    def fill_terrain(self, type, x1, y1, x2, y2, flag):
+        """Fill the areas between (x1, y1) and (x2, y2) with feature descibed
+        in flag as follows:
+
+        type:
+        - "rect" - An unfilled rectangle, containing just the edges and none
+            of the interior points.
+        - "fillrect" - A filled rectangle containing the edges and all of the
+            interior points.
+        - "line" - A straight line drawn from one pair of coordinates to the
+            other using Bresenham's line algorithm.
+        """
+        assert type in ("rect", "fillrect", "line")
+        assert flag in MAP_CHARS
+        self.footer += f"TERRAIN:{type} ({x1},{y1},{x2},{y2}),'{flag}'\n"
+
     def add_stair_down(self, place="random"):
         place = self.validate_place(place)
         self.footer += f"STAIR:{place},down\n"
@@ -211,7 +228,7 @@ GEOMETRY:center,center
         if self.stair_up_exist:
             return
         x, y = self.validate_coord(coord)
-        _x, _y = abs(x - 1), abs(y - 1)
+        _x, _y = abs(x - 1), abs(y - 1)  # any different coordinate than (x,y)
         self.footer += f"BRANCH:({x},{y},{x},{y}),({_x},{_y},{_x},{_y})\n"
         self.stair_up_exist = True
 
@@ -245,6 +262,14 @@ GEOMETRY:center,center
 
     def wallify(self):
         self.footer += "WALLIFY\n"
+
+    def add_mazewalk(self, coord=None, dir="east"):
+        if coord is not None:
+            x, y = self.validate_coord(coord)
+        else:
+            x, y = self.x // 2, self.y // 2
+
+        self.footer += f"MAZEWALK:({x},{y}),{dir}\n"
 
 
 class KeyRoomGenerator:

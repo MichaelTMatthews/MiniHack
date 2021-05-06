@@ -2,7 +2,6 @@
 
 from nle.minihack import MiniHack
 from nle import nethack
-from gym.envs import registration
 
 
 MOVE_ACTIONS = tuple(nethack.CompassDirection)
@@ -37,18 +36,3 @@ class MiniHackNavigation(MiniHack):
         self._no_rand_mon()
 
         super().__init__(*args, des_file=des_file, **kwargs)
-
-
-class MiniHackMazeWalk(MiniHackNavigation):
-    """Environment for "mazewalk" task."""
-
-    def __init__(self, *args, **kwargs):
-        kwargs["max_episode_steps"] = kwargs.pop("max_episode_steps", 1000)
-        self._no_rand_mon()
-        super().__init__(*args, des_file="mazewalk.des", **kwargs)
-
-
-registration.register(
-    id="MiniHack-MazeWalk-v0",
-    entry_point="nle.minihack.navigation:MiniHackMazeWalk",
-)
