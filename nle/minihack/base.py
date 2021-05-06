@@ -17,6 +17,11 @@ PATCH_SCRIPT = os.path.join(
     "scripts",
     "mh_patch_nhdat.sh",
 )
+MH_FULL_ACTIONS = list(FULL_ACTIONS)
+MH_FULL_ACTIONS.remove(nethack.MiscDirection.DOWN)
+MH_FULL_ACTIONS.remove(nethack.MiscDirection.UP)
+MH_FULL_ACTIONS = tuple(MH_FULL_ACTIONS)
+
 
 MINIHACK_SPACE_FUNCS = {
     "glyphs_crop": lambda x, y: gym.spaces.Box(
@@ -82,7 +87,8 @@ class MiniHack(NetHackStaircase):
         # No pet
         kwargs["options"] = kwargs.pop("options", list(nethack.NETHACKOPTIONS))
         # Actions space - move only
-        kwargs["actions"] = kwargs.pop("actions", FULL_ACTIONS)
+        kwargs["actions"] = kwargs.pop("actions", MH_FULL_ACTIONS)
+
         # Enter Wizard mode - turned off by default
         kwargs["wizard"] = kwargs.pop("wizard", False)
         # Allowing one-letter menu questions
