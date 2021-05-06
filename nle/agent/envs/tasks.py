@@ -2,6 +2,7 @@ from nle.env import tasks as nle_tasks
 from nle.minihack.envs import room
 from nle.minihack.envs import corridor
 from nle.minihack.envs import keyroom
+from nle.minihack.envs import mazewalk
 
 
 ENVS = dict(
@@ -36,4 +37,11 @@ ENVS = dict(
     keyroom_small_dark=keyroom.MiniHackKeyRoom5x5Dark,
     keyroom_big=keyroom.MiniHackKeyRoom15x15,
     keyroom_big_dark=keyroom.MiniHackKeyRoom15x15Dark,
+    # MiniHack MazeWalk
+    mazewalk_small=mazewalk.MiniHackMazeWalk9x9,
+    mazewalk_small_mapped=mazewalk.MiniHackMazeWalk9x9Premapped,
+    mazewalk_big=mazewalk.MiniHackMazeWalk15x15,
+    mazewalk_big_mapped=mazewalk.MiniHackMazeWalk15x15Premapped,
+    mazewalk_huge=mazewalk.MiniHackMazeWalkMax,
+    mazewalk_huge_mapped=mazewalk.MiniHackMazeWalkMaxPremapped,
 )
