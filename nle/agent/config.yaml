@@ -111,7 +111,7 @@ momentum: 0        # keep at 0
 epsilon: 0.000001  # do not use 0.01, 1e-6 seems same as 1e-8
 
 # Experimental settings.
-state_counter: coordinates         # none, coordinates
+state_counter: none        # none, coordinates
 no_extrinsic: false        # ignore extrinsic reward
 
 int:                       # intrinsic reward options
