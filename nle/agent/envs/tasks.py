@@ -31,6 +31,7 @@ ENVS = dict(
     corridor8=corridor.MiniHackCorridor8,
     corridor10=corridor.MiniHackCorridor10,
     # MiniHack KeyRoom
+    keyroom_small_fixed=keyroom.MiniHackKeyRoom5x5Fixed,
     keyroom_small=keyroom.MiniHackKeyRoom5x5,
     keyroom_small_dark=keyroom.MiniHackKeyRoom5x5Dark,
     keyroom_big=keyroom.MiniHackKeyRoom15x15,

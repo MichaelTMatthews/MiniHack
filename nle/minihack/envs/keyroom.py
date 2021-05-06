@@ -54,6 +54,11 @@ class MiniHackKeyRoom(MiniHackKeyDoor):
         super().__init__(*args, des_file=des_file, **kwargs)
 
 
+class MiniHackKeyRoom5x5Fixed(MiniHackKeyDoor):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, des_file="key_and_door.des", **kwargs)
+
+
 class MiniHackKeyRoom5x5(MiniHackKeyRoom):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, room_size=5, subroom_size=2, lit=True, **kwargs)
@@ -76,7 +81,10 @@ class MiniHackKeyRoom15x15Dark(MiniHackKeyRoom):
         super().__init__(*args, room_size=15, subroom_size=5, lit=False, **kwargs)
 
 
-# KeyRoom
+registration.register(
+    id="MiniHack-KeyRoom-Fixed-S5-v0",
+    entry_point="nle.minihack.envs.keyroom:MiniHackKeyRoom5x5Fixed",
+)
 registration.register(
     id="MiniHack-KeyRoom-S5-v0",
     entry_point="nle.minihack.envs.keyroom:MiniHackKeyRoom5x5",
