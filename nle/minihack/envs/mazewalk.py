@@ -32,11 +32,13 @@ class MiniHackMazeWalk(MiniHackNavigation):
 
 class MiniHackMazeWalk9x9(MiniHackMazeWalk):
     def __init__(self, *args, **kwargs):
+        kwargs["max_episode_steps"] = kwargs.pop("max_episode_steps", 200)
         super().__init__(*args, w=9, h=9, premapped=False, **kwargs)
 
 
 class MiniHackMazeWalk9x9Premapped(MiniHackMazeWalk):
     def __init__(self, *args, **kwargs):
+        kwargs["max_episode_steps"] = kwargs.pop("max_episode_steps", 200)
         super().__init__(*args, w=9, h=9, premapped=True, **kwargs)
 
 
@@ -59,7 +61,6 @@ class MiniHackMazeWalkMax(MiniHackMazeWalk):
 
 class MiniHackMazeWalkMaxPremapped(MiniHackMazeWalk):
     def __init__(self, *args, **kwargs):
-        kwargs["max_episode_steps"] = kwargs.pop("max_episode_steps", 1000)
         super().__init__(
             *args, w=DUNGEON_SHAPE[0], h=DUNGEON_SHAPE[1], premapped=True, **kwargs
         )
