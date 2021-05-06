@@ -205,5 +205,6 @@ nle/version.py
 nle_data/
 nle/fbs/
 nle/nethackdir
+.boxoban_levels
 outputs/
 latest
