@@ -31,7 +31,9 @@ class MiniHackNavigation(MiniHack):
         # Override episode limit
         kwargs["max_episode_steps"] = kwargs.pop("max_episode_steps", 100)
         # Restrict the observation space to chars only
-        kwargs["observation_keys"] = kwargs.pop("observation_keys", ["chars_crop"])
+        kwargs["observation_keys"] = kwargs.pop(
+            "observation_keys", ["chars_crop", "colors_crop"]
+        )
         # No random monster generation after every timestep
         self._no_rand_mon()
 
