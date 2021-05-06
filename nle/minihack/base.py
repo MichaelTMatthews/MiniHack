@@ -97,10 +97,7 @@ class MiniHack(NetHackStaircase):
         kwargs["max_episode_steps"] = kwargs.pop("max_episode_steps", 200)
         # Using all NLE observations by default
         space_dict = dict(NLE_SPACE_ITEMS)
-        # Not currently passing the observation keys to the base class
-        # because they are used in render(), which is used when developing
-        # new environments. Instead, we filter the observations in the
-        # _get_observation() method we override.
+        # MiniHack's observation keys are kept separate
         self._minihack_obs_keys = kwargs.pop(
             "observation_keys", list(space_dict.keys())
         )
