@@ -3,6 +3,7 @@ from nle.minihack.envs import room
 from nle.minihack.envs import corridor
 from nle.minihack.envs import keyroom
 from nle.minihack.envs import mazewalk
+from nle.minihack.envs import minigrid
 
 
 ENVS = dict(
@@ -44,4 +45,20 @@ ENVS = dict(
     mazewalk_big_mapped=mazewalk.MiniHackMazeWalk15x15Premapped,
     mazewalk_huge=mazewalk.MiniHackMazeWalkMax,
     mazewalk_huge_mapped=mazewalk.MiniHackMazeWalkMaxPremapped,
+    # MiniHack MultiRooms
+    multiroom_2=minigrid.MiniHackMultiRoomN2,
+    multiroom_4=minigrid.MiniHackMultiRoomN4,
+    multiroom_6=minigrid.MiniHackMultiRoomN6,
+    multiroom_2_locked=minigrid.MiniHackMultiRoomN2Locked,
+    multiroom_4_locked=minigrid.MiniHackMultiRoomN4Locked,
+    multiroom_6_locked=minigrid.MiniHackMultiRoomN6Locked,
+    multiroom_2_trap=minigrid.MiniHackMultiRoomN2Trap,
+    multiroom_4_trap=minigrid.MiniHackMultiRoomN4Trap,
+    multiroom_6_trap=minigrid.MiniHackMultiRoomN6Trap,
+    multiroom_2_monster=minigrid.MiniHackMultiRoomN2Monster,
+    multiroom_4_monster=minigrid.MiniHackMultiRoomN4Monster,
+    multiroom_6_monster=minigrid.MiniHackMultiRoomN6Monster,
+    multiroom_2_extreme=minigrid.MiniHackMultiRoomN2Extreme,
+    multiroom_4_extreme=minigrid.MiniHackMultiRoomN4Extreme,
+    multiroom_6_extreme=minigrid.MiniHackMultiRoomN6Extreme,
 )
