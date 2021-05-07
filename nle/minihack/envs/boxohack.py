@@ -66,7 +66,7 @@ class BoxoHack(MiniHackNavigation):
         flags = kwargs.get("flags", [])
         flags.append("noteleport")
         flags.append("premapped")
-        lvl_gen = LevelGenerator(map=map, lit=True, flags=flags, solidfill="#")
+        lvl_gen = LevelGenerator(map=map, lit=True, flags=flags, solidfill=" ")
         for b in info["boulders"]:
             lvl_gen.add_boulder(b)
         for f in info["fountains"]:
@@ -77,10 +77,8 @@ class BoxoHack(MiniHackNavigation):
 
     def get_env_map(self, level):
         info = {"fountains": [], "boulders": []}
-        level[0] = "-" * len(level[0])
-        level[-1] = "-" * len(level[0])
-        for row in range(1, len(level) - 1):
-            level[row] = f"|{level[row][1:-1]}|"
+        level = level[:-1]
+        for row in range(0, len(level)):
             for col in range(len(level[row])):
                 if level[row][col] == "$":
                     info["boulders"].append((col, row))
@@ -91,7 +89,7 @@ class BoxoHack(MiniHackNavigation):
                 level[row] = level[row].replace("@", ".")
                 info["player"] = (py, row)
             level[row] = level[row].replace(" ", ".")
-            level[row] = level[row].replace("#", " ")
+            level[row] = level[row].replace("#", "F")
             level[row] = level[row].replace("$", ".")
         return "\n".join(level), info
 
