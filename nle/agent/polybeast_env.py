@@ -97,7 +97,6 @@ def create_env(flags, env_id=0, lock=threading.Lock()):
             savedir=None,
             archivefile=None,
             character=flags.character,
-            max_episode_steps=flags.max_num_steps,
             observation_keys=(
                 "glyphs",
                 "chars",
@@ -110,9 +109,10 @@ def create_env(flags, env_id=0, lock=threading.Lock()):
             penalty_time=flags.penalty_time,
             penalty_mode=flags.fn_penalty_step,
         )
-        if flags.env in ("staircase", "pet", "oracle") or any(
-            name in flags.env for name in ("room", "corridor", "keyroom")
-        ):  # TODO MIKA FIX
+        if not tasks.is_env_minihack(env_class):
+            kwargs.update(max_episode_steps=flags.max_num_steps)
+
+        if flags.env in ("staircase", "pet", "oracle"):
             kwargs.update(reward_win=flags.reward_win, reward_lose=flags.reward_lose)
         elif env_id == 0:  # print warning once
             print("Ignoring flags.reward_win and flags.reward_lose")

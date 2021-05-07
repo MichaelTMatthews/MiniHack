@@ -1,4 +1,5 @@
 from nle.env import tasks as nle_tasks
+from nle.minihack import MiniHack
 from nle.minihack.envs import room
 from nle.minihack.envs import corridor
 from nle.minihack.envs import keyroom
@@ -62,3 +63,7 @@ ENVS = dict(
     multiroom_4_extreme=minigrid.MiniHackMultiRoomN4Extreme,
     multiroom_6_extreme=minigrid.MiniHackMultiRoomN6Extreme,
 )
+
+
+def is_env_minihack(env_cls):
+    return issubclass(env_cls, MiniHack)
