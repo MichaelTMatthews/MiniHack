@@ -60,7 +60,9 @@ class BoxoHack(MiniHackNavigation):
 
         level = random.choice(self._levels)
         level = level.split("\n")
+
         map, info = self.get_env_map(level)
+
         flags = kwargs.get("flags", [])
         flags.append("noteleport")
         flags.append("premapped")
@@ -70,12 +72,13 @@ class BoxoHack(MiniHackNavigation):
         for f in info["fountains"]:
             lvl_gen.add_fountain(f)
         lvl_gen.add_stair_up(info["player"])
+
         super().__init__(*args, des_file=lvl_gen.get_des(), **kwargs)
 
     def get_env_map(self, level):
         info = {"fountains": [], "boulders": []}
         level[0] = "-" * len(level[0])
-        level[-1] = "-" * len(level[-1])
+        level[-1] = "-" * len(level[0])
         for row in range(1, len(level) - 1):
             level[row] = f"|{level[row][1:-1]}|"
             for col in range(len(level[row])):
