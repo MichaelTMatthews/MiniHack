@@ -221,9 +221,15 @@ GEOMETRY:center,center
         assert flag in MAP_CHARS
         self.footer += f"TERRAIN:{type} ({x1},{y1},{x2},{y2}),'{flag}'\n"
 
+    def add_goal_pos(self, place="random"):
+        self.add_stair_down(place)
+
     def add_stair_down(self, place="random"):
         place = self.validate_place(place)
         self.footer += f"STAIR:{place},down\n"
+
+    def set_start_pos(self, coord):
+        self.add_stair_up(coord)
 
     def add_stair_up(self, coord):
         if self.stair_up_exist:

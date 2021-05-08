@@ -239,7 +239,6 @@ registration.register(
 class MiniHackMultiRoomN2Extreme(MiniGridHack):
     def __init__(self, *args, **kwargs):
         kwargs["max_episode_steps"] = kwargs.pop("max_episode_steps", 160)
-        kwargs["num_trap"] = 2
         kwargs["num_mon"] = 2
         kwargs["door_state"] = "locked"
         super().__init__(*args, env_name="MiniGrid-MultiRoom-N2-S4-v0", **kwargs)
@@ -248,7 +247,6 @@ class MiniHackMultiRoomN2Extreme(MiniGridHack):
 class MiniHackMultiRoomN4Extreme(MiniGridHack):
     def __init__(self, *args, **kwargs):
         kwargs["max_episode_steps"] = kwargs.pop("max_episode_steps", 320)
-        kwargs["num_trap"] = 4
         kwargs["num_mon"] = 4
         kwargs["door_state"] = "locked"
         super().__init__(*args, env_name="MiniGrid-MultiRoom-N4-S5-v0", **kwargs)
@@ -257,7 +255,6 @@ class MiniHackMultiRoomN4Extreme(MiniGridHack):
 class MiniHackMultiRoomN6Extreme(MiniGridHack):
     def __init__(self, *args, **kwargs):
         kwargs["max_episode_steps"] = kwargs.pop("max_episode_steps", 480)
-        kwargs["num_trap"] = 6
         kwargs["num_mon"] = 6
         kwargs["door_state"] = "locked"
         super().__init__(*args, env_name="MiniGrid-MultiRoom-N6-v0", **kwargs)
