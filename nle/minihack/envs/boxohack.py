@@ -1,7 +1,7 @@
 # Copyright (c) Facebook, Inc. and its affiliates.
 import os
 import random
-
+import numpy as np
 from nle.minihack import MiniHackNavigation, LevelGenerator
 
 from gym.envs import registration
@@ -96,14 +96,24 @@ class BoxoHack(MiniHackNavigation):
 
     def reset(self):
         self.update(self.get_lvl_gen().get_des())
+        self._goal_pos_set = None
         return super().reset()
 
     def _is_episode_end(self, observation):
         # If no goals in the observation, all of them are covered with boulders.
+        char_obs = observation[self._original_observation_keys.index("chars")]
+        if self._goal_pos_set is None:
+            self._goal_pos_set = set(
+                (x, y) for x, y in zip(*np.where(char_obs == ord("{")))
+            )
         if (
             ord("{")  # use fountain as a goal for boulders
             not in observation[self._original_observation_keys.index("chars")]
+        ) and self._goal_pos_set == set(
+            (x, y) for x, y in zip(*np.where(char_obs == ord("`")))
         ):
+            # we need to check for goal pos because we might stand on the last fountain
+            # without a boulder and hide it from the observation
             return self.StepStatus.TASK_SUCCESSFUL
         else:
             return self.StepStatus.RUNNING
