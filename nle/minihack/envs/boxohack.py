@@ -56,24 +56,10 @@ class BoxoHack(MiniHackNavigation):
         if not os.path.exists(cur_levels_path):
             download_boxoban_levels()
 
+        self._flags = tuple(kwargs.get("flags", []))
         self._levels = load_boxoban_levels(cur_levels_path)
 
-        level = random.choice(self._levels)
-        level = level.split("\n")
-
-        map, info = self.get_env_map(level)
-
-        flags = kwargs.get("flags", [])
-        flags.append("noteleport")
-        flags.append("premapped")
-        lvl_gen = LevelGenerator(map=map, lit=True, flags=flags, solidfill=" ")
-        for b in info["boulders"]:
-            lvl_gen.add_boulder(b)
-        for f in info["fountains"]:
-            lvl_gen.add_fountain(f)
-        lvl_gen.add_stair_up(info["player"])
-
-        super().__init__(*args, des_file=lvl_gen.get_des(), **kwargs)
+        super().__init__(*args, des_file=self.get_lvl_gen().get_des(), **kwargs)
 
     def get_env_map(self, level):
         info = {"fountains": [], "boulders": []}
@@ -92,6 +78,25 @@ class BoxoHack(MiniHackNavigation):
             level[row] = level[row].replace("#", "F")
             level[row] = level[row].replace("$", ".")
         return "\n".join(level), info
+
+    def get_lvl_gen(self):
+        level = random.choice(self._levels)
+        level = level.split("\n")
+        map, info = self.get_env_map(level)
+        flags = list(self._flags)
+        flags.append("noteleport")
+        flags.append("premapped")
+        lvl_gen = LevelGenerator(map=map, lit=True, flags=flags, solidfill=" ")
+        for b in info["boulders"]:
+            lvl_gen.add_boulder(b)
+        for f in info["fountains"]:
+            lvl_gen.add_fountain(f)
+        lvl_gen.add_stair_up(info["player"])
+        return lvl_gen
+
+    def reset(self):
+        self.update(self.get_lvl_gen().get_des())
+        return super().reset()
 
     def _is_episode_end(self, observation):
         # If no goals in the observation, all of them are covered with boulders.
