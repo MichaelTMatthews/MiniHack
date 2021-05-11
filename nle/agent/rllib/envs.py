@@ -6,9 +6,7 @@ import nle  # noqa: F401
 import numpy as np
 from ray.tune.registry import register_env
 
-
-def create_env(name, observation_keys, *args, **kwargs):
-    return gym.make(name, observation_keys=observation_keys, *args, **kwargs)
+from nle.agent.common.envs.tasks import create_env
 
 
 class RLLibNLEEnv(gym.Env):
@@ -16,11 +14,9 @@ class RLLibNLEEnv(gym.Env):
         # We sort the observation keys so we can create the OrderedDict output
         # in a consistent order
         self._observation_keys = sorted(
-            env_config.pop("observation_keys", ("blstats", "glyphs"))
+            env_config.get("observation_keys", ("blstats", "glyphs"))
         )
-        self.gym_env = create_env(
-            env_config.pop("env"), observation_keys=self._observation_keys, **env_config
-        )
+        self.gym_env = create_env(env_config["flags"])
 
     @property
     def action_space(self) -> gym.Space:
@@ -43,10 +39,10 @@ class RLLibNLEEnv(gym.Env):
         return self._process_obs(obs), reward, done, info
 
     def render(self):
-        return self.env.render()
+        return self.gym_env.render()
 
     def close(self):
-        return self.env.close()
+        return self.gym_env.close()
 
 
 register_env("rllib_nle_env", RLLibNLEEnv)

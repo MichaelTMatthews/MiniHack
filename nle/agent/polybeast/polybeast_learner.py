@@ -29,11 +29,11 @@ import wandb
 
 import nest
 import torch
-from nle.agent.core import file_writer
-from nle.agent.core import vtrace
-from nle.agent.models import create_model, losses
-from nle.agent.models.base import NetHackNet
-from nle.agent.models.intrinsic import IntrinsicRewardNet
+from nle.agent.polybeast.core import file_writer
+from nle.agent.polybeast.core import vtrace
+from nle.agent.polybeast.models import create_model, losses
+from nle.agent.polybeast.models.base import NetHackNet
+from nle.agent.polybeast.models.intrinsic import IntrinsicRewardNet
 import libtorchbeast
 from torch import nn
 from torch.nn import functional as F

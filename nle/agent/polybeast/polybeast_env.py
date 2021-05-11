@@ -16,12 +16,9 @@ import argparse
 import multiprocessing as mp
 import logging
 import os
-import threading
 import time
 
-from nle.agent.envs import tasks
-
-from nle.agent.envs.wrapper import CounterWrapper
+from nle.agent.common.envs import create_env
 import libtorchbeast
 
 
@@ -87,45 +84,6 @@ def create_folders(flags):
         os.makedirs(logdir, exist_ok=True)
     else:
         logging.info("Found archive directory: %s" % logdir)
-
-
-def create_env(flags, env_id=0, lock=threading.Lock()):
-    # Create environment instances for actors
-    with lock:
-        env_class = tasks.ENVS[flags.env]
-        kwargs = dict(
-            savedir=None,
-            archivefile=None,
-            character=flags.character,
-            observation_keys=(
-                "glyphs",
-                "chars",
-                "colors",
-                "specials",
-                "blstats",
-                "message",
-            ),
-            penalty_step=flags.penalty_step,
-            penalty_time=flags.penalty_time,
-            penalty_mode=flags.fn_penalty_step,
-        )
-        if not tasks.is_env_minihack(env_class):
-            kwargs.update(max_episode_steps=flags.max_num_steps)
-
-        if flags.env in ("staircase", "pet", "oracle"):
-            kwargs.update(reward_win=flags.reward_win, reward_lose=flags.reward_lose)
-        elif env_id == 0:  # print warning once
-            print("Ignoring flags.reward_win and flags.reward_lose")
-
-        env = env_class(**kwargs)
-
-        if flags.state_counter != "none":
-            env = CounterWrapper(env, flags.state_counter)
-
-        if flags.seedspath is not None and len(flags.seedspath) > 0:
-            raise NotImplementedError("seedspath > 0 not implemented yet.")
-
-        return env
 
 
 def serve(flags, server_address, env_id):

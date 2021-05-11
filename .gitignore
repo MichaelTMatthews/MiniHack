@@ -208,3 +208,7 @@ nle/nethackdir
 .boxoban_levels
 outputs/
 latest
+
+Session.vim
+
+outputs

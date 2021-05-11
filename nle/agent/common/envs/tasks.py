@@ -1,10 +1,9 @@
+import threading
+
 from nle.env import tasks as nle_tasks
 from nle.minihack import MiniHack
-from nle.minihack.envs import room
-from nle.minihack.envs import corridor
-from nle.minihack.envs import keyroom
-from nle.minihack.envs import mazewalk
-from nle.minihack.envs import minigrid
+from nle.minihack.envs import corridor, keyroom, mazewalk, minigrid, room
+from nle.agent.common.envs.wrapper import CounterWrapper
 
 
 ENVS = dict(
@@ -67,3 +66,32 @@ ENVS = dict(
 
 def is_env_minihack(env_cls):
     return issubclass(env_cls, MiniHack)
+
+
+def create_env(flags, env_id=0, lock=threading.Lock()):
+    # Create environment instances for actors
+    with lock:
+        env_class = ENVS[flags.env]
+        kwargs = dict(
+            savedir=None,
+            archivefile=None,
+            character=flags.character,
+            observation_keys=flags.obs_keys.split(","),
+            penalty_step=flags.penalty_step,
+            penalty_time=flags.penalty_time,
+            penalty_mode=flags.fn_penalty_step,
+        )
+        if not is_env_minihack(env_class):
+            kwargs.update(max_episode_steps=flags.max_num_steps)
+        if flags.env in ("staircase", "pet", "oracle"):
+            kwargs.update(reward_win=flags.reward_win, reward_lose=flags.reward_lose)
+        elif env_id == 0:
+            # print("Ignoring flags.reward_win and flags.reward_lose")
+            pass
+        env = env_class(**kwargs)
+        if flags.state_counter != "none":
+            env = CounterWrapper(env, flags.state_counter)
+        if flags.seedspath is not None and len(flags.seedspath) > 0:
+            raise NotImplementedError("seedspath > 0 not implemented yet.")
+
+        return env
