@@ -44,8 +44,8 @@ def download_boxoban_levels():
 class BoxoHack(MiniHackNavigation):
     def __init__(self, *args, max_episode_steps=1000, **kwargs):
 
-        level_set = kwargs.get("level_set", "unfiltered")
-        level_mode = kwargs.get("level_mode", "train")
+        level_set = kwargs.pop("level_set", "unfiltered")
+        level_mode = kwargs.pop("level_mode", "train")
 
         if not os.path.exists(LEVELS_PATH):
             os.mkdir(LEVELS_PATH)
@@ -56,7 +56,7 @@ class BoxoHack(MiniHackNavigation):
         if not os.path.exists(cur_levels_path):
             download_boxoban_levels()
 
-        self._flags = tuple(kwargs.get("flags", []))
+        self._flags = tuple(kwargs.pop("flags", []))
         self._levels = load_boxoban_levels(cur_levels_path)
 
         super().__init__(*args, des_file=self.get_lvl_gen().get_des(), **kwargs)
@@ -119,6 +119,26 @@ class BoxoHack(MiniHackNavigation):
             return self.StepStatus.RUNNING
 
 
+class MiniHackBoxobanMedium(BoxoHack):
+    def __init__(self, *args, **kwargs):
+        kwargs["level_set"] = "medium"
+        kwargs["level_mode"] = "train"
+        super().__init__(*args, **kwargs)
+
+
+class MiniHackBoxobanHard(BoxoHack):
+    def __init__(self, *args, **kwargs):
+        kwargs["level_set"] = "hard"
+        kwargs["level_mode"] = ""
+        super().__init__(*args, **kwargs)
+
+
 registration.register(
-    id="MiniHack-Boxoban-v0", entry_point="nle.minihack.envs.boxohack:BoxoHack"
+    id="MiniHack-Boxoban-Medium-v0",
+    entry_point="nle.minihack.envs.boxohack:MiniHackBoxobanMedium",
+)
+
+registration.register(
+    id="MiniHack-Boxoban-Hard-v0",
+    entry_point="nle.minihack.envs.boxohack:MiniHackBoxobanHard",
 )
