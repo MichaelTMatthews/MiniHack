@@ -2,7 +2,7 @@ import threading
 
 from nle.env import tasks as nle_tasks
 from nle.minihack import MiniHack
-from nle.minihack.envs import corridor, keyroom, mazewalk, minigrid, room
+from nle.minihack.envs import corridor, keyroom, mazewalk, minigrid, room, boxohack
 from nle.agent.common.envs.wrapper import CounterWrapper
 
 
@@ -61,6 +61,9 @@ ENVS = dict(
     multiroom_2_extreme=minigrid.MiniHackMultiRoomN2Extreme,
     multiroom_4_extreme=minigrid.MiniHackMultiRoomN4Extreme,
     multiroom_6_extreme=minigrid.MiniHackMultiRoomN6Extreme,
+    # MiniHack Boxoban
+    boxoban_hard=boxohack.MiniHackBoxobanHard,
+    boxoban_medium=boxohack.MiniHackBoxobanMedium,
 )
 
 
