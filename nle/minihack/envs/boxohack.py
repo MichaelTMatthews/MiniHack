@@ -3,12 +3,11 @@ import os
 import random
 import numpy as np
 from nle.minihack import MiniHackNavigation, LevelGenerator
-
 from gym.envs import registration
+import pkg_resources
 
-LEVELS_PATH = ".boxoban_levels/"
-BOXOBAN_REPO_URL = (
-    "https://github.com/deepmind/boxoban-levels/archive/refs/heads/master.zip"
+LEVELS_PATH = os.path.join(
+    pkg_resources.resource_filename("nle", "minihack/dat"), "boxoban-levels-master"
 )
 
 
@@ -29,32 +28,13 @@ def load_boxoban_levels(cur_levels_path):
     return levels
 
 
-def download_boxoban_levels():
-    print("Boxoban levels file not found. Downloading...")
-    os.system(
-        f"wget -c --read-timeout=5 --tries=0 " f'"{BOXOBAN_REPO_URL}" -P {LEVELS_PATH}'
-    )
-    print("Boxoban levels downloaded, unpacking...")
-    import zipfile
-
-    with zipfile.ZipFile(os.path.join(LEVELS_PATH, "master.zip"), "r") as zip_ref:
-        zip_ref.extractall(LEVELS_PATH)
-
-
 class BoxoHack(MiniHackNavigation):
     def __init__(self, *args, max_episode_steps=1000, **kwargs):
 
         level_set = kwargs.pop("level_set", "unfiltered")
         level_mode = kwargs.pop("level_mode", "train")
 
-        if not os.path.exists(LEVELS_PATH):
-            os.mkdir(LEVELS_PATH)
-        cur_levels_path = os.path.join(
-            LEVELS_PATH, "boxoban-levels-master", level_set, level_mode
-        )
-
-        if not os.path.exists(cur_levels_path):
-            download_boxoban_levels()
+        cur_levels_path = os.path.join(LEVELS_PATH, level_set, level_mode)
 
         self._flags = tuple(kwargs.pop("flags", []))
         self._levels = load_boxoban_levels(cur_levels_path)
