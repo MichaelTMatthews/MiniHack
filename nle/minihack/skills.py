@@ -1,6 +1,5 @@
 # Copyright (c) Facebook, Inc. and its affiliates.
-from nle.minihack import MiniHack, LevelGenerator, GoalGenerator
-from nle.minihack.goal_generator import GoalEvent
+from nle.minihack import MiniHack, LevelGenerator, RewardManager
 from nle.nethack import CompassDirection
 from gym.envs import registration
 import numpy as np
@@ -15,19 +14,16 @@ class MiniHackSkillEnv(MiniHack):
         self,
         *args,
         des_file,
-        goals=None,
+        reward_manager=None,
         **kwargs,
     ):
-        """If goal_msgs == None, the goal is to reach the staircase."""
+        """If reward_manager == None, the goal is to reach the staircase."""
         kwargs["options"] = kwargs.pop("options", [])
         kwargs["options"].append("pettype:none")
         kwargs["options"].append("!autopickup")
         kwargs["character"] = kwargs.pop("charachter", "cav-hum-new-mal")
         kwargs["max_episode_steps"] = kwargs.pop("max_episode_steps", 100)
         self._no_rand_mon()
-
-        self.goals_orig = goals
-        self._init_goals()
 
         default_keys = [
             "chars_crop",
@@ -39,84 +35,9 @@ class MiniHackSkillEnv(MiniHack):
         ]
 
         kwargs["observation_keys"] = kwargs.pop("observation_keys", default_keys)
-        super().__init__(*args, des_file=des_file, **kwargs)
-
-    def _init_goals(self):
-        if self.goals_orig is None:
-            self.is_navigation_task = True
-            self.goals_achieved = [False]
-            self.goals = None
-        else:
-            self.goals = list(self.goals_orig)
-            self.is_navigation_task = False
-            self.goals_achieved = [False] * len(self.goals)
-
-            self.loc_action_goals = []
-            for i, (goal_type, goal) in enumerate(self.goals):
-                if goal_type == GoalEvent.LOC_ACTION:
-                    goal.index = i
-                    self.loc_action_goals.append(goal)  # index, status
-
-    def reset(self, *args, **kwargs):
-        self._init_goals()
-        return super().reset(*args, **kwargs)
-
-    def step(self, action: int):
-        if self.goals is not None:
-            for goal in self.loc_action_goals:
-                if self._actions[action] == goal.action and self._standing_on_top(
-                    goal.loc
-                ):
-                    goal.status = True
-                elif self._actions[action] == Y_cmd and goal.status:
-                    self.goals_achieved[goal.index] = True
-                else:
-                    goal.status = False
-
-        obs, reward, done, info = super().step(action)
-        return obs, reward, done, info
-
-    def _is_episode_end(self, observation):
-        # IF the goal is to reach the staircase
-        if self.is_navigation_task:
-            internal = observation[self._internal_index]
-            stairs_down = internal[4]
-            if stairs_down:
-                return self.StepStatus.TASK_SUCCESSFUL
-            return self.StepStatus.RUNNING
-
-        # Else, iterator through goals
-        for i, (goal_type, details) in enumerate(self.goals):
-            if self.goals_achieved[i]:
-                # if goal already achieved, continue
-                continue
-
-            # If message goal
-            if goal_type == GoalEvent.MESSAGE:
-                goal_msgs = details
-                curr_msg = (
-                    observation[self._original_observation_keys.index("message")]
-                    .tobytes()
-                    .decode("utf-8")
-                )
-                for msg in goal_msgs:
-                    if msg in curr_msg:
-                        self.goals_achieved[i] = True
-
-            # Loc-action goal checks are handled in step()
-
-        if all(goal for goal in self.goals_achieved):
-            return self.StepStatus.TASK_SUCCESSFUL
-        return self.StepStatus.RUNNING
-
-    def _standing_on_top(self, name):
-        """Returns whether the agents is standing on top of the given object.
-        The object name (e.g. altar, sink, fountain) must exist on the map.
-        The function will return True if the object name is not in the screen
-        descriptions (with agent info taking the space of the corresponding
-        tile rather than the object).
-        """
-        return not self.screen_contains(name)
+        super().__init__(
+            *args, des_file=des_file, reward_manager=reward_manager, **kwargs
+        )
 
 
 class MiniHackEat(MiniHackSkillEnv):
@@ -127,11 +48,12 @@ class MiniHackEat(MiniHackSkillEnv):
         lvl_gen.add_object("apple", "%")
         des_file = lvl_gen.get_des()
 
-        goal_gen = GoalGenerator()
-        goal_gen.add_eat_goal("apple")
-        goals = goal_gen.get_goals()
+        reward_manager = RewardManager()
+        reward_manager.add_eat_event("apple")
 
-        super().__init__(*args, des_file=des_file, goals=goals, **kwargs)
+        super().__init__(
+            *args, des_file=des_file, reward_manager=reward_manager, **kwargs
+        )
 
 
 class MiniHackWield(MiniHackSkillEnv):
@@ -142,11 +64,12 @@ class MiniHackWield(MiniHackSkillEnv):
         lvl_gen.add_object("dagger", ")")
         des_file = lvl_gen.get_des()
 
-        goal_gen = GoalGenerator()
-        goal_gen.add_wield_goal("dagger")
-        goals = goal_gen.get_goals()
+        reward_manager = RewardManager()
+        reward_manager.add_wield_event("dagger")
 
-        super().__init__(*args, des_file=des_file, goals=goals, **kwargs)
+        super().__init__(
+            *args, des_file=des_file, reward_manager=reward_manager, **kwargs
+        )
 
 
 class MiniHackWear(MiniHackSkillEnv):
@@ -157,11 +80,12 @@ class MiniHackWear(MiniHackSkillEnv):
         lvl_gen.add_object("robe", "[")
         des_file = lvl_gen.get_des()
 
-        goal_gen = GoalGenerator()
-        goal_gen.add_wear_goal("robe")
-        goals = goal_gen.get_goals()
+        reward_manager = RewardManager()
+        reward_manager.add_wear_event("robe")
 
-        super().__init__(*args, des_file=des_file, goals=goals, **kwargs)
+        super().__init__(
+            *args, des_file=des_file, reward_manager=reward_manager, **kwargs
+        )
 
 
 class MiniHackTakeOff(MiniHackSkillEnv):
@@ -172,11 +96,12 @@ class MiniHackTakeOff(MiniHackSkillEnv):
         lvl_gen.add_object("leather jacket", "[")
         des_file = lvl_gen.get_des()
 
-        goal_gen = GoalGenerator()
-        goal_gen.add_wear_goal("leather jacket")
-        goals = goal_gen.get_goals()
+        reward_manager = RewardManager()
+        reward_manager.add_wear_event("leather jacket")
 
-        super().__init__(*args, des_file=des_file, goals=goals, **kwargs)
+        super().__init__(
+            *args, des_file=des_file, reward_manager=reward_manager, **kwargs
+        )
 
 
 class MiniHackPutOn(MiniHackSkillEnv):
@@ -187,11 +112,12 @@ class MiniHackPutOn(MiniHackSkillEnv):
         lvl_gen.add_object("amulet of life saving", '"')
         des_file = lvl_gen.get_des()
 
-        goal_gen = GoalGenerator()
-        goal_gen.add_amulet_goal()
-        goals = goal_gen.get_goals()
+        reward_manager = RewardManager()
+        reward_manager.add_amulet_event()
 
-        super().__init__(*args, des_file=des_file, goals=goals, **kwargs)
+        super().__init__(
+            *args, des_file=des_file, reward_manager=reward_manager, **kwargs
+        )
 
 
 class MiniHackZap(MiniHackSkillEnv):
@@ -202,11 +128,12 @@ class MiniHackZap(MiniHackSkillEnv):
         lvl_gen.add_object("enlightenment", "/")
         des_file = lvl_gen.get_des()
 
-        goal_gen = GoalGenerator()
-        goal_gen._add_message_goal(["The feeling subsides."])  # TODO change
-        goals = goal_gen.get_goals()
+        reward_manager = RewardManager()
+        reward_manager.add_message_event(["The feeling subsides."])  # TODO change
 
-        super().__init__(*args, des_file=des_file, goals=goals, **kwargs)
+        super().__init__(
+            *args, des_file=des_file, reward_manager=reward_manager, **kwargs
+        )
 
 
 class MiniHackRead(MiniHackSkillEnv):
@@ -217,11 +144,14 @@ class MiniHackRead(MiniHackSkillEnv):
         lvl_gen.add_object("blank paper", "?")
         des_file = lvl_gen.get_des()
 
-        goal_gen = GoalGenerator()
-        goal_gen._add_message_goal(["This scroll seems to be blank."])  # TODO change
-        goals = goal_gen.get_goals()
+        reward_manager = RewardManager()
+        reward_manager.add_message_event(
+            ["This scroll seems to be blank."]
+        )  # TODO change
 
-        super().__init__(*args, des_file=des_file, goals=goals, **kwargs)
+        super().__init__(
+            *args, des_file=des_file, reward_manager=reward_manager, **kwargs
+        )
 
 
 class MiniHackPray(MiniHackSkillEnv):
@@ -232,11 +162,12 @@ class MiniHackPray(MiniHackSkillEnv):
         lvl_gen.add_altar("random", "neutral", "altar")
         des_file = lvl_gen.get_des()
 
-        goal_gen = GoalGenerator()
-        goal_gen.add_positional_goal("altar", "pray")
-        goals = goal_gen.get_goals()
+        reward_manager = RewardManager()
+        reward_manager.add_positional_event("altar", "pray")
 
-        super().__init__(*args, des_file=des_file, goals=goals, **kwargs)
+        super().__init__(
+            *args, des_file=des_file, reward_manager=reward_manager, **kwargs
+        )
 
 
 class MiniHackSink(MiniHackSkillEnv):
@@ -247,11 +178,12 @@ class MiniHackSink(MiniHackSkillEnv):
         lvl_gen.add_sink()
         des_file = lvl_gen.get_des()
 
-        goal_gen = GoalGenerator()
-        goal_gen.add_positional_goal("sink", "quaff")
-        goals = goal_gen.get_goals()
+        reward_manager = RewardManager()
+        reward_manager.add_positional_event("sink", "quaff")
 
-        super().__init__(*args, des_file=des_file, goals=goals, **kwargs)
+        super().__init__(
+            *args, des_file=des_file, reward_manager=reward_manager, **kwargs
+        )
 
 
 class MiniHackClosedDoor(MiniHackSkillEnv):
@@ -269,7 +201,7 @@ class MiniHackLockedDoor(MiniHackSkillEnv):
 
 
 class MiniHackWandOfDeath(MiniHackSkillEnv):
-    """Environment for "sink" task."""
+    """Environment for "Wand of death" task."""
 
     def __init__(self, *args, **kwargs):
         map = """
@@ -310,7 +242,7 @@ registration.register(
 
 
 class MiniHackLabyrinth(MiniHackSkillEnv):
-    """Environment for "read" task."""
+    """Environment for "Labyrinth" task."""
 
     def __init__(self, *args, **kwargs):
         map = """

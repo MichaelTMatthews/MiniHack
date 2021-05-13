@@ -1,7 +1,7 @@
 # Copyright (c) Facebook, Inc. and its affiliates.
 
 from nle.minihack.level_generator import LevelGenerator
-from nle.minihack.goal_generator import GoalGenerator
+from nle.minihack.reward_manager import RewardManager
 from nle.minihack.base import MiniHack
 from nle.minihack.navigation import MiniHackNavigation
 from nle.minihack.skills import MiniHackSkillEnv
@@ -20,5 +20,5 @@ __all__ = [
     "MiniHackNavigation",
     "MiniHackSkillEnv",
     "LevelGenerator",
-    "GoalGenerator",
+    "RewardManager",
 ]

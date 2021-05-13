@@ -1,14 +1,14 @@
 # Copyright (c) Facebook, Inc. and its affiliates.
 
+import os
+import subprocess
+
+import gym
+import numpy as np
+import pkg_resources
+from nle import _pynethack, nethack
 from nle.env.base import FULL_ACTIONS, NLE_SPACE_ITEMS
 from nle.env.tasks import NetHackStaircase
-from nle import nethack, _pynethack
-
-import pkg_resources
-import numpy as np
-import subprocess
-import os
-import gym
 
 PATH_DAT_DIR = os.path.join(os.path.dirname(os.path.realpath(__file__)), "dat")
 LIB_DIR = os.path.join(os.path.dirname(os.path.realpath(__file__)), "lib")
@@ -82,6 +82,7 @@ class MiniHack(NetHackStaircase):
         obs_crop_h=5,
         obs_crop_w=5,
         obs_crop_pad=0,
+        reward_manager=None,
         **kwargs,
     ):
         # No pet
@@ -101,6 +102,9 @@ class MiniHack(NetHackStaircase):
         self._minihack_obs_keys = kwargs.pop(
             "observation_keys", list(space_dict.keys())
         )
+        self.reward_manager = reward_manager
+        if self.reward_manager is not None:
+            self.reward_manager.reset()
 
         super().__init__(*args, **kwargs)
 
@@ -133,14 +137,44 @@ class MiniHack(NetHackStaircase):
 
         return obs_space_dict
 
-    def _reward_fn(self, last_response, response, end_status):
-        if end_status == self.StepStatus.TASK_SUCCESSFUL:
-            reward = self.reward_win
-        elif end_status == self.StepStatus.RUNNING:
-            reward = 0
-        else:  # death or aborted
-            reward = self.reward_lose
-        return reward + self._get_time_penalty(last_response, response)
+    def reset(self, *args, **kwargs):
+        if self.reward_manager is not None:
+            self.reward_manager.reset()
+        super().reset(*args, **kwargs)
+
+    def _reward_fn(self, last_observation, observation, end_status):
+        """Use reward_manager to collect reward calculated in _is_episode_end,
+        or revert to standard sparse reward."""
+        if self.reward_manager is not None:
+            reward = self.reward_manager.collect_reward()
+        else:
+            if end_status == self.StepStatus.TASK_SUCCESSFUL:
+                reward = self.reward_win
+            elif end_status == self.StepStatus.RUNNING:
+                reward = 0
+            else:  # death or aborted
+                reward = self.reward_lose
+        return reward + self._get_time_penalty(last_observation, observation)
+
+    def step(self, action: int):
+        self._previous_obs = tuple(a.copy() for a in self.last_observation)
+        self._previous_action = action
+        # Within this call, _is_episode_end is called and then _reward_fn,
+        # both using self.reward_manager
+        return super().step(action)
+
+    def _is_episode_end(self, observation):
+        if self.reward_manager is not None:
+            # This also calculates reward, to be collected in _reward_fn by
+            # collect_reward
+            result = self.reward_manager.check_episode_end_call(
+                self, self._previous_obs, self._previous_action, observation
+            )
+            if result:
+                return self.StepStatus.TASK_SUCCESSFUL
+            # Revert to staircase episode end check (so we always end if we go
+            # down a staircase
+        return super()._is_episode_end(observation)
 
     def update(self, des_file):
         """Update the current environment by replacing its description file """
