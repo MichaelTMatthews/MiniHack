@@ -283,9 +283,9 @@ class RewardManager(AbstractRewardManager):
             terminal_sufficient,
         )
 
-    def add_location_event(
+    def add_coordinate_event(
         self,
-        location,
+        coordinates,
         reward=1,
         repeatable=False,
         terminal_required=True,
@@ -294,7 +294,26 @@ class RewardManager(AbstractRewardManager):
         self.events.append(
             Event(
                 EventType.COORD,
-                CoordInfo(location),
+                CoordInfo(coordinates),
+                reward,
+                repeatable,
+                terminal_required,
+                terminal_sufficient,
+            )
+        )
+
+    def add_location_event(
+        self,
+        location: str,
+        reward=1,
+        repeatable=False,
+        terminal_required=True,
+        terminal_sufficient=False,
+    ):
+        self.events.append(
+            Event(
+                EventType.LOC,
+                LocInfo(location),
                 reward,
                 repeatable,
                 terminal_required,
@@ -378,16 +397,21 @@ class RewardManager(AbstractRewardManager):
         return self._check_complete()
 
     def _check_complete(self) -> bool:
+        """Checks whether the episode is complete.
+
+        Requires any event which is sufficient to be achieved, OR all required
+        events to be achieved."""
+        result = True
         for event in self.events:
             # This event is enough, we're done
             if event.achieved and event.terminal_sufficient:
                 return True
             # We need this event and we haven't done it, we're not done
             if not event.achieved and event.terminal_required:
-                return False
+                result = False
 
         # We've achieved all terminal_required events, we're done
-        return True
+        return result
 
     def collect_reward(self):
         """Return reward calculated and accumulated in check_episode_end_call,
