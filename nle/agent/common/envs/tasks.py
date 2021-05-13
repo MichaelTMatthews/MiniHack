@@ -10,6 +10,7 @@ from nle.minihack.envs import (
     room,
     boxohack,
     fightcorridor,
+    river,
 )
 from nle.agent.common.envs.wrapper import CounterWrapper
 
@@ -56,6 +57,11 @@ ENVS = dict(
     # MiniHack Fight Corridor
     fight_corridor=fightcorridor.MiniHackFightCorridor,
     fight_corridor_dark=fightcorridor.MiniHackFightCorridorDark,
+    # MiniHack River
+    river=river.MiniHackRiver,
+    river_lava=river.MiniHackRiverLava,
+    river_monster=river.MiniHackRiverMonster,
+    river_monsterlava=river.MiniHackRiverMonsterLava,
     # MiniHack MultiRooms
     multiroom_2=minigrid.MiniHackMultiRoomN2,
     multiroom_4=minigrid.MiniHackMultiRoomN4,

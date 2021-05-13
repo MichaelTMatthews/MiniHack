@@ -169,6 +169,10 @@ GEOMETRY:center,center
 
         self.footer += "\n"
 
+    def add_object_area(self, area_name, name="random", symbol="%", cursestate=None):
+        place = f"rndcoord({area_name})"
+        self.add_object(name, symbol, place, cursestate)
+
     def add_monster(self, name="random", symbol=None, place="random", args=()):
         place = self.validate_place(place)
         assert (
@@ -220,6 +224,31 @@ GEOMETRY:center,center
         assert type in ("rect", "fillrect", "line")
         assert flag in MAP_CHARS
         self.footer += f"TERRAIN:{type} ({x1},{y1},{x2},{y2}),'{flag}'\n"
+
+    def set_area_variable(
+        self,
+        var_name,  # Should start with $ sign
+        type,
+        x1,
+        y1,
+        x2,
+        y2,
+    ):
+        """Set a variable representing an area on the map.
+
+        type:
+        - "rect" - An unfilled rectangle, containing just the edges and none
+            of the interior points.
+        - "fillrect" - A filled rectangle containing the edges and all of the
+            interior points.
+        - "line" - A straight line drawn from one pair of coordinates to the
+            other using Bresenham's line algorithm.
+        """
+
+        assert type in ("rect", "fillrect", "line")
+        if var_name[0] != "$":
+            var_name = "$" + var_name
+        self.footer += f"{var_name} = selection:{type} ({x1},{y1},{x2},{y2})\n"
 
     def add_goal_pos(self, place="random"):
         self.add_stair_down(place)
@@ -296,6 +325,9 @@ GEOMETRY:center,center
             x, y = self.x // 2, self.y // 2
 
         self.footer += f"MAZEWALK:({x},{y}),{dir}\n"
+
+    def add_line(self, str):
+        self.footer += str + "\n"
 
 
 class KeyRoomGenerator:
