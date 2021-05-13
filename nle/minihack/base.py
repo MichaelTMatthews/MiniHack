@@ -103,7 +103,7 @@ class MiniHack(NetHackStaircase):
             "observation_keys", list(space_dict.keys())
         )
         self.reward_manager = reward_manager
-        if self.reward_manager:
+        if self.reward_manager is not None:
             self.reward_manager.reset()
 
         super().__init__(*args, **kwargs)
@@ -138,7 +138,7 @@ class MiniHack(NetHackStaircase):
         return obs_space_dict
 
     def reset(self, *args, **kwargs):
-        if self.reward_manager:
+        if self.reward_manager is not None:
             self.reward_manager.reset()
         super().reset(*args, **kwargs)
 
