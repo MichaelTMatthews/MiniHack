@@ -8,7 +8,6 @@ from nle.minihack.skills import MiniHackSkill
 from nle.minihack.wiki import NetHackWiki
 
 import nle.minihack.envs.room
-import nle.minihack.envs.keyroom
 import nle.minihack.envs.corridor
 import nle.minihack.envs.keyroom
 import nle.minihack.envs.mazewalk
@@ -21,6 +20,9 @@ import nle.minihack.envs.skills_simple
 import nle.minihack.envs.skills_wod
 import nle.minihack.envs.skills_levitate
 import nle.minihack.envs.skills_freeze
+import nle.minihack.envs.skills_invis
+import nle.minihack.envs.lab
+import nle.minihack.envs.deepexplore
 
 # import nle.minihack.envs.skills_lava_river
 # import nle.minihack.envs.skills_chest
