@@ -12,6 +12,7 @@ import nle.minihack.envs.corridor  # noqa
 import nle.minihack.envs.keyroom  # noqa
 import nle.minihack.envs.mazewalk  # noqa
 import nle.minihack.envs.minigrid  # noqa
+import nle.minihack.envs.memory  # noqa
 import nle.minihack.envs.boxohack
 import nle.minihack.skills  # noqa
 
