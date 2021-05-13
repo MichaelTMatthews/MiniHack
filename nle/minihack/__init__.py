@@ -5,6 +5,7 @@ from nle.minihack.reward_manager import RewardManager
 from nle.minihack.base import MiniHack
 from nle.minihack.navigation import MiniHackNavigation
 from nle.minihack.skills import MiniHackSkillEnv
+from nle.minihack.wiki import NetHackWiki
 
 import nle.minihack.envs.room  # noqa
 import nle.minihack.envs.keyroom  # noqa
@@ -21,4 +22,5 @@ __all__ = [
     "MiniHackSkillEnv",
     "LevelGenerator",
     "RewardManager",
+    "NetHackWiki",
 ]

@@ -9,6 +9,7 @@ import pkg_resources
 from nle import _pynethack, nethack
 from nle.env.base import FULL_ACTIONS, NLE_SPACE_ITEMS
 from nle.env.tasks import NetHackStaircase
+from nle.minihack.wiki import NetHackWiki
 
 PATH_DAT_DIR = os.path.join(os.path.dirname(os.path.realpath(__file__)), "dat")
 LIB_DIR = os.path.join(os.path.dirname(os.path.realpath(__file__)), "lib")
@@ -83,6 +84,7 @@ class MiniHack(NetHackStaircase):
         obs_crop_w=5,
         obs_crop_pad=0,
         reward_manager=None,
+        use_wiki=False,
         **kwargs,
     ):
         # No pet
@@ -123,6 +125,10 @@ class MiniHack(NetHackStaircase):
 
         self._scr_descr_index = self._observation_keys.index("screen_descriptions")
         self.observation_space = gym.spaces.Dict(self.get_obs_space_dict(space_dict))
+
+        self.use_wiki = use_wiki
+        if self.use_wiki:
+            self.wiki = NetHackWiki()
 
     def get_obs_space_dict(self, space_dict):
         obs_space_dict = {}
@@ -325,6 +331,19 @@ class MiniHack(NetHackStaircase):
         ]
         return neighbors
 
+    def get_neighbor_wiki_pages(self, observation=None):
+        if not self.use_wiki:
+            raise NotImplementedError(
+                "use_wiki is set to false - initialise your environment with"
+                "use_wiki=True to use the wiki"
+            )
+        neighbors_descriptions = self.get_neighbor_descriptions(observation)
+        neighbor_pages = [
+            self.wiki.get_page_text(description)
+            for description in neighbors_descriptions
+        ]
+        return neighbor_pages
+
     def get_screen_description(self, x, y, observation=None):
         """Returns the description of the screen on (x,y) coordinates."""
         if observation is None:
@@ -334,6 +353,16 @@ class MiniHack(NetHackStaircase):
         symb_len = np.where(des_arr == 0)[0][0]
 
         return des_arr[:symb_len].tobytes().decode("utf-8")
+
+    def get_screen_wiki_page(self, x, y, observation=None):
+        """Returns the wiki page matching the object on (x,y) coordinates."""
+        if not self.use_wiki:
+            raise NotImplementedError(
+                "use_wiki is set to false - initialise your environment with"
+                "use_wiki=True to use the wiki"
+            )
+        description = self.get_screen_description(x, y, observation)
+        return self.wiki.get_page_text(description)
 
     def screen_contains(self, name, observation=None):
         """Whether the given name is included in screen descriptions of

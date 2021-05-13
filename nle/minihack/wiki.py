@@ -2,15 +2,76 @@ import json
 import os
 import re
 from collections import defaultdict
+from functools import lru_cache
 from typing import List
 from urllib.parse import unquote
 
 import pkg_resources
 
+try:
+    import inflect
+    import stanza
+
+    PREPROCESSING_ALLOWED = True
+    import_error = None
+except ImportError as error:  # noqa
+    PREPROCESSING_ALLOWED = False
+    import_error = error
+
 DATA_DIR_PATH = pkg_resources.resource_filename("nle", "minihack/dat")
 
+EXCEPTIONS = (
+    "floor of a room",
+    "agent",
+    "staircase up",
+)
 
-class NethackWiki:
+
+class TextProcessor:
+    """Base class for modeling relations between an object and subject."""
+
+    def __init__(self):
+        # Will only do it the first time
+        stanza.download("en")
+        self.nlp = stanza.Pipeline(lang="en", processors="tokenize,mwt,pos")
+        self.inflect = inflect.engine()
+
+    @lru_cache(maxsize=None)
+    def preprocess(self, input_str: str) -> str:
+        # Removes the brackets and non-letter charachters
+        text = re.sub(r"\([^)]*\)", "", input_str)
+        pattern = re.compile(r"[^a-zA-Z]+")
+        text = pattern.sub(" ", text)
+        # Remove trailing whitespaces
+        text = re.sub(r"\w[ ]{2,}\w", " ", text)
+        return text.strip()
+
+    @lru_cache(maxsize=None)
+    def process(self, input_str: str) -> str:
+        input_str = self.preprocess(input_str)
+
+        # First find nouns in phrase
+        result = self.nlp(input_str)
+        nouns = [
+            word.text
+            for sent in result.sentences
+            for word in sent.words
+            if word.upos in {"NOUN", "PROPN"}
+        ]
+        if not nouns:
+            return input_str
+        # Pick last noun in input
+        noun = nouns[-1]
+
+        # Singularise the noun - returns False if the word is alread singular
+        singular = self.inflect.singular_noun(noun.lower())
+        if not singular:
+            return nouns[-1].lower()
+        else:
+            return singular
+
+
+class NetHackWiki:
     """A class representing Nethack Wiki Data - pages and links between them."""
 
     def __init__(
@@ -19,6 +80,8 @@ class NethackWiki:
         processed_wiki_file_name: str = f"{DATA_DIR_PATH}/processednethackwiki.json",
         save_processed_json: bool = True,
         ignore_inpage_anchors: bool = True,
+        preprocess_input: bool = True,
+        exceptions: str = None,
     ) -> None:
         if os.path.isfile(processed_wiki_file_name):
             with open(processed_wiki_file_name, "r") as json_file:
@@ -39,10 +102,30 @@ class NethackWiki:
                 data."""
             )
 
+        self.exceptions = exceptions if exceptions is not None else EXCEPTIONS
+        self.preprocess_input = preprocess_input
+        if preprocess_input:
+            if PREPROCESSING_ALLOWED:
+                self.text_processor = TextProcessor()
+            else:
+                print(
+                    "To perform text preprocessing, `inflect` and `stanza`"
+                    f"must be installed. See {import_error} for more information"
+                )
+                self.preprocess_input = False
+
     def get_page_text(self, page: str) -> str:
+        if page in self.exceptions:
+            return ""
+        if self.preprocess_input:
+            page = self.text_processor.process(page)
         return self.wiki.get(page, {}).get("text", "")
 
     def get_page_data(self, page: str) -> dict:
+        if page in self.exceptions:
+            return {}
+        if self.preprocess_input:
+            page = self.text_processor.process(input)
         return self.wiki.get(page, {})
 
 
@@ -75,7 +158,6 @@ def process_json(wiki_json: List[dict], ignore_inpage_anchors) -> dict:
             raw_text="".join(page["text"]),
             text=clean_page_text(page["page_data"]),
         )
-        # breakpoint()
         # noqa: E731
         relevant_page_info["anchors"] = [
             dict(
