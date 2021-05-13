@@ -231,12 +231,23 @@ GEOMETRY:center,center
     def set_start_pos(self, coord):
         self.add_stair_up(coord)
 
+    def set_start_rect(self, p1, p2):
+        self.add_stair_up_rect(p1, p2)
+
     def add_stair_up(self, coord):
         if self.stair_up_exist:
             return
         x, y = self.validate_coord(coord)
         _x, _y = abs(x - 1), abs(y - 1)  # any different coordinate than (x,y)
         self.footer += f"BRANCH:({x},{y},{x},{y}),({_x},{_y},{_x},{_y})\n"
+        self.stair_up_exist = True
+
+    def add_stair_up_rect(self, p1, p2):
+        if self.stair_up_exist:
+            return
+        x1, y1 = self.validate_coord(p1)
+        x2, y2 = self.validate_coord(p2)
+        self.footer += f"BRANCH:({x1},{y1},{x2},{y2}),({0},{0},{0},{0})\n"
         self.stair_up_exist = True
 
     def add_door(self, state, place="random"):
