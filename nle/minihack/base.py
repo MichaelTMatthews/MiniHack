@@ -146,7 +146,7 @@ class MiniHack(NetHackStaircase):
     def reset(self, *args, **kwargs):
         if self.reward_manager is not None:
             self.reward_manager.reset()
-        super().reset(*args, **kwargs)
+        return super().reset(*args, **kwargs)
 
     def _reward_fn(self, last_observation, observation, end_status):
         """Use reward_manager to collect reward calculated in _is_episode_end,
