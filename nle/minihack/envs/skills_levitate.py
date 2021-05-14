@@ -22,7 +22,7 @@ class MiniHackLevitate(MiniHackSkill):
 class MiniHackLevitateBoots(MiniHackLevitate):
     def __init__(self, *args, **kwargs):
         lvl_gen = LevelGenerator(w=5, h=5, lit=True)
-        lvl_gen.add_object("levitation boots", "[")
+        lvl_gen.add_object("levitation boots", "[", cursestate="blessed")
         des_file = lvl_gen.get_des()
 
         super().__init__(*args, des_file=des_file, **kwargs)
@@ -31,7 +31,7 @@ class MiniHackLevitateBoots(MiniHackLevitate):
 class MiniHackLevitateRing(MiniHackLevitate):
     def __init__(self, *args, **kwargs):
         lvl_gen = LevelGenerator(w=5, h=5, lit=True)
-        lvl_gen.add_object("levitation", "=")
+        lvl_gen.add_object("levitation", "=", cursestate="blessed")
         des_file = lvl_gen.get_des()
 
         super().__init__(*args, des_file=des_file, **kwargs)
@@ -40,7 +40,7 @@ class MiniHackLevitateRing(MiniHackLevitate):
 class MiniHackLevitatePotion(MiniHackLevitate):
     def __init__(self, *args, **kwargs):
         lvl_gen = LevelGenerator(w=5, h=5, lit=True)
-        lvl_gen.add_object("levitation", "!")
+        lvl_gen.add_object("levitation", "!", cursestate="blessed")
         des_file = lvl_gen.get_des()
 
         super().__init__(*args, des_file=des_file, **kwargs)
@@ -63,12 +63,12 @@ MAP
 ENDMAP
 REGION:(0,0,5,5),lit,"ordinary"
 IF [33%] {
-    OBJECT:('!',"levitation"),random
+    OBJECT:('!',"levitation"),random,blessed
 } ELSE {
     IF [33%] {
-        OBJECT:('=',"levitation"),random
+        OBJECT:('=',"levitation"),random,blessed
     } ELSE {
-        OBJECT:('[',"levitation boots"),random
+        OBJECT:('[',"levitation boots"),random,blessed
     }
 }
 """
@@ -78,8 +78,8 @@ IF [33%] {
 
 
 class MiniHackLevitateRandomDist(MiniHackLevitateRandom):
-    def __init__(self, *args, n_distract=3, **kwargs):
-        super().__init__(n_distract)
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, n_distract=3, **kwargs)
 
 
 registration.register(
