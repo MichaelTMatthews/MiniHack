@@ -42,7 +42,6 @@ class MiniHackLevitatePotion(MiniHackLevitate):
         lvl_gen = LevelGenerator(w=5, h=5, lit=True)
         lvl_gen.add_object("levitation", "!")
         des_file = lvl_gen.get_des()
-        print(des_file)
 
         super().__init__(*args, des_file=des_file, **kwargs)
 
