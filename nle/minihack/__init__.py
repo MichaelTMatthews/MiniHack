@@ -18,6 +18,7 @@ import nle.minihack.envs.boxohack
 import nle.minihack.envs.river
 import nle.minihack.envs.skills_simple
 import nle.minihack.envs.skills_wand
+import nle.minihack.envs.skills_levitate
 
 __all__ = [
     "MiniHack",

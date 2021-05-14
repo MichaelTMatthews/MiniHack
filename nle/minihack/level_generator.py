@@ -165,7 +165,7 @@ GEOMETRY:center,center
         if cursestate is not None:
             assert cursestate in ["blessed", "uncursed", "cursed", "random"]
             if cursestate != "random":
-                self.footer += f", {cursestate}"
+                self.footer += f",{cursestate}"
 
         self.footer += "\n"
 
