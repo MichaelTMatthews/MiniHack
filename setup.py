@@ -79,6 +79,8 @@ packages = [
     "nle.scripts",
     "nle.tests",
     "nle.minihack",
+    "nle.minihack.envs",
+    "nle.tiles",
 ]
 
 entry_points = {
