@@ -75,9 +75,10 @@ class GlyphEmbedding(nn.Module):
         self._unit_dim = dimension // strategy.count_matrices()
         self._remainder_dim = self.dim - self._unit_dim * strategy.count_matrices()
 
-        self._id_pairs_table = None
         if self.requires_id_pairs_table:
-            self._id_pairs_table = torch.from_numpy(id_pairs_table())
+            self.register_buffer("_id_pairs_table", torch.from_numpy(id_pairs_table()))
+        else:
+            self._id_pairs_table = None
 
         # Build our custom embedding matrices
         embed = {}
@@ -98,9 +99,6 @@ class GlyphEmbedding(nn.Module):
                 num_subgroup_ids, self._dim(strategy.subgroup_ids)
             )
 
-        if self.id_pairs_table is not None and device is not None:
-            self._id_pairs_table = self._id_pairs_table.to(device)
-
         self.embeddings = nn.ModuleDict(embed)
         self.targets = list(embed.keys())
         self.GlyphTuple = namedtuple("GlyphTuple", self.targets)
@@ -108,7 +106,8 @@ class GlyphEmbedding(nn.Module):
         if strategy.do_linear_layer and strategy.count_matrices() > 1:
             self.linear = nn.Linear(strategy.count_matrices() * self.dim, self.dim)
 
-        self.to(device)
+        if device is not None:
+            self.to(device)
 
     def _dim(self, units):
         """Decide the embedding size for a single matrix.  If using a linear layer

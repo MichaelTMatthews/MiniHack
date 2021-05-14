@@ -119,22 +119,23 @@ class NetHackNet(nn.Module):
 
 
 class Crop(nn.Module):
-    def __init__(self, height, width, height_target, width_target, device=None):
+    def __init__(self, height, width, height_target, width_target):
         super(Crop, self).__init__()
         self.width = width
         self.height = height
         self.width_target = width_target
         self.height_target = height_target
-        self.width_grid = self._step_to_range(2 / (self.width - 1), self.width_target)[
+
+        width_grid = self._step_to_range(2 / (self.width - 1), self.width_target)[
             None, :
         ].expand(self.height_target, -1)
-        self.height_grid = self._step_to_range(2 / (self.height - 1), height_target)[
+        height_grid = self._step_to_range(2 / (self.height - 1), height_target)[
             :, None
         ].expand(-1, self.width_target)
 
-        if device is not None:
-            self.width_grid = self.width_grid.to(device)
-            self.height_grid = self.height_grid.to(device)
+        # "clone" necessary, https://github.com/pytorch/pytorch/issues/34880
+        self.register_buffer("width_grid", width_grid.clone())
+        self.register_buffer("height_grid", height_grid.clone())
 
     def _step_to_range(self, step, num_steps):
         return torch.tensor([step * (i - num_steps // 2) for i in range(num_steps)])
@@ -199,7 +200,7 @@ class Flatten(nn.Module):
 
 
 class BaseNet(NetHackNet):
-    def __init__(self, processed_observation_shape, device, flags: DictConfig):
+    def __init__(self, processed_observation_shape, flags: DictConfig):
         super(BaseNet, self).__init__()
 
         self.observation_space = processed_observation_shape.original_space
@@ -215,13 +216,13 @@ class BaseNet(NetHackNet):
 
         self.num_features = NUM_FEATURES
 
-        self.crop = Crop(self.H, self.W, self.crop_dim, self.crop_dim, device)
+        self.crop = Crop(self.H, self.W, self.crop_dim, self.crop_dim)
 
         self.glyph_type = flags.glyph_type
         self.glyph_embedding = RLLibGlyphEmbedding(
             flags.glyph_type,
             flags.embedding_dim,
-            device,
+            None,
             flags.use_index_select,
         )
 
@@ -261,7 +262,7 @@ class BaseNet(NetHackNet):
                 heads=8,
                 height=self.crop_dim,
                 width=self.crop_dim,
-                device=device,
+                device=None,
             )
         elif self.crop_model == "cnn":
             conv_extract_crop = [
@@ -508,13 +509,13 @@ class RLLibNLENetwork(TorchModelV2, nn.Module):
         nn.Module.__init__(self)
 
         flags = model_config["custom_model_config"]["flags"]
-        self.num_outputs = flags.hidden_dim
+        self.num_outputs = num_outputs or flags.hidden_dim
 
-        self.base = BaseNet(observation_space, None, flags)  # device is sorted later
+        self.base = BaseNet(observation_space, flags)  # device is sorted later
 
     @override(TorchModelV2)
-    def forward(self, x: Dict[str, Any], *_: Any) -> Tuple[torch.Tensor, None]:
-        return self.base(x["obs"]), None
+    def forward(self, x: Dict[str, Any], *_: Any) -> Tuple[torch.Tensor, list]:
+        return self.base(x["obs"]), []
 
 
 ModelCatalog.register_custom_model("rllib_nle_model", RLLibNLENetwork)
