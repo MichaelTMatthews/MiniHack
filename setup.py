@@ -80,7 +80,7 @@ packages = [
     "nle.tests",
     "nle.minihack",
     "nle.minihack.envs",
-    "nle.tiles",
+    # "nle.tiles",
 ]
 
 entry_points = {
