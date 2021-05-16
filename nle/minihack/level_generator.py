@@ -169,6 +169,10 @@ GEOMETRY:center,center
 
         self.footer += "\n"
 
+    def add_object_area(self, area_name, name="random", symbol="%", cursestate=None):
+        place = f"rndcoord({area_name})"
+        self.add_object(name, symbol, place, cursestate)
+
     def add_monster(self, name="random", symbol=None, place="random", args=()):
         place = self.validate_place(place)
         assert (
@@ -221,6 +225,31 @@ GEOMETRY:center,center
         assert flag in MAP_CHARS
         self.footer += f"TERRAIN:{type} ({x1},{y1},{x2},{y2}),'{flag}'\n"
 
+    def set_area_variable(
+        self,
+        var_name,  # Should start with $ sign
+        type,
+        x1,
+        y1,
+        x2,
+        y2,
+    ):
+        """Set a variable representing an area on the map.
+
+        type:
+        - "rect" - An unfilled rectangle, containing just the edges and none
+            of the interior points.
+        - "fillrect" - A filled rectangle containing the edges and all of the
+            interior points.
+        - "line" - A straight line drawn from one pair of coordinates to the
+            other using Bresenham's line algorithm.
+        """
+
+        assert type in ("rect", "fillrect", "line")
+        if var_name[0] != "$":
+            var_name = "$" + var_name
+        self.footer += f"{var_name} = selection:{type} ({x1},{y1},{x2},{y2})\n"
+
     def add_goal_pos(self, place="random"):
         self.add_stair_down(place)
 
@@ -231,12 +260,23 @@ GEOMETRY:center,center
     def set_start_pos(self, coord):
         self.add_stair_up(coord)
 
+    def set_start_rect(self, p1, p2):
+        self.add_stair_up_rect(p1, p2)
+
     def add_stair_up(self, coord):
         if self.stair_up_exist:
             return
         x, y = self.validate_coord(coord)
         _x, _y = abs(x - 1), abs(y - 1)  # any different coordinate than (x,y)
         self.footer += f"BRANCH:({x},{y},{x},{y}),({_x},{_y},{_x},{_y})\n"
+        self.stair_up_exist = True
+
+    def add_stair_up_rect(self, p1, p2):
+        if self.stair_up_exist:
+            return
+        x1, y1 = self.validate_coord(p1)
+        x2, y2 = self.validate_coord(p2)
+        self.footer += f"BRANCH:({x1},{y1},{x2},{y2}),({0},{0},{0},{0})\n"
         self.stair_up_exist = True
 
     def add_door(self, state, place="random"):
@@ -285,6 +325,9 @@ GEOMETRY:center,center
             x, y = self.x // 2, self.y // 2
 
         self.footer += f"MAZEWALK:({x},{y}),{dir}\n"
+
+    def add_line(self, str):
+        self.footer += str + "\n"
 
 
 class KeyRoomGenerator:

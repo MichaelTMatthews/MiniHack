@@ -209,4 +209,5 @@ nle/nethackdir
 outputs/
 latest
 
+nle/minihack/dat/*.json
 Session.vim
