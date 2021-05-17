@@ -22,8 +22,8 @@ import nle.minihack.envs.skills_wod
 import nle.minihack.envs.skills_levitate
 import nle.minihack.envs.skills_freeze
 import nle.minihack.envs.skills_lava
+import nle.minihack.envs.skills_chest
 
-# import nle.minihack.envs.skills_chest
 # import nle.minihack.envs.skills_quest
 
 __all__ = [
