@@ -16,6 +16,7 @@ import nle.minihack.envs.fightcorridor
 import nle.minihack.envs.minigrid
 import nle.minihack.envs.boxohack
 import nle.minihack.envs.river
+import nle.minihack.envs.hidenseek
 import nle.minihack.envs.lab
 import nle.minihack.envs.skills_simple
 import nle.minihack.envs.skills_wod
