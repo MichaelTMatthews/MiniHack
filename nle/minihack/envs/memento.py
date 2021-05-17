@@ -2,8 +2,8 @@ from gym.envs import registration
 from nle.minihack import MiniHackNavigation, RewardManager
 
 
-class MiniHackMemory(MiniHackNavigation):
-    """Environment for a memory challenge."""
+class MiniHackMemento(MiniHackNavigation):
+    """Environment for a memento challenge."""
 
     def __init__(self, *args, **kwargs):
         kwargs["max_episode_steps"] = kwargs.pop("max_episode_steps", 5000)
@@ -15,11 +15,11 @@ class MiniHackMemory(MiniHackNavigation):
             "grid bug", reward=1, terminal_sufficient=True, terminal_required=True
         )
         super().__init__(
-            *args, des_file="memory.des", reward_manager=reward_manager, **kwargs
+            *args, des_file="memento.des", reward_manager=reward_manager, **kwargs
         )
 
 
 registration.register(
-    id="MiniHack-Memory-v0",
-    entry_point="nle.minihack.envs.memory:MiniHackMemory",
+    id="MiniHack-Memento-v0",
+    entry_point="nle.minihack.envs.memento:MiniHackMemento",
 )

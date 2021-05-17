@@ -13,7 +13,7 @@ import nle.minihack.envs.keyroom
 import nle.minihack.envs.mazewalk
 import nle.minihack.envs.fightcorridor
 import nle.minihack.envs.minigrid
-import nle.minihack.envs.memory
+import nle.minihack.envs.memento
 import nle.minihack.envs.boxohack
 import nle.minihack.envs.river
 import nle.minihack.envs.hidenseek
