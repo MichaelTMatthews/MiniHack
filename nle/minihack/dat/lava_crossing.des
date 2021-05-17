@@ -3,72 +3,39 @@ INIT_MAP:solidfill,' '
 GEOMETRY:center,center
 MAP
 -------------
-|...........|
-|...........|
-|...........|
-|...........|
-|...........|
-|...........|
-|...........|
-|...........|
-|...........|
-|...........|
-|...........|
+|.....L.....|
+|.....L.....|
+|.....L.....|
+|.....L.....|
+|.....L.....|
 -------------
 ENDMAP
-REGION:(0,0,11,11),lit,"ordinary"
+REGION:(0,0,12,6),lit,"ordinary"
+$left_bank = selection:fillrect (1,1,5,5)
+$right_bank = selection:fillrect (7,1,11,5)
 IF [50%] {
-    $line = selection:line (2,1),(2,11)
-    TERRAIN:$line, 'L'
-    TERRAIN:rndcoord($line), '.'
-
-    $line = selection:line (4,1),(4,11)
-    TERRAIN:$line, 'L'
-    TERRAIN:rndcoord($line), '.'
-
-    $line = selection:line (6,1),(6,11)
-    TERRAIN:$line, 'L'
-    TERRAIN:rndcoord($line), '.'
-
-    $line = selection:line (8,1),(8,11)
-    TERRAIN:$line, 'L'
-    TERRAIN:rndcoord($line), '.'
-
-    $line = selection:line (10,1),(10,11)
-    TERRAIN:$line, 'L'
-    TERRAIN:rndcoord($line), '.'
-
-    IF [50%] {
-        $line_stair = selection:line (1,1),(1,11)
+    # levitate
+    IF [33%] {
+        # potion of levitation
+        OBJECT:('!',"levitation"),rndcoord($left_bank),blessed
     } ELSE {
-        $line_stair = selection:line (11,1),(11,11)
+        IF [50%] {
+            # ring of levitation
+            OBJECT:('=',"levitation"),rndcoord($left_bank),blessed
+        } ELSE {
+            # levitation boots
+            OBJECT:('[',"levitation boots"),rndcoord($left_bank),blessed
+        }
     }
 } ELSE {
-    $line = selection:line (1,2),(11,2)
-    TERRAIN:$line, 'L'
-    TERRAIN:rndcoord($line), '.'
-
-    $line = selection:line (1,4),(11,4)
-    TERRAIN:$line, 'L'
-    TERRAIN:rndcoord($line), '.'
-
-    $line = selection:line (1,6),(11,6)
-    TERRAIN:$line, 'L'
-    TERRAIN:rndcoord($line), '.'
-
-    $line = selection:line (1,8),(11,8)
-    TERRAIN:$line, 'L'
-    TERRAIN:rndcoord($line), '.'
-
-    $line = selection:line (1,10),(11,10)
-    TERRAIN:$line, 'L'
-    TERRAIN:rndcoord($line), '.'
-
+    # freeze
     IF [50%] {
-        $line_stair = selection:line (1,1),(11,1)
+        # wand of cold
+        OBJECT:('/',"cold"),rndcoord($left_bank),blessed
     } ELSE {
-        $line_stair = selection:line (1,11),(11,11)
+        # frost horn
+        OBJECT:('(',"frost horn"),rndcoord($left_bank),blessed
     }
 }
-STAIR:random,up
-STAIR:rndcoord($line_stair), down
+BRANCH:(1,1,5,5),(0,0,0,0)
+STAIR:rndcoord($right_bank),down
