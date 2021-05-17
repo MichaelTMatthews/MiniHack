@@ -33,7 +33,7 @@ class MiniHackFreezeHorn(MiniHackFreeze):
 
 
 class MiniHackFreezeRandom(MiniHackFreeze):
-    def __init__(self, *args, n_distract=0, **kwargs):
+    def __init__(self, *args, **kwargs):
         des_file = """
 MAZE: "mylevel", ' '
 FLAGS:hardfloor
@@ -41,27 +41,55 @@ MESSAGE: "Welcome to MiniHack!"
 INIT_MAP: solidfill,' '
 GEOMETRY:center,center
 MAP
-.....
-.....
-.....
-.....
-.....
+........
+........
+........
+........
+........
+........
+........
+........
 ENDMAP
-REGION:(0,0,8,8),lit,"ordinary"
+REGION:(0,0,7,7),lit,"ordinary"
 IF [50%] {
     OBJECT:('/',"cold"),random,blessed
 } ELSE {
     OBJECT:('(',"frost horn"),random,blessed
 }
 """
-        for _ in range(n_distract):
-            des_file += "OBJECT:random,random\n"
         super().__init__(*args, des_file=des_file, **kwargs)
 
 
-class MiniHackFreezeRandomDist(MiniHackFreezeRandom):
+class MiniHackFreezeLava(MiniHackSkill):
     def __init__(self, *args, **kwargs):
-        super().__init__(*args, n_distract=3, **kwargs)
+        des_file = """
+MAZE: "mylevel", ' '
+FLAGS:hardfloor
+INIT_MAP: solidfill,' '
+GEOMETRY:center,center
+MAP
+-------------
+|.....L.....|
+|.....L.....|
+|.....L.....|
+|.....L.....|
+|.....L.....|
+-------------
+ENDMAP
+REGION:(0,0,12,6),lit,"ordinary"
+$left_bank = selection:fillrect (1,1,5,5)
+$right_bank = selection:fillrect (7,1,11,5)
+IF [50%] {
+    # wand of cold
+    OBJECT:('/',"cold"),rndcoord($left_bank),blessed
+} ELSE {
+    # frost horn
+    OBJECT:('(',"frost horn"),rndcoord($left_bank),blessed
+}
+BRANCH:(1,1,5,5),(0,0,0,0)
+STAIR:rndcoord($right_bank),down
+"""
+        super().__init__(*args, des_file=des_file, **kwargs)
 
 
 registration.register(
@@ -77,6 +105,6 @@ registration.register(
     entry_point="nle.minihack.envs.skills_freeze:MiniHackFreezeRandom",
 )
 registration.register(
-    id="MiniHack-Freeze-Random-Distract-v0",
-    entry_point="nle.minihack.envs.skills_freeze:MiniHackFreezeRandomDist",
+    id="MiniHack-Freeze-Lava-v0",
+    entry_point="nle.minihack.envs.skills_freeze:MiniHackFreezeLava",
 )

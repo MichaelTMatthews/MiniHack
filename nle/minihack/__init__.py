@@ -13,20 +13,20 @@ import nle.minihack.envs.keyroom
 import nle.minihack.envs.mazewalk
 import nle.minihack.envs.fightcorridor
 import nle.minihack.envs.minigrid
+import nle.minihack.envs.memento
 import nle.minihack.envs.boxohack
 import nle.minihack.envs.river
+import nle.minihack.envs.hidenseek
 import nle.minihack.envs.lab
+import nle.minihack.envs.deepexplore
 import nle.minihack.envs.skills_simple
 import nle.minihack.envs.skills_wod
 import nle.minihack.envs.skills_levitate
 import nle.minihack.envs.skills_freeze
 import nle.minihack.envs.skills_invis
-import nle.minihack.envs.lab
-import nle.minihack.envs.deepexplore
-
-# import nle.minihack.envs.skills_lava_river
-# import nle.minihack.envs.skills_chest
-# import nle.minihack.envs.skills_quest
+import nle.minihack.envs.skills_lava
+import nle.minihack.envs.skills_chest
+import nle.minihack.envs.skills_quest
 
 __all__ = [
     "MiniHack",
