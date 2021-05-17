@@ -556,7 +556,8 @@ class NLE(gym.Env):
         rendering = "\n".join(rendering)
         return rendering
 
-    def render(self, mode="human"):
+
+    def get_render(self, mode="human", view=None, print_guides=False):
         """Renders the state of environment.
 
         Arguments:
@@ -571,7 +572,35 @@ class NLE(gym.Env):
             tty_colors_index = self._observation_keys.index("tty_colors")
             tty_chars = obs[tty_chars_index]
             tty_colors = obs[tty_colors_index]
-            rendering = self.get_tty_rendering(tty_chars, tty_colors)
+            if view is not None:
+                x1, x2, y1, y2 = view
+                tty_chars = tty_chars[x1:y1, x2:y2]
+                tty_colors = tty_colors[x1:y1, x2:y2]
+
+            rendering = self.get_tty_rendering(tty_chars, tty_colors, print_guides)
+            return rendering
+
+    def render(self, mode="human", view=None, print_guides=False):
+        """Renders the state of environment.
+
+        Arguments:
+           mode (str): Defaults to "human". Acceptable values are "human" and
+                       "ansi", otherwise a ``ValueError`` is raised.
+
+        """
+        chars_index = self._observation_keys.index("chars")
+        if mode == "human":
+            obs = self.last_observation
+            tty_chars_index = self._observation_keys.index("tty_chars")
+            tty_colors_index = self._observation_keys.index("tty_colors")
+            tty_chars = obs[tty_chars_index]
+            tty_colors = obs[tty_colors_index]
+            if view is not None:
+                x1, x2, y1, y2 = view
+                tty_chars = tty_chars[x1:y1, x2:y2]
+                tty_colors = tty_colors[x1:y1, x2:y2]
+
+            rendering = self.get_tty_rendering(tty_chars, tty_colors, print_guides)
             print(rendering)
             return
         elif mode == "full":

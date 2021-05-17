@@ -6,7 +6,7 @@ class MiniHackHideAndSeek(MiniHackSkill):
     def __init__(self, *args, **kwargs):
         des_file = """
 MAZE: "mylevel", ' '
-FLAGS:hardfloor
+FLAGS:hardfloor, premapped
 MESSAGE: "Welcome to MiniHack!"
 INIT_MAP: solidfill,' '
 GEOMETRY:center,center
