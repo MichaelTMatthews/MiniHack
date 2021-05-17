@@ -12,10 +12,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from nle.agent.envs import tasks
+from nle.agent.common.envs import tasks
 from nle.env.base import DUNGEON_SHAPE
-from nle.agent.models.base import BaseNet, RandomNet
-from nle.agent.models.intrinsic import RNDNet, RIDENet
+from nle.agent.polybeast.models.base import BaseNet, RandomNet
+from nle.agent.polybeast.models.intrinsic import RNDNet, RIDENet
 
 
 def create_model(flags, device):

@@ -4,9 +4,7 @@ from gym.envs import registration
 import gym
 
 
-MOVE_AND_KICK_ACTIONS = tuple(
-    list(CompassDirection) + [Command.OPEN, Command.KICK, Command.SEARCH]
-)
+MOVE_AND_KICK_ACTIONS = tuple(list(CompassDirection) + [Command.OPEN, Command.KICK])
 
 
 class MiniGridHack(MiniHackNavigation):
@@ -19,6 +17,12 @@ class MiniGridHack(MiniHackNavigation):
         self.door_state = kwargs.pop("door_state", "closed")
         if self.door_state == "locked":
             kwargs["actions"] = MOVE_AND_KICK_ACTIONS
+
+        lava_walls = kwargs.pop("lava_walls", False)
+        if lava_walls:
+            self.wall = "L"
+        else:
+            self.wall = "|"
 
         des_file = self.get_env_desc()
         super().__init__(*args, des_file=des_file, **kwargs)
@@ -39,7 +43,7 @@ class MiniGridHack(MiniHackNavigation):
                     continue
                 empty_str = False
                 if c.type == "wall":
-                    str += "|"
+                    str += self.wall
                 elif c.type == "door":
                     str += "+"
                     door_pos.append((i, j - empty_strs))
@@ -54,9 +58,9 @@ class MiniGridHack(MiniHackNavigation):
                     str += "."
             if not empty_str and j < env.grid.height - 1:
                 if set(str) != {"."}:
-                    str = str.replace(".", " ", str.index("|"))
+                    str = str.replace(".", " ", str.index(self.wall))
                     inv = str[::-1]
-                    str = inv.replace(".", " ", inv.index("|"))[::-1]
+                    str = inv.replace(".", " ", inv.index(self.wall))[::-1]
                     env_map.append(str)
             elif empty_str:
                 empty_strs += 1
@@ -96,105 +100,186 @@ class MiniGridHack(MiniHackNavigation):
         return super().reset()
 
 
-# MiniGrid: MultiRoom
+class MiniHackMultiRoomN2(MiniGridHack):
+    def __init__(self, *args, **kwargs):
+        kwargs["max_episode_steps"] = kwargs.pop("max_episode_steps", 40)
+        super().__init__(*args, env_name="MiniGrid-MultiRoom-N2-S4-v0", **kwargs)
+
+
+class MiniHackMultiRoomN4(MiniGridHack):
+    def __init__(self, *args, **kwargs):
+        kwargs["max_episode_steps"] = kwargs.pop("max_episode_steps", 80)
+        super().__init__(*args, env_name="MiniGrid-MultiRoom-N4-S5-v0", **kwargs)
+
+
+class MiniHackMultiRoomN6(MiniGridHack):
+    def __init__(self, *args, **kwargs):
+        kwargs["max_episode_steps"] = kwargs.pop("max_episode_steps", 120)
+        super().__init__(*args, env_name="MiniGrid-MultiRoom-N6-v0", **kwargs)
+
+
 registration.register(
     id="MiniHack-MultiRoom-N2-S4-v0",
-    entry_point="nle.minihack.envs.minigrid:MiniGridHack",
-    kwargs={"env_name": "MiniGrid-MultiRoom-N2-S4-v0", "max_episode_steps": 40},
+    entry_point="nle.minihack.envs.minigrid:MiniHackMultiRoomN2",
 )
 registration.register(
     id="MiniHack-MultiRoom-N4-S5-v0",
-    entry_point="nle.minihack.envs.minigrid:MiniGridHack",
-    kwargs={"env_name": "MiniGrid-MultiRoom-N4-S5-v0", "max_episode_steps": 80},
+    entry_point="nle.minihack.envs.minigrid:MiniHackMultiRoomN4",
 )
 registration.register(
     id="MiniHack-MultiRoom-N6-v0",
-    entry_point="nle.minihack.envs.minigrid:MiniGridHack",
-    kwargs={"env_name": "MiniGrid-MultiRoom-N6-v0", "max_episode_steps": 120},
+    entry_point="nle.minihack.envs.minigrid:MiniHackMultiRoomN6",
 )
 
-# TODO define max_episode_steps for the following
+
 # MiniGrid: LockedMultiRoom
+class MiniHackMultiRoomN2Locked(MiniGridHack):
+    def __init__(self, *args, **kwargs):
+        kwargs["max_episode_steps"] = kwargs.pop("max_episode_steps", 40)
+        kwargs["door_state"] = "locked"
+        super().__init__(*args, env_name="MiniGrid-MultiRoom-N2-S4-v0", **kwargs)
+
+
+class MiniHackMultiRoomN4Locked(MiniGridHack):
+    def __init__(self, *args, **kwargs):
+        kwargs["max_episode_steps"] = kwargs.pop("max_episode_steps", 80)
+        kwargs["door_state"] = "locked"
+        super().__init__(*args, env_name="MiniGrid-MultiRoom-N4-S5-v0", **kwargs)
+
+
+class MiniHackMultiRoomN6Locked(MiniGridHack):
+    def __init__(self, *args, **kwargs):
+        kwargs["max_episode_steps"] = kwargs.pop("max_episode_steps", 120)
+        kwargs["door_state"] = "locked"
+        super().__init__(*args, env_name="MiniGrid-MultiRoom-N6-v0", **kwargs)
+
+
 registration.register(
-    id="MiniHack-LockedMultiRoom-N2-S4-M1-v0",
-    entry_point="nle.minihack.envs.minigrid:MiniGridHack",
-    kwargs={"env_name": "MiniGrid-MultiRoom-N2-S4-v0", "door_state": "locked"},
+    id="MiniHack-LockedMultiRoom-N2-S4-v0",
+    entry_point="nle.minihack.envs.minigrid:MiniHackMultiRoomN2Locked",
 )
 registration.register(
     id="MiniHack-LockedMultiRoom-N4-S5-v0",
-    entry_point="nle.minihack.envs.minigrid:MiniGridHack",
-    kwargs={"env_name": "MiniGrid-MultiRoom-N4-S5-v0", "door_state": "locked"},
+    entry_point="nle.minihack.envs.minigrid:MiniHackMultiRoomN4Locked",
 )
 registration.register(
     id="MiniHack-LockedMultiRoom-N6-v0",
-    entry_point="nle.minihack.envs.minigrid:MiniGridHack",
-    kwargs={"env_name": "MiniGrid-MultiRoom-N6-v0", "door_state": "locked"},
+    entry_point="nle.minihack.envs.minigrid:MiniHackMultiRoomN6Locked",
 )
 
-# MiniGrid: TrappedMultiRoom
+
+# MiniGrid: LavaMultiRoom
+class MiniHackMultiRoomN2Lava(MiniGridHack):
+    def __init__(self, *args, **kwargs):
+        kwargs["max_episode_steps"] = kwargs.pop("max_episode_steps", 40)
+        kwargs["lava_walls"] = True
+        super().__init__(*args, env_name="MiniGrid-MultiRoom-N2-S4-v0", **kwargs)
+
+
+class MiniHackMultiRoomN4Lava(MiniGridHack):
+    def __init__(self, *args, **kwargs):
+        kwargs["max_episode_steps"] = kwargs.pop("max_episode_steps", 80)
+        kwargs["lava_walls"] = True
+        super().__init__(*args, env_name="MiniGrid-MultiRoom-N4-S5-v0", **kwargs)
+
+
+class MiniHackMultiRoomN6Lava(MiniGridHack):
+    def __init__(self, *args, **kwargs):
+        kwargs["max_episode_steps"] = kwargs.pop("max_episode_steps", 120)
+        kwargs["lava_walls"] = True
+        super().__init__(*args, env_name="MiniGrid-MultiRoom-N6-v0", **kwargs)
+
+
 registration.register(
-    id="MiniHack-TrappedMultiRoom-N2-S4-M1-v0",
-    entry_point="nle.minihack.envs.minigrid:MiniGridHack",
-    kwargs={"env_name": "MiniGrid-MultiRoom-N2-S4-v0", "num_trap": 1},
+    id="MiniHack-LavaMultiRoom-N2-S4-v0",
+    entry_point="nle.minihack.envs.minigrid:MiniHackMultiRoomN2Lava",
 )
 registration.register(
-    id="MiniHack-TrappedMultiRoom-N4-S5-v0",
-    entry_point="nle.minihack.envs.minigrid:MiniGridHack",
-    kwargs={"env_name": "MiniGrid-MultiRoom-N4-S5-v0", "num_trap": 4},
+    id="MiniHack-LavaMultiRoom-N4-S5-v0",
+    entry_point="nle.minihack.envs.minigrid:MiniHackMultiRoomN4Lava",
 )
 registration.register(
-    id="MiniHack-TrappedMultiRoom-N6-v0",
-    entry_point="nle.minihack.envs.minigrid:MiniGridHack",
-    kwargs={"env_name": "MiniGrid-MultiRoom-N6-v0", "num_trap": 6},
+    id="MiniHack-LavaMultiRoom-N6-v0",
+    entry_point="nle.minihack.envs.minigrid:MiniHackMultiRoomN6Lava",
 )
+
+
+# MiniGrid: MonsterpedMultiRoom
+class MiniHackMultiRoomN2Monster(MiniGridHack):
+    def __init__(self, *args, **kwargs):
+        kwargs["max_episode_steps"] = kwargs.pop("max_episode_steps", 40)
+        kwargs["num_mon"] = 3
+        super().__init__(*args, env_name="MiniGrid-MultiRoom-N2-S4-v0", **kwargs)
+
+
+class MiniHackMultiRoomN4Monster(MiniGridHack):
+    def __init__(self, *args, **kwargs):
+        kwargs["max_episode_steps"] = kwargs.pop("max_episode_steps", 80)
+        kwargs["num_mon"] = 6
+        super().__init__(*args, env_name="MiniGrid-MultiRoom-N4-S5-v0", **kwargs)
+
+
+class MiniHackMultiRoomN6Monster(MiniGridHack):
+    def __init__(self, *args, **kwargs):
+        kwargs["max_episode_steps"] = kwargs.pop("max_episode_steps", 120)
+        kwargs["num_mon"] = 9
+        super().__init__(*args, env_name="MiniGrid-MultiRoom-N6-v0", **kwargs)
+
 
 # MiniGrid: MonsterMultiRoom
 registration.register(
-    id="MiniHack-MonsterMultiRoom-N2-S4-M1-v0",
-    entry_point="nle.minihack.envs.minigrid:MiniGridHack",
-    kwargs={"env_name": "MiniGrid-MultiRoom-N2-S4-v0", "num_mon": 1},
+    id="MiniHack-MonsterMultiRoom-N2-S4-v0",
+    entry_point="nle.minihack.envs.minigrid:MiniHackMultiRoomN2Monster",
 )
 registration.register(
     id="MiniHack-MonsterMultiRoom-N4-S5-v0",
-    entry_point="nle.minihack.envs.minigrid:MiniGridHack",
-    kwargs={"env_name": "MiniGrid-MultiRoom-N4-S5-v0", "num_mon": 4},
+    entry_point="nle.minihack.envs.minigrid:MiniHackMultiRoomN4Monster",
 )
 registration.register(
     id="MiniHack-MonsterMultiRoom-N6-v0",
-    entry_point="nle.minihack.envs.minigrid:MiniGridHack",
-    kwargs={"env_name": "MiniGrid-MultiRoom-N6-v0", "num_mon": 6},
+    entry_point="nle.minihack.envs.minigrid:MiniHackMultiRoomN6Monster",
 )
 
+
 # MiniGrid: ExtremeMultiRoom
+class MiniHackMultiRoomN2Extreme(MiniGridHack):
+    def __init__(self, *args, **kwargs):
+        kwargs["max_episode_steps"] = kwargs.pop("max_episode_steps", 40)
+        kwargs["num_mon"] = 3
+        kwargs["lava_walls"] = True
+        kwargs["door_state"] = "locked"
+        super().__init__(*args, env_name="MiniGrid-MultiRoom-N2-S4-v0", **kwargs)
+
+
+class MiniHackMultiRoomN4Extreme(MiniGridHack):
+    def __init__(self, *args, **kwargs):
+        kwargs["max_episode_steps"] = kwargs.pop("max_episode_steps", 80)
+        kwargs["num_mon"] = 6
+        kwargs["lava_walls"] = True
+        kwargs["door_state"] = "locked"
+        super().__init__(*args, env_name="MiniGrid-MultiRoom-N4-S5-v0", **kwargs)
+
+
+class MiniHackMultiRoomN6Extreme(MiniGridHack):
+    def __init__(self, *args, **kwargs):
+        kwargs["max_episode_steps"] = kwargs.pop("max_episode_steps", 120)
+        kwargs["num_mon"] = 9
+        kwargs["lava_walls"] = True
+        kwargs["door_state"] = "locked"
+        super().__init__(*args, env_name="MiniGrid-MultiRoom-N6-v0", **kwargs)
+
+
 registration.register(
-    id="MiniHack-ExtremeMultiRoom-N2-S4-M1-v0",
-    entry_point="nle.minihack.envs.minigrid:MiniGridHack",
-    kwargs={
-        "env_name": "MiniGrid-MultiRoom-N2-S4-v0",
-        "num_mon": 1,
-        "num_trap": 1,
-        "door_state": "locked",
-    },
+    id="MiniHack-ExtremeMultiRoom-N2-S4-v0",
+    entry_point="nle.minihack.envs.minigrid:MiniHackMultiRoomN2Extreme",
 )
 registration.register(
     id="MiniHack-ExtremeMultiRoom-N4-S5-v0",
-    entry_point="nle.minihack.envs.minigrid:MiniGridHack",
-    kwargs={
-        "env_name": "MiniGrid-MultiRoom-N4-S5-v0",
-        "num_mon": 4,
-        "num_trap": 4,
-        "door_state": "locked",
-    },
+    entry_point="nle.minihack.envs.minigrid:MiniHackMultiRoomN4Extreme",
 )
 registration.register(
     id="MiniHack-ExtremeMultiRoom-N6-v0",
-    entry_point="nle.minihack.envs.minigrid:MiniGridHack",
-    kwargs={
-        "env_name": "MiniGrid-MultiRoom-N6-v0",
-        "num_mon": 6,
-        "num_trap": 6,
-        "door_state": "locked",
-    },
+    entry_point="nle.minihack.envs.minigrid:MiniHackMultiRoomN6Extreme",
 )
 
 # MiniGrid: LavaCrossing

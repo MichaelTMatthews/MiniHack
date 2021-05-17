@@ -640,6 +640,10 @@ class NLE(gym.Env):
 
     def _perform_known_steps(self, observation, done, exceptions=True):
         while not done:
+            if observation[self._program_state_index][0] == 1:  # game over
+                observation, done = self.env.step(ASCII_SPACE)
+                continue
+
             if observation[self._internal_index][3]:  # xwaitforspace
                 observation, done = self.env.step(ASCII_SPACE)
                 continue
