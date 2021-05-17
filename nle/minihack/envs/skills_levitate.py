@@ -47,11 +47,10 @@ class MiniHackLevitatePotion(MiniHackLevitate):
 
 
 class MiniHackLevitateRandom(MiniHackLevitate):
-    def __init__(self, *args, n_distract=0, **kwargs):
+    def __init__(self, *args, **kwargs):
         des_file = """
 MAZE: "mylevel", ' '
 FLAGS:hardfloor
-MESSAGE: "Welcome to MiniHack!"
 INIT_MAP: solidfill,' '
 GEOMETRY:center,center
 MAP
@@ -65,21 +64,48 @@ REGION:(0,0,5,5),lit,"ordinary"
 IF [33%] {
     OBJECT:('!',"levitation"),random,blessed
 } ELSE {
-    IF [33%] {
+    IF [50%] {
         OBJECT:('=',"levitation"),random,blessed
     } ELSE {
         OBJECT:('[',"levitation boots"),random,blessed
     }
 }
 """
-        for _ in range(n_distract):
-            des_file += "OBJECT:random,random\n"
         super().__init__(*args, des_file=des_file, **kwargs)
 
 
-class MiniHackLevitateRandomDist(MiniHackLevitateRandom):
+class MiniHackLevitateLava(MiniHackSkill):
     def __init__(self, *args, **kwargs):
-        super().__init__(*args, n_distract=3, **kwargs)
+        des_file = """
+MAZE: "mylevel", ' '
+FLAGS:hardfloor
+INIT_MAP: solidfill,' '
+GEOMETRY:center,center
+MAP
+-------------
+|.....L.....|
+|.....L.....|
+|.....L.....|
+|.....L.....|
+|.....L.....|
+-------------
+ENDMAP
+REGION:(0,0,12,6),lit,"ordinary"
+$left_bank = selection:fillrect (1,1,5,5)
+$right_bank = selection:fillrect (7,1,11,5)
+IF [33%] {
+    OBJECT:('!',"levitation"),rndcoord($left_bank),blessed
+} ELSE {
+    IF [50%] {
+        OBJECT:('=',"levitation"),rndcoord($left_bank),blessed
+    } ELSE {
+        OBJECT:('[',"levitation boots"),rndcoord($left_bank),blessed
+    }
+}
+BRANCH:(1,1,5,5),(0,0,0,0)
+STAIR:rndcoord($right_bank),down
+"""
+        super().__init__(*args, des_file=des_file, **kwargs)
 
 
 registration.register(
@@ -99,6 +125,6 @@ registration.register(
     entry_point="nle.minihack.envs.skills_levitate:MiniHackLevitateRandom",
 )
 registration.register(
-    id="MiniHack-Levitate-Random-Distract-v0",
-    entry_point="nle.minihack.envs.skills_levitate:MiniHackLevitateRandomDist",
+    id="MiniHack-Levitate-Lava-v0",
+    entry_point="nle.minihack.envs.skills_levitate:MiniHackLevitateLava",
 )
