@@ -149,7 +149,7 @@ COLORS = [
     "\x1b[95m",
     "\x1b[96m",
     "\x1b[97m",
-]
+] * 2
 
 
 class NLE(gym.Env):

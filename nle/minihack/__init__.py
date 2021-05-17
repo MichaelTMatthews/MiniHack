@@ -21,6 +21,8 @@ import nle.minihack.envs.skills_wand
 import nle.minihack.envs.skills_levitate
 import nle.minihack.envs.skills_invis
 import nle.minihack.envs.lab
+import nle.minihack.envs.scratch
+import nle.minihack.envs.hideandseek
 
 
 __all__ = [
