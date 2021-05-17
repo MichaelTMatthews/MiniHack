@@ -79,7 +79,7 @@ class MiniHackWoDHard(MiniHackSkill):
         super().__init__(*args, des_file=des_file, **kwargs)
 
 
-class MiniHackWoDExtreme(MiniHackSkill):
+class MiniHackWoDPro(MiniHackSkill):
     def __init__(self, *args, **kwargs):
         map = """
 -------------------------------------
@@ -133,6 +133,6 @@ registration.register(
     entry_point="nle.minihack.envs.skills_wod:MiniHackWoDHard",
 )
 registration.register(
-    id="MiniHack-WoD-Extreme-v0",
+    id="MiniHack-WoD-Pro-v0",
     entry_point="nle.minihack.envs.skills_wod:MiniHackWoDExtreme",
 )
