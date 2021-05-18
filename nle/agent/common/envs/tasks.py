@@ -101,7 +101,6 @@ def create_env(flags, env_id=0, lock=threading.Lock()):
         kwargs = dict(
             savedir=None,
             archivefile=None,
-            character=flags.character,
             observation_keys=flags.obs_keys.split(","),
             penalty_step=flags.penalty_step,
             penalty_time=flags.penalty_time,
@@ -109,6 +108,7 @@ def create_env(flags, env_id=0, lock=threading.Lock()):
         )
         if not is_env_minihack(env_class):
             kwargs.update(max_episode_steps=flags.max_num_steps)
+            kwargs.update(character=flags.character)
         if flags.env in ("staircase", "pet", "oracle"):
             kwargs.update(reward_win=flags.reward_win, reward_lose=flags.reward_lose)
         elif env_id == 0:

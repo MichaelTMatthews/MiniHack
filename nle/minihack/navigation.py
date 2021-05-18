@@ -30,6 +30,8 @@ class MiniHackNavigation(MiniHack):
         kwargs["allow_all_yn_questions"] = kwargs.pop("allow_all_yn_questions", False)
         # Perform know steps
         kwargs["perform_menu_steps"] = kwargs.pop("perform_known_steps", True)
+        # Play with Rogue character
+        kwargs["character"] = kwargs.pop("character", "rog-hum-cha-mal")
         # Override episode limit
         kwargs["max_episode_steps"] = kwargs.pop("max_episode_steps", 100)
         # Restrict the observation space to chars only
