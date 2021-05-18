@@ -149,7 +149,7 @@ COLORS = [
     "\x1b[95m",
     "\x1b[96m",
     "\x1b[97m",
-]
+] + [str(i) for i in range(32)]
 
 
 class NLE(gym.Env):
@@ -228,6 +228,7 @@ class NLE(gym.Env):
         actions=None,
         options=None,
         wizard=False,
+        perform_menu_steps=False,
         allow_all_yn_questions=False,
         space_dict=None,
     ):
@@ -258,6 +259,7 @@ class NLE(gym.Env):
 
         self.character = character
         self._max_episode_steps = max_episode_steps
+        self._perform_menu_steps = perform_menu_steps
         self._allow_all_yn_questions = allow_all_yn_questions
 
         if actions is None:
@@ -379,9 +381,11 @@ class NLE(gym.Env):
         last_observation = tuple(a.copy() for a in self.last_observation)
 
         observation, done = self.env.step(self._actions[action])
-        observation, done = self._perform_known_steps(
-            observation, done, exceptions=True
-        )
+        game_over = observation[self._program_state_index][0] == 1
+        if self._perform_menu_steps or game_over:
+            observation, done = self._perform_known_steps(
+                observation, done, exceptions=True
+            )
 
         self._steps += 1
 
@@ -640,6 +644,10 @@ class NLE(gym.Env):
 
     def _perform_known_steps(self, observation, done, exceptions=True):
         while not done:
+            if observation[self._program_state_index][0] == 1:  # game over
+                observation, done = self.env.step(ASCII_SPACE)
+                continue
+
             if observation[self._internal_index][3]:  # xwaitforspace
                 observation, done = self.env.step(ASCII_SPACE)
                 continue

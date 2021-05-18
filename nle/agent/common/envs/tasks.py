@@ -11,6 +11,7 @@ from nle.minihack.envs import (
     boxohack,
     fightcorridor,
     river,
+    memento,
 )
 from nle.agent.common.envs.wrapper import CounterWrapper
 
@@ -62,6 +63,9 @@ ENVS = dict(
     river_lava=river.MiniHackRiverLava,
     river_monster=river.MiniHackRiverMonster,
     river_monsterlava=river.MiniHackRiverMonsterLava,
+    river_narrow=river.MiniHackRiverNarrow,
+    # MiniHack Memento
+    memento=memento.MiniHackMemento,
     # MiniHack MultiRooms
     multiroom_2=minigrid.MiniHackMultiRoomN2,
     multiroom_4=minigrid.MiniHackMultiRoomN4,
@@ -69,9 +73,9 @@ ENVS = dict(
     multiroom_2_locked=minigrid.MiniHackMultiRoomN2Locked,
     multiroom_4_locked=minigrid.MiniHackMultiRoomN4Locked,
     multiroom_6_locked=minigrid.MiniHackMultiRoomN6Locked,
-    multiroom_2_trap=minigrid.MiniHackMultiRoomN2Trap,
-    multiroom_4_trap=minigrid.MiniHackMultiRoomN4Trap,
-    multiroom_6_trap=minigrid.MiniHackMultiRoomN6Trap,
+    multiroom_2_lava=minigrid.MiniHackMultiRoomN2Lava,
+    multiroom_4_lava=minigrid.MiniHackMultiRoomN4Lava,
+    multiroom_6_lava=minigrid.MiniHackMultiRoomN6Lava,
     multiroom_2_monster=minigrid.MiniHackMultiRoomN2Monster,
     multiroom_4_monster=minigrid.MiniHackMultiRoomN4Monster,
     multiroom_6_monster=minigrid.MiniHackMultiRoomN6Monster,

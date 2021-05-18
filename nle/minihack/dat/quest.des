@@ -1,18 +1,23 @@
-MAZE: "mylevel",' '
-INIT_MAP:solidfill,' '
+MAZE: "mylevel", ' '
+FLAGS:hardfloor
+INIT_MAP: solidfill,' '
 GEOMETRY:center,center
 MAP
 -------------
-|.....L.....|
-|.....L.....|
-|.....L.....|
-|.....L.....|
-|.....L.....|
+|.....L.....|   -------
+|.....L.....|   |.....|                 |------------------------|
+|.....L.....|   |......#################.........................|
+|.....L.....####......|                 |------------------------|
+|.....L.....|   -------
 -------------
 ENDMAP
+
+# Room 1
 REGION:(0,0,12,6),lit,"ordinary"
 $left_bank = selection:fillrect (1,1,5,5)
 $right_bank = selection:fillrect (7,1,11,5)
+BRANCH:(1,1,5,5),(0,0,0,0)
+OBJECT:('(',"skeleton key"),rndcoord($right_bank),blessed,0
 IF [50%] {
     # levitate
     IF [33%] {
@@ -37,5 +42,15 @@ IF [50%] {
         OBJECT:('(',"frost horn"),rndcoord($left_bank),blessed
     }
 }
-BRANCH:(1,1,5,5),(0,0,0,0)
-STAIR:rndcoord($right_bank),down
+
+# Room 2
+$room = selection:fillrect (17,2,21,4)
+REGION:(16,1,22,5),unlit,"ordinary"
+CONTAINER:('(',"chest"),not_trapped,rndcoord($room) {
+   OBJECT:('/', "death"),blessed
+}
+
+# Room 3
+REGION:(40,2,65,4),lit,"ordinary"
+MONSTER:('H', "minotaur"),(63,3),hostile,asleep
+STAIR:(64,3),down

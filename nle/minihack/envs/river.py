@@ -7,9 +7,20 @@ class MiniHackRiver(MiniHackNavigation):
         kwargs["max_episode_steps"] = kwargs.pop("max_episode_steps", 350)
         n_monster = kwargs.pop("n_monster", 0)
         n_boulder = kwargs.pop("n_boulder", 5)
+        narrow = kwargs.pop("narrow", False)
         lava = kwargs.pop("lava", False)
 
-        if not lava:
+        if narrow:
+            map = """
+..................WW.....
+..................WW.....
+..................WW.....
+..................WW.....
+..................WW.....
+..................WW.....
+..................WW.....
+"""
+        elif not lava:
             map = """
 ..................WWW....
 ..................WWW....
@@ -62,6 +73,11 @@ class MiniHackRiverMonsterLava(MiniHackRiver):
         super().__init__(*args, lava=True, n_monster=5, **kwargs)
 
 
+class MiniHackRiverNarrow(MiniHackRiver):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, narrow=True, **kwargs)
+
+
 registration.register(
     id="MiniHack-River-v0",
     entry_point="nle.minihack.envs.river:MiniHackRiver",
@@ -80,4 +96,9 @@ registration.register(
 registration.register(
     id="MiniHack-River-MonsterLava-v0",
     entry_point="nle.minihack.envs.river:MiniHackRiverMonsterLava",
+)
+
+registration.register(
+    id="MiniHack-River-Narrow-v0",
+    entry_point="nle.minihack.envs.river:MiniHackRiverNarrow",
 )

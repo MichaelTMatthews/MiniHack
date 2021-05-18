@@ -19,7 +19,7 @@ PATCH_SCRIPT = os.path.join(
     "mh_patch_nhdat.sh",
 )
 MH_FULL_ACTIONS = list(FULL_ACTIONS)
-MH_FULL_ACTIONS.remove(nethack.MiscDirection.DOWN)
+# MH_FULL_ACTIONS.remove(nethack.MiscDirection.DOWN)
 MH_FULL_ACTIONS.remove(nethack.MiscDirection.UP)
 MH_FULL_ACTIONS = tuple(MH_FULL_ACTIONS)
 
@@ -146,7 +146,7 @@ class MiniHack(NetHackStaircase):
     def reset(self, *args, **kwargs):
         if self.reward_manager is not None:
             self.reward_manager.reset()
-        super().reset(*args, **kwargs)
+        return super().reset(*args, **kwargs)
 
     def _reward_fn(self, last_observation, observation, end_status):
         """Use reward_manager to collect reward calculated in _is_episode_end,
@@ -178,8 +178,8 @@ class MiniHack(NetHackStaircase):
             )
             if result:
                 return self.StepStatus.TASK_SUCCESSFUL
-            # Revert to staircase episode end check (so we always end if we go
-            # down a staircase
+
+        # Revert to staircase episode end check (so we always end if we reach
         return super()._is_episode_end(observation)
 
     def update(self, des_file):
