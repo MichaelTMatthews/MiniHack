@@ -101,7 +101,7 @@ class MiniHackRoom15x15MonsterTrap(MiniHackRoom):
 
 registration.register(
     id="MiniHack-Room-15x15-v0",
-    entry_point="nle.minihack.envs.room:MiniHackRoom",
+    entry_point="nle.minihack.envs.room:MiniHackRoom15x15",
 )
 registration.register(
     id="MiniHack-Room-Random-15x15-v0",
