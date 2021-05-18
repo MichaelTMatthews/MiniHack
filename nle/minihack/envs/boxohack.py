@@ -29,8 +29,8 @@ def load_boxoban_levels(cur_levels_path):
 
 
 class BoxoHack(MiniHackNavigation):
-    def __init__(self, *args, max_episode_steps=1000, **kwargs):
-
+    def __init__(self, *args, **kwargs):
+        kwargs["max_episode_steps"] = kwargs.pop("max_episode_steps", 400)
         level_set = kwargs.pop("level_set", "unfiltered")
         level_mode = kwargs.pop("level_mode", "train")
 
