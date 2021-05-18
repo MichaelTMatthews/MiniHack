@@ -65,7 +65,9 @@ ENVS = dict(
     river_monsterlava=river.MiniHackRiverMonsterLava,
     river_narrow=river.MiniHackRiverNarrow,
     # MiniHack Memento
-    memento=memento.MiniHackMemento,
+    memento_short=memento.MiniHackMementoShortF2,
+    memento=memento.MiniHackMementoF2,
+    memento_hard=memento.MiniHackMementoF4,
     # MiniHack MultiRooms
     multiroom_2=minigrid.MiniHackMultiRoomN2,
     multiroom_4=minigrid.MiniHackMultiRoomN4,
