@@ -35,7 +35,7 @@ STAIR:$place[2],down
 
 class MiniHackHideAndSeek(MiniHackNavigation):
     def __init__(self, *args, **kwargs):
-        kwargs["max_episode_steps"] = kwargs.pop("max_episode_steps", 1000)
+        kwargs["max_episode_steps"] = kwargs.pop("max_episode_steps", 200)
         super().__init__(*args, des_file=des_file, **kwargs)
 
 
