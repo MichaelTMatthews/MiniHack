@@ -71,6 +71,7 @@ ENVS = dict(
     memento_hard=memento.MiniHackMementoF4,
     # MiniHack Hide&Seek
     hidenseek=hidenseek.MiniHackHideAndSeek,
+    hidenseek_mapped=hidenseek.MiniHackHideAndSeekMapped,
     # MiniHack MultiRooms
     multiroom_2=minigrid.MiniHackMultiRoomN2,
     multiroom_4=minigrid.MiniHackMultiRoomN4,
