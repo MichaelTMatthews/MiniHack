@@ -10,6 +10,7 @@ from nle import _pynethack, nethack
 from nle.env.base import FULL_ACTIONS, NLE_SPACE_ITEMS
 from nle.env.tasks import NetHackStaircase
 from nle.minihack.wiki import NetHackWiki
+from nle.tiles import GlyphMapper
 
 PATH_DAT_DIR = os.path.join(os.path.dirname(os.path.realpath(__file__)), "dat")
 LIB_DIR = os.path.join(os.path.dirname(os.path.realpath(__file__)), "lib")
@@ -22,6 +23,9 @@ MH_FULL_ACTIONS = list(FULL_ACTIONS)
 # MH_FULL_ACTIONS.remove(nethack.MiscDirection.DOWN)
 MH_FULL_ACTIONS.remove(nethack.MiscDirection.UP)
 MH_FULL_ACTIONS = tuple(MH_FULL_ACTIONS)
+
+RGB_MAX_VAL = 255
+N_TILE_PIXEL = 16
 
 
 MINIHACK_SPACE_FUNCS = {
@@ -44,6 +48,12 @@ MINIHACK_SPACE_FUNCS = {
         low=0,
         high=127,
         shape=(x, y, _pynethack.nethack.NLE_SCREEN_DESCRIPTION_LENGTH),
+        dtype=np.uint8,
+    ),
+    "pixel_crop": lambda x, y: gym.spaces.Box(
+        low=0,
+        high=RGB_MAX_VAL,
+        shape=(x * N_TILE_PIXEL, y * N_TILE_PIXEL, 3),
         dtype=np.uint8,
     ),
 }
@@ -98,12 +108,22 @@ class MiniHack(NetHackStaircase):
         kwargs["allow_all_yn_questions"] = kwargs.pop("allow_all_yn_questions", True)
         # Episode limit
         kwargs["max_episode_steps"] = kwargs.pop("max_episode_steps", 200)
+
         # Using all NLE observations by default
         space_dict = dict(NLE_SPACE_ITEMS)
         # MiniHack's observation keys are kept separate
-        self._minihack_obs_keys = kwargs.pop(
-            "observation_keys", list(space_dict.keys())
+        self._minihack_obs_keys = list(
+            kwargs.pop("observation_keys", space_dict.keys())
         )
+        # Handle RGB pixel observations
+        if any("pixel" in key for key in self._minihack_obs_keys):
+            self._glyph_mapper = GlyphMapper()
+            if "pixel_crop" in self._minihack_obs_keys:
+                # Make sure glyphs_crop and chars_crop are there
+                for key in ("glyphs_crop", "chars_crop"):
+                    if key not in self._minihack_obs_keys:
+                        self._minihack_obs_keys.append(key)
+
         self.reward_manager = reward_manager
         if self.reward_manager is not None:
             self.reward_manager.reset()
@@ -139,7 +159,17 @@ class MiniHack(NetHackStaircase):
                 space_func = MINIHACK_SPACE_FUNCS[key]
                 obs_space_dict[key] = space_func(self.obs_crop_h, self.obs_crop_w)
             else:
-                raise ValueError(f'Observation key "{key}" is not supported')
+                if "pixel" in self._minihack_obs_keys:
+                    d_shape = nethack.OBSERVATION_DESC["glyphs"]["shape"]
+                    shape = (d_shape[0] * N_TILE_PIXEL, d_shape[1] * N_TILE_PIXEL, 3)
+                    obs_space_dict["pixel"] = gym.spaces.Box(
+                        low=0,
+                        high=RGB_MAX_VAL,
+                        shape=shape,
+                        dtype=np.uint8,
+                    )
+                else:
+                    raise ValueError(f'Observation key "{key}" is not supported')
 
         return obs_space_dict
 
@@ -227,6 +257,8 @@ class MiniHack(NetHackStaircase):
         observation = super()._get_observation(observation)
         obs_dict = {}
         for key in self._minihack_obs_keys:
+            if "pixel" in key:
+                continue
             if key in self._observation_keys:
                 obs_dict[key] = observation[key]
             elif key in MINIHACK_SPACE_FUNCS.keys():
@@ -236,6 +268,16 @@ class MiniHack(NetHackStaircase):
                 else:
                     loc = observation["blstats"][:2]
                 obs_dict[key] = self._crop_observation(observation[orig_key], loc)
+
+        if "pixel" in self._minihack_obs_keys:
+            obs_dict["pixel"] = self._glyph_mapper.to_rgb(
+                observation["glyphs"], observation["chars"]
+            )
+
+        if "pixel_crop" in self._minihack_obs_keys:
+            obs_dict["pixel_crop"] = self._glyph_mapper.to_rgb(
+                obs_dict["glyphs_crop"], obs_dict["chars_crop"]
+            )
 
         return obs_dict
 

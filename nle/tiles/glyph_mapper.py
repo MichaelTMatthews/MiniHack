@@ -30,14 +30,14 @@ class GlyphMapper:
         assert 0 <= tile_id <= MAXOTHTILE
         return self.tiles[tile_id]
 
-    def glyph_obs_to_rgb(self, glyphs):
+    def _glyph_to_rgb(self, glyphs):
         # TODO this can probably be imporved
         # Expects glhyphs as two-dimensional numpy ndarray
         cols = None
         col = None
 
-        for i in range(glyphs.shape[0]):
-            for j in range(glyphs.shape[1]):
+        for i in range(glyphs.shape[1]):
+            for j in range(glyphs.shape[0]):
                 rgb = self.glyph_id_to_rgb(glyphs[j, i])
                 if col is None:
                     col = rgb
@@ -51,3 +51,15 @@ class GlyphMapper:
             col = None
 
         return cols
+
+    def to_rgb(self, glyphs, chars):
+        # Fix glyphs with 0 ID
+        glyphs = glyphs.copy()  # we might change it
+        zero_indices = np.argwhere(glyphs == 0)
+        for i, j in zero_indices:
+            if chars[i, j] == ord("a"):  # giant ant
+                continue
+            else:
+                glyphs[i, j] = 2359  # dark part of the room
+
+        return self._glyph_to_rgb(glyphs)
