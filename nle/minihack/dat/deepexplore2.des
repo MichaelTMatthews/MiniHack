@@ -1,0 +1,14 @@
+LEVEL: "mylevel"
+
+ROOM: "ordinary" , lit, random, random, random {
+  STAIR: random, up
+  STAIR: random, down
+}
+ROOM: "ordinary" , lit, random, random, random {
+  STAIR: random, down
+  LOOP [4] {
+    OBJECT: ('%',"apple"),random
+  }
+}
+
+RANDOM_CORRIDORS

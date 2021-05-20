@@ -18,10 +18,12 @@ import nle.minihack.envs.boxohack
 import nle.minihack.envs.river
 import nle.minihack.envs.hidenseek
 import nle.minihack.envs.lab
+import nle.minihack.envs.deepexplore
 import nle.minihack.envs.skills_simple
 import nle.minihack.envs.skills_wod
 import nle.minihack.envs.skills_levitate
 import nle.minihack.envs.skills_freeze
+import nle.minihack.envs.skills_invis
 import nle.minihack.envs.skills_lava
 import nle.minihack.envs.skills_chest
 import nle.minihack.envs.skills_quest
