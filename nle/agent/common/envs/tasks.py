@@ -72,6 +72,8 @@ ENVS = dict(
     # MiniHack Hide&Seek
     hidenseek=hidenseek.MiniHackHideAndSeek,
     hidenseek_mapped=hidenseek.MiniHackHideAndSeekMapped,
+    hidenseek_lava=hidenseek.MiniHackHideAndSeekLava,
+    hidenseek_big=hidenseek.MiniHackHideAndSeekBig,
     # MiniHack MultiRooms
     multiroom_2=minigrid.MiniHackMultiRoomN2,
     multiroom_4=minigrid.MiniHackMultiRoomN4,
