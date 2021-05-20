@@ -42,7 +42,7 @@ obs_keys: "glyphs,chars,colors,specials,blstats,message"
 env: score
 ## NLE tasks:
 # staircase, score, pet, oracle, gold, eat, scout,
-## MiniHack tasks
+## MiniHack tasks. See nle/agent/common/envs/tasks for all tasks
 # small_room, small_room_random, small_room_dark, small_room_monster,
 # small_room_trap, big_room, big_room_random, big_room_dark, big_room_monster,
 # big_room_monster_trap, corridor2, corridor3, corridor5, corridor8,
@@ -54,7 +54,8 @@ env: score
 # multiroom_4_locked, multiroom_6_locked, multiroom_2_trap, multiroom_4_trap,
 # multiroom_6_trap, multiroom_2_monster, multiroom_4_monster,
 # multiroom_6_monster, multiroom_2_extreme, multiroom_4_extreme,
-# multiroom_6_extreme, boxoban_hard, boxoban_medium, 
+# multiroom_6_extreme, boxoban_hard, boxoban_medium, mini_eat, mini_pray,
+# mini_sink
 
 # Training settings.
 num_gpus: 0
