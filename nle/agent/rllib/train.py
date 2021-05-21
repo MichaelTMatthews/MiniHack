@@ -10,7 +10,7 @@ from nle.agent.rllib.envs import RLLibNLEEnv  # noqa: F401
 from nle.agent.rllib.models import RLLibNLENetwork  # noqa: F401
 from omegaconf import DictConfig, OmegaConf
 from ray import tune
-from ray.rllib.agents import dqn, impala, ppo
+from ray.rllib.agents import dqn, impala, ppo, a3c
 from ray.tune.integration.wandb import (
     _VALID_ITERABLE_TYPES,
     _VALID_TYPES,
@@ -46,6 +46,7 @@ def get_full_config(cfg: DictConfig) -> DictConfig:
 
 NAME_TO_TRAINER: dict = {
     "impala": (impala, impala.ImpalaTrainer),
+    "a2c": (a3c, a3c.A2CTrainer),
     "dqn": (dqn, dqn.DQNTrainer),
     "ppo": (ppo, ppo.PPOTrainer),
 }
