@@ -13,6 +13,7 @@ from nle.minihack.envs import (
     river,
     memento,
     hidenseek,
+    deepexplore,
     skills_simple,
 )
 from nle.agent.common.envs.wrapper import CounterWrapper
@@ -73,6 +74,13 @@ ENVS = dict(
     # MiniHack Hide&Seek
     hidenseek=hidenseek.MiniHackHideAndSeek,
     hidenseek_mapped=hidenseek.MiniHackHideAndSeekMapped,
+    hidenseek_lava=hidenseek.MiniHackHideAndSeekLava,
+    hidenseek_big=hidenseek.MiniHackHideAndSeekBig,
+    # MiniHack Harvest/DeepExplore
+    harvest2=deepexplore.MiniHackDeepExplore2,
+    harvest3=deepexplore.MiniHackDeepExplore3,
+    harvest5=deepexplore.MiniHackDeepExplore5,
+    harvest8=deepexplore.MiniHackDeepExplore8,
     # MiniHack MultiRooms
     multiroom_2=minigrid.MiniHackMultiRoomN2,
     multiroom_4=minigrid.MiniHackMultiRoomN4,
