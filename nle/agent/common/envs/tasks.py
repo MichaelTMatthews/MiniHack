@@ -14,6 +14,7 @@ from nle.minihack.envs import (
     memento,
     hidenseek,
     deepexplore,
+    skills_simple,
 )
 from nle.agent.common.envs.wrapper import CounterWrapper
 
@@ -99,6 +100,10 @@ ENVS = dict(
     # MiniHack Boxoban
     boxoban_hard=boxohack.MiniHackBoxobanHard,
     boxoban_medium=boxohack.MiniHackBoxobanMedium,
+    # MiniHack Skills
+    mini_eat=skills_simple.MiniHackEat,
+    mini_pray=skills_simple.MiniHackPray,
+    mini_sink=skills_simple.MiniHackSink,
 )
 
 
