@@ -211,3 +211,5 @@ latest
 
 nle/minihack/dat/*.json
 Session.vim
+
+wandb
