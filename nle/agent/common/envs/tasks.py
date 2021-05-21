@@ -16,7 +16,7 @@ from nle.minihack.envs import (
     deepexplore,
     skills_simple,
 )
-from nle.agent.common.envs.wrapper import CounterWrapper
+from nle.agent.common.envs.wrapper import CounterWrapper, CropWrapper, PrevWrapper
 
 
 ENVS = dict(
@@ -115,10 +115,14 @@ def create_env(flags, env_id=0, lock=threading.Lock()):
     # Create environment instances for actors
     with lock:
         env_class = ENVS[flags.env]
+        if flags.model == "tty":
+            observation_keys = ("tty_chars", "tty_colors", "tty_cursor", "blstats")
+        else:
+            observation_keys = flags.obs_keys.split(",")
         kwargs = dict(
             savedir=None,
             archivefile=None,
-            observation_keys=flags.obs_keys.split(","),
+            observation_keys=observation_keys,
             penalty_step=flags.penalty_step,
             penalty_time=flags.penalty_time,
             penalty_mode=flags.fn_penalty_step,
@@ -134,6 +138,9 @@ def create_env(flags, env_id=0, lock=threading.Lock()):
         env = env_class(**kwargs)
         if flags.state_counter != "none":
             env = CounterWrapper(env, flags.state_counter)
+        if flags.model == "tty":
+            env = CropWrapper(env)
+            env = PrevWrapper(env)
         if flags.seedspath is not None and len(flags.seedspath) > 0:
             raise NotImplementedError("seedspath > 0 not implemented yet.")
 
