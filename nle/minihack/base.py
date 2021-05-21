@@ -209,7 +209,7 @@ class MiniHack(NetHackStaircase):
             if result:
                 return self.StepStatus.TASK_SUCCESSFUL
 
-        # Revert to staircase episode end check (so we always end if we reach
+        # Revert to staircase check (so we always end if we reach it)
         return super()._is_episode_end(observation)
 
     def update(self, des_file):
