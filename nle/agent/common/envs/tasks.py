@@ -15,6 +15,7 @@ from nle.minihack.envs import (
     hidenseek,
     deepexplore,
     skills_simple,
+    skills_levitate,
 )
 from nle.agent.common.envs.wrapper import CounterWrapper
 
@@ -104,6 +105,11 @@ ENVS = dict(
     mini_eat=skills_simple.MiniHackEat,
     mini_pray=skills_simple.MiniHackPray,
     mini_sink=skills_simple.MiniHackSink,
+    # MiniHack Levitat
+    levitate_boot=skills_levitate.MiniHackLevitateBoots,
+    levitate_ring=skills_levitate.MiniHackLevitateRing,
+    levitate_potion=skills_levitate.MiniHackLevitatePotion,
+    levitate_random=skills_levitate.MiniHackLevitateRandom,
 )
 
 
