@@ -345,7 +345,7 @@ class RewardManager(AbstractRewardManager):
             curr_msg = (
                 observation[env._original_observation_keys.index("message")]
                 .tobytes()
-                .decode("utf-8")
+                .decode("latin-1")
             )
             for msg in event_msgs:
                 if msg in curr_msg:
