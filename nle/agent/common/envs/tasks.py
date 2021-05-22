@@ -57,8 +57,8 @@ ENVS = dict(
     mazewalk_small_mapped=mazewalk.MiniHackMazeWalk9x9Premapped,
     mazewalk_big=mazewalk.MiniHackMazeWalk15x15,
     mazewalk_big_mapped=mazewalk.MiniHackMazeWalk15x15Premapped,
-    mazewalk_huge=mazewalk.MiniHackMazeWalkMax,
-    mazewalk_huge_mapped=mazewalk.MiniHackMazeWalkMaxPremapped,
+    mazewalk_huge=mazewalk.MiniHackMazeWalk45x19,
+    mazewalk_huge_mapped=mazewalk.MiniHackMazeWalk45x19Premapped,
     # MiniHack Fight Corridor
     fight_corridor=fightcorridor.MiniHackFightCorridor,
     fight_corridor_dark=fightcorridor.MiniHackFightCorridorDark,
@@ -136,8 +136,8 @@ def create_env(flags, env_id=0, lock=threading.Lock()):
         if not is_env_minihack(env_class):
             kwargs.update(max_episode_steps=flags.max_num_steps)
             kwargs.update(character=flags.character)
-        if flags.env in ("staircase", "pet", "oracle"):
-            kwargs.update(reward_win=flags.reward_win, reward_lose=flags.reward_lose)
+        # if flags.env in ("staircase", "pet", "oracle"):
+        #     kwargs.update(reward_win=flags.reward_win, reward_lose=flags.reward_lose)
         elif env_id == 0:
             # print("Ignoring flags.reward_win and flags.reward_lose")
             pass
