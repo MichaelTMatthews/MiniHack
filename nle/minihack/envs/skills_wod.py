@@ -16,7 +16,7 @@ class MiniHackWoDEasy(MiniHackSkill):
         lvl_gen.set_start_pos((1, 1))
         kwargs["options"] = kwargs.pop("options", [])
         kwargs["options"].append("autopickup")
-        kwargs["max_episode_steps"] = kwargs.pop("max_episode_steps", 10)
+        kwargs["max_episode_steps"] = kwargs.pop("max_episode_steps", 20)
 
         lvl_gen.add_object(
             name="death", symbol="/", cursestate="blessed", place=((1, 1))
@@ -74,7 +74,7 @@ class MiniHackWoDHard(MiniHackSkill):
         )
         lvl_gen.add_monster("minotaur", place=(26, 1))
         des_file = lvl_gen.get_des()
-        kwargs["max_episode_steps"] = kwargs.pop("max_episode_steps", 60)
+        kwargs["max_episode_steps"] = kwargs.pop("max_episode_steps", 200)
 
         super().__init__(*args, des_file=des_file, **kwargs)
 
