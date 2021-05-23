@@ -160,8 +160,14 @@ def create_env(flags, env_id=0, lock=threading.Lock()):
             observation_keys = ("tty_chars", "tty_colors", "tty_cursor", "blstats")
         else:
             observation_keys = flags.obs_keys.split(",")
+
+        if flags.save_tty:
+            savedir = ""  # NLE choses location
+        else:
+            savedir = None
+
         kwargs = dict(
-            savedir=None,
+            savedir=savedir,
             archivefile=None,
             observation_keys=observation_keys,
             penalty_step=flags.penalty_step,
