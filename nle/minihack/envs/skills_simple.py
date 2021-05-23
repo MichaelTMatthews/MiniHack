@@ -35,6 +35,24 @@ class MiniHackEatFixed(MiniHackSkill):
         )
 
 
+class MiniHackEatDistr(MiniHackSkill):
+    """Environment for "eat" task."""
+
+    def __init__(self, *args, **kwargs):
+        lvl_gen = LevelGenerator(w=5, h=5, lit=True)
+        lvl_gen.add_object("apple", "%")
+        lvl_gen.add_monster()
+        lvl_gen.add_object()
+        des_file = lvl_gen.get_des()
+
+        reward_manager = RewardManager()
+        reward_manager.add_eat_event("apple")
+
+        super().__init__(
+            *args, des_file=des_file, reward_manager=reward_manager, **kwargs
+        )
+
+
 class MiniHackWield(MiniHackSkill):
     """Environment for "wield" task."""
 
@@ -58,6 +76,24 @@ class MiniHackWieldFixed(MiniHackSkill):
         lvl_gen = LevelGenerator(w=5, h=5, lit=True)
         lvl_gen.add_object("dagger", ")", place=(0, 0))
         lvl_gen.set_start_pos((2, 2))
+        des_file = lvl_gen.get_des()
+
+        reward_manager = RewardManager()
+        reward_manager.add_wield_event("dagger")
+
+        super().__init__(
+            *args, des_file=des_file, reward_manager=reward_manager, **kwargs
+        )
+
+
+class MiniHackWieldDistr(MiniHackSkill):
+    """Environment for "wield" task."""
+
+    def __init__(self, *args, **kwargs):
+        lvl_gen = LevelGenerator(w=5, h=5, lit=True)
+        lvl_gen.add_object("dagger", ")")
+        lvl_gen.add_monster()
+        lvl_gen.add_object()
         des_file = lvl_gen.get_des()
 
         reward_manager = RewardManager()
@@ -101,6 +137,24 @@ class MiniHackWearFixed(MiniHackSkill):
         )
 
 
+class MiniHackWearDistr(MiniHackSkill):
+    """Environment for "wear" task."""
+
+    def __init__(self, *args, **kwargs):
+        lvl_gen = LevelGenerator(w=5, h=5, lit=True)
+        lvl_gen.add_object("robe", "[")
+        lvl_gen.add_monster()
+        lvl_gen.add_object()
+        des_file = lvl_gen.get_des()
+
+        reward_manager = RewardManager()
+        reward_manager.add_wear_event("robe")
+
+        super().__init__(
+            *args, des_file=des_file, reward_manager=reward_manager, **kwargs
+        )
+
+
 class MiniHackPutOn(MiniHackSkill):
     """Environment for "put on" task."""
 
@@ -124,6 +178,24 @@ class MiniHackPutOnFixed(MiniHackSkill):
         lvl_gen = LevelGenerator(w=5, h=5, lit=True)
         lvl_gen.add_object("amulet of life saving", '"', place=(0, 0))
         lvl_gen.set_start_pos((2, 2))
+        des_file = lvl_gen.get_des()
+
+        reward_manager = RewardManager()
+        reward_manager.add_amulet_event()
+
+        super().__init__(
+            *args, des_file=des_file, reward_manager=reward_manager, **kwargs
+        )
+
+
+class MiniHackPutOnDistr(MiniHackSkill):
+    """Environment for "put on" task."""
+
+    def __init__(self, *args, **kwargs):
+        lvl_gen = LevelGenerator(w=5, h=5, lit=True)
+        lvl_gen.add_object("amulet of life saving", '"')
+        lvl_gen.add_monster()
+        lvl_gen.add_object()
         des_file = lvl_gen.get_des()
 
         reward_manager = RewardManager()
@@ -167,6 +239,24 @@ class MiniHackZapFixed(MiniHackSkill):
         )
 
 
+class MiniHackZapDistr(MiniHackSkill):
+    """Environment for "zap" task."""
+
+    def __init__(self, *args, **kwargs):
+        lvl_gen = LevelGenerator(w=5, h=5, lit=True)
+        lvl_gen.add_object("enlightenment", "/")
+        lvl_gen.add_monster()
+        lvl_gen.add_object()
+        des_file = lvl_gen.get_des()
+
+        reward_manager = RewardManager()
+        reward_manager.add_message_event(["The feeling subsides."])  # TODO change
+
+        super().__init__(
+            *args, des_file=des_file, reward_manager=reward_manager, **kwargs
+        )
+
+
 class MiniHackRead(MiniHackSkill):
     """Environment for "read" task."""
 
@@ -190,6 +280,24 @@ class MiniHackReadFixed(MiniHackSkill):
         lvl_gen = LevelGenerator(w=5, h=5, lit=True)
         lvl_gen.add_object("blank paper", "?", place=(0, 0))
         lvl_gen.set_start_pos((2, 2))
+        des_file = lvl_gen.get_des()
+
+        reward_manager = RewardManager()
+        reward_manager.add_message_event(["This scroll seems to be blank."])
+
+        super().__init__(
+            *args, des_file=des_file, reward_manager=reward_manager, **kwargs
+        )
+
+
+class MiniHackReadDistr(MiniHackSkill):
+    """Environment for "read" task."""
+
+    def __init__(self, *args, **kwargs):
+        lvl_gen = LevelGenerator(w=5, h=5, lit=True)
+        lvl_gen.add_object("blank paper", "?")
+        lvl_gen.add_monster()
+        lvl_gen.add_object()
         des_file = lvl_gen.get_des()
 
         reward_manager = RewardManager()
@@ -233,6 +341,24 @@ class MiniHackPrayFixed(MiniHackSkill):
         )
 
 
+class MiniHackPrayDistr(MiniHackSkill):
+    """Environment for "pray" task."""
+
+    def __init__(self, *args, **kwargs):
+        lvl_gen = LevelGenerator(w=5, h=5, lit=True)
+        lvl_gen.add_altar("random", "neutral", "altar")
+        lvl_gen.add_monster()
+        lvl_gen.add_object()
+        des_file = lvl_gen.get_des()
+
+        reward_manager = RewardManager()
+        reward_manager.add_positional_event("altar", "pray")
+
+        super().__init__(
+            *args, des_file=des_file, reward_manager=reward_manager, **kwargs
+        )
+
+
 class MiniHackSink(MiniHackSkill):
     """Environment for "sink" task."""
 
@@ -266,6 +392,24 @@ class MiniHackSinkFixed(MiniHackSkill):
         )
 
 
+class MiniHackSinkDistr(MiniHackSkill):
+    """Environment for "sink" task."""
+
+    def __init__(self, *args, **kwargs):
+        lvl_gen = LevelGenerator(w=5, h=5, lit=True)
+        lvl_gen.add_sink()
+        lvl_gen.add_monster()
+        lvl_gen.add_object()
+        des_file = lvl_gen.get_des()
+
+        reward_manager = RewardManager()
+        reward_manager.add_positional_event("sink", "quaff")
+
+        super().__init__(
+            *args, des_file=des_file, reward_manager=reward_manager, **kwargs
+        )
+
+
 class MiniHackClosedDoor(MiniHackSkill):
     """Environment for "open" task."""
 
@@ -278,6 +422,13 @@ class MiniHackLockedDoor(MiniHackSkill):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, des_file="locked_door.des", **kwargs)
+
+
+class MiniHackLockedDoorFixed(MiniHackSkill):
+    """Environment for "kick" task."""
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, des_file="locked_door_fixed.des", **kwargs)
 
 
 # Tasks (w/o doors)
@@ -348,6 +499,40 @@ registration.register(
     entry_point="nle.minihack.envs.skills_simple:MiniHackReadFixed",
 )
 
+# Task versions with random distractions
+registration.register(
+    id="MiniHack-Eat-Distr-v0",
+    entry_point="nle.minihack.envs.skills_simple:MiniHackEatDistr",
+)
+registration.register(
+    id="MiniHack-Pray-Distr-v0",
+    entry_point="nle.minihack.envs.skills_simple:MiniHackPrayDistr",
+)
+registration.register(
+    id="MiniHack-Sink-Distr-v0",
+    entry_point="nle.minihack.envs.skills_simple:MiniHackSinkDistr",
+)
+registration.register(
+    id="MiniHack-Wield-Distr-v0",
+    entry_point="nle.minihack.envs.skills_simple:MiniHackWieldDistr",
+)
+registration.register(
+    id="MiniHack-Wear-Distr-v0",
+    entry_point="nle.minihack.envs.skills_simple:MiniHackWearDistr",
+)
+registration.register(
+    id="MiniHack-PutOn-Distr-v0",
+    entry_point="nle.minihack.envs.skills_simple:MiniHackPutOnDistr",
+)
+registration.register(
+    id="MiniHack-Zap-Distr-v0",
+    entry_point="nle.minihack.envs.skills_simple:MiniHackZapDistr",
+)
+registration.register(
+    id="MiniHack-Read-Distr-v0",
+    entry_point="nle.minihack.envs.skills_simple:MiniHackReadDistr",
+)
+
 # Tasks involvign doors
 registration.register(
     id="MiniHack-ClosedDoor-v0",
@@ -356,4 +541,8 @@ registration.register(
 registration.register(
     id="MiniHack-LockedDoor-v0",
     entry_point="nle.minihack.envs.skills_simple:MiniHackLockedDoor",
+)
+registration.register(
+    id="MiniHack-LockedDoor-Fixed-v0",
+    entry_point="nle.minihack.envs.skills_simple:MiniHackLockedDoorFixed",
 )
