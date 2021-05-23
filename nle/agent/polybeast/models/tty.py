@@ -11,7 +11,8 @@ import math
 NUM_GLYPHS = nethack.MAX_GLYPH
 NUM_FEATURES = nethack.BLSTATS_SHAPE[0]
 PAD_CHAR = 0
-NUM_CHARS = 128
+NUM_CHARS = 256
+NUM_COLORS = 32
 
 
 class BN(nn.Module):
@@ -142,8 +143,10 @@ class TtyBaseNet(NetHackNet):
         F = 3  # filter dimensions
         S = 1  # stride
         P = 1  # padding
-        M = 16  # number of intermediate filters
-        self.Y = 8  # number of output filters
+        # M = 16  # number of intermediate filters
+        M = 16
+        # self.Y = 8  # number of output filters
+        self.Y = 8
 
         in_channels = [2 * K] + [M] * (L - 1)
         out_channels = [M] * (L - 1) + [self.Y]
@@ -191,7 +194,7 @@ class TtyBaseNet(NetHackNet):
             nn.Linear(self.k_dim, self.k_dim),
             nn.ReLU(),
         )
-        self.embed_colors = nn.Embedding(16, self.k_dim)
+        self.embed_colors = nn.Embedding(NUM_COLORS, self.k_dim)
         self.embed_chars = nn.Embedding(NUM_CHARS, self.k_dim)
         self.embed_actions = nn.Embedding(self.num_actions, self.k_dim)
         self.use_index_select = flags.use_index_select
@@ -199,6 +202,7 @@ class TtyBaseNet(NetHackNet):
         self.st_fc = nn.Sequential(
             # nn.Linear(self.h_dim + out_dim, self.h_dim),
             nn.Linear(18272, self.h_dim),  # FIXME: calculate
+            # nn.Linear(36352, self.h_dim),  # FIXME: calculate
             nn.ReLU(),
             nn.Linear(self.h_dim, self.h_dim),
             nn.ReLU(),
@@ -264,14 +268,10 @@ class TtyBaseNet(NetHackNet):
     def forward(self, inputs: Dict[str, torch.Tensor], core_state, learning=False):
         T, B, H, W = inputs["tty_chars"].shape
 
-        # start = time.time()
-
         if learning:
             self.train()
         else:
             self.eval()
-
-        # af = F.celu
 
         chars = inputs["tty_chars"]
         colors = inputs["tty_colors"]
@@ -324,12 +324,13 @@ class TtyBaseNet(NetHackNet):
 
         # -- [(TB) (h+K)]
         st = torch.cat([x, ctx, stats, at1], dim=1)
-
         # -- [(T B) h]
         st = self.st_fc(st)
 
         if self.is_half:
             st = st.float()
+
+        conv_lstm_state = None
 
         if self.use_lstm:
             core_state = (core_state[0], core_state[1])
@@ -372,7 +373,6 @@ class TtyBaseNet(NetHackNet):
                 )
                 / 6
             )
-            # print("itemp is ", itemp)
         else:
             itemp = 0.95
             if self.use_random and random.randint(0, 10) == 0:
@@ -387,6 +387,8 @@ class TtyBaseNet(NetHackNet):
         action = action.view(T, B)
 
         full_core_state = core_state
+        if conv_lstm_state is not None:
+            full_core_state += conv_lstm_state
 
         output = dict(policy_logits=policy_logits, baseline=baseline, action=action)
         return (output, full_core_state)

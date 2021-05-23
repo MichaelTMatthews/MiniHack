@@ -16,6 +16,7 @@ from nle.minihack.envs import (
     deepexplore,
     skills_simple,
     skills_levitate,
+    skills_wod,
 )
 from nle.agent.common.envs.wrapper import CounterWrapper, CropWrapper, PrevWrapper
 
@@ -105,6 +106,18 @@ ENVS = dict(
     mini_eat=skills_simple.MiniHackEat,
     mini_pray=skills_simple.MiniHackPray,
     mini_sink=skills_simple.MiniHackSink,
+    mini_closed=skills_simple.MiniHackClosedDoor,
+    mini_locked=skills_simple.MiniHackLockedDoor,
+    mini_read=skills_simple.MiniHackRead,
+    mini_zap=skills_simple.MiniHackZap,
+    mini_puton=skills_simple.MiniHackPutOn,
+    mini_wear=skills_simple.MiniHackWear,
+    mini_wield=skills_simple.MiniHackWield,
+    # WoD
+    wod_easy=skills_wod.MiniHackWoDEasy,
+    wod_medium=skills_wod.MiniHackWoDMedium,
+    wod_hard=skills_wod.MiniHackWoDHard,
+    wod_pro=skills_wod.MiniHackWoDPro,
     # MiniHack Levitat
     levitate_boot=skills_levitate.MiniHackLevitateBoots,
     levitate_ring=skills_levitate.MiniHackLevitateRing,
