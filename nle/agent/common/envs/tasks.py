@@ -102,17 +102,26 @@ ENVS = dict(
     # MiniHack Boxoban
     boxoban_hard=boxohack.MiniHackBoxobanHard,
     boxoban_medium=boxohack.MiniHackBoxobanMedium,
-    # MiniHack Skills
+    # MiniHack Simple Skills
     mini_eat=skills_simple.MiniHackEat,
     mini_pray=skills_simple.MiniHackPray,
     mini_sink=skills_simple.MiniHackSink,
-    mini_closed=skills_simple.MiniHackClosedDoor,
-    mini_locked=skills_simple.MiniHackLockedDoor,
     mini_read=skills_simple.MiniHackRead,
     mini_zap=skills_simple.MiniHackZap,
     mini_puton=skills_simple.MiniHackPutOn,
     mini_wear=skills_simple.MiniHackWear,
     mini_wield=skills_simple.MiniHackWield,
+    mini_closed=skills_simple.MiniHackClosedDoor,
+    mini_locked=skills_simple.MiniHackLockedDoor,
+    # MiniHack Simple Skills (Fixed versions)
+    mini_eat_fixed=skills_simple.MiniHackEatFixed,
+    mini_pray_fixed=skills_simple.MiniHackPrayFixed,
+    mini_sink_fixed=skills_simple.MiniHackSinkFixed,
+    mini_read_fixed=skills_simple.MiniHackReadFixed,
+    mini_zap_fixed=skills_simple.MiniHackZapFixed,
+    mini_puton_fixed=skills_simple.MiniHackPutOnFixed,
+    mini_wear_fixed=skills_simple.MiniHackWearFixed,
+    mini_wield_fixed=skills_simple.MiniHackWieldFixed,
     # WoD
     wod_easy=skills_wod.MiniHackWoDEasy,
     wod_medium=skills_wod.MiniHackWoDMedium,
