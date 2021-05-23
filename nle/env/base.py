@@ -228,7 +228,7 @@ class NLE(gym.Env):
         actions=None,
         options=None,
         wizard=False,
-        perform_menu_steps=False,
+        perform_menu_steps=True,
         allow_all_yn_questions=False,
         space_dict=None,
     ):
