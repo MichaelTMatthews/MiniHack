@@ -111,7 +111,6 @@ ENVS = dict(
     mini_puton=skills_simple.MiniHackPutOn,
     mini_wear=skills_simple.MiniHackWear,
     mini_wield=skills_simple.MiniHackWield,
-    mini_closed=skills_simple.MiniHackClosedDoor,
     mini_locked=skills_simple.MiniHackLockedDoor,
     # MiniHack Simple Skills (Fixed versions)
     mini_eat_fixed=skills_simple.MiniHackEatFixed,
@@ -122,6 +121,16 @@ ENVS = dict(
     mini_puton_fixed=skills_simple.MiniHackPutOnFixed,
     mini_wear_fixed=skills_simple.MiniHackWearFixed,
     mini_wield_fixed=skills_simple.MiniHackWieldFixed,
+    mini_locked_fixed=skills_simple.MiniHackLockedDoorFixed,
+    # MiniHack Simple Skills (Fixed versions)
+    mini_eat_distr=skills_simple.MiniHackEatDistr,
+    mini_pray_distr=skills_simple.MiniHackPrayDistr,
+    mini_sink_distr=skills_simple.MiniHackSinkDistr,
+    mini_read_distr=skills_simple.MiniHackReadDistr,
+    mini_zap_distr=skills_simple.MiniHackZapDistr,
+    mini_puton_distr=skills_simple.MiniHackPutOnDistr,
+    mini_wear_distr=skills_simple.MiniHackWearDistr,
+    mini_wield_distr=skills_simple.MiniHackWieldDistr,
     # WoD
     wod_easy=skills_wod.MiniHackWoDEasy,
     wod_medium=skills_wod.MiniHackWoDMedium,
