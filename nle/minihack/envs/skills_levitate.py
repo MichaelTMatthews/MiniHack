@@ -273,7 +273,6 @@ MAP
 -------------
 ENDMAP
 REGION:(0,0,12,6),lit,"ordinary"
-$right_bank = selection:fillrect (7,1,11,5)
 OBJECT:('=',"levitation"),(2,2),blessed
 BRANCH:(2,2,2,2),(0,0,0,0)
 STAIR:(10,3),down
