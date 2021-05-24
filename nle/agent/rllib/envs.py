@@ -4,7 +4,6 @@ from typing import Tuple, Union
 import gym
 import nle  # noqa: F401
 import numpy as np
-from ray.tune.registry import register_env
 
 from nle.agent.common.envs.tasks import create_env
 
@@ -43,6 +42,3 @@ class RLLibNLEEnv(gym.Env):
 
     def close(self):
         return self.gym_env.close()
-
-
-register_env("rllib_nle_env", RLLibNLEEnv)

@@ -7,7 +7,8 @@ import numpy as np
 import ray
 import ray.tune.integration.wandb
 from nle.agent.rllib.envs import RLLibNLEEnv  # noqa: F401
-from nle.agent.rllib.models import RLLibNLENetwork  # noqa: F401
+import nle.agent.rllib.models  # noqa: F401
+from ray.tune.registry import register_env
 from omegaconf import DictConfig, OmegaConf
 from ray import tune
 from ray.rllib.agents import dqn, impala, ppo, a3c
@@ -17,21 +18,6 @@ from ray.tune.integration.wandb import (
     WandbLoggerCallback,
 )
 from ray.tune.utils import merge_dicts
-
-
-# Hacky monkey-patching to allow for OmegaConf config
-def _is_allowed_type(obj):
-    """Return True if type is allowed for logging to wandb"""
-    if isinstance(obj, DictConfig):
-        return True
-    if isinstance(obj, np.ndarray) and obj.size == 1:
-        return isinstance(obj.item(), Number)
-    if isinstance(obj, Iterable) and len(obj) > 0:
-        return isinstance(obj[0], _VALID_ITERABLE_TYPES)
-    return isinstance(obj, _VALID_TYPES)
-
-
-ray.tune.integration.wandb._is_allowed_type = _is_allowed_type
 
 
 def get_full_config(cfg: DictConfig) -> DictConfig:
@@ -56,6 +42,7 @@ NAME_TO_TRAINER: dict = {
 def train(cfg: DictConfig) -> None:
     ray.init(num_gpus=cfg.num_gpus, num_cpus=cfg.num_cpus + 1)
     cfg = get_full_config(cfg)
+    register_env("RLlibNLE-v0", RLLibNLEEnv)
 
     try:
         algo, trainer = NAME_TO_TRAINER[cfg.algo]
@@ -72,7 +59,7 @@ def train(cfg: DictConfig) -> None:
             "framework": "torch",
             "num_gpus": cfg.num_gpus,
             "seed": cfg.seed,
-            "env": "rllib_nle_env",
+            "env": "RLlibNLE-v0",
             "env_config": {
                 "flags": cfg,
                 "observation_keys": cfg.obs_keys.split(","),
@@ -113,6 +100,18 @@ def train(cfg: DictConfig) -> None:
         )
         os.environ["TUNE_DISABLE_AUTO_CALLBACK_LOGGERS"] = "1"  # Only log to wandb
 
+    # Hacky monkey-patching to allow for OmegaConf config
+    def _is_allowed_type(obj):
+        """Return True if type is allowed for logging to wandb"""
+        if isinstance(obj, DictConfig):
+            return True
+        if isinstance(obj, np.ndarray) and obj.size == 1:
+            return isinstance(obj.item(), Number)
+        if isinstance(obj, Iterable) and len(obj) > 0:
+            return isinstance(obj[0], _VALID_ITERABLE_TYPES)
+        return isinstance(obj, _VALID_TYPES)
+
+    ray.tune.integration.wandb._is_allowed_type = _is_allowed_type
     tune.run(
         trainer,
         stop={"timesteps_total": cfg.total_steps},
