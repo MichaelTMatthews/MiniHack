@@ -26,8 +26,8 @@ hydra:
     tasks_per_node: 1
     mem_gb: 20
     nodes: 1
-    partition: dev
-    comment: null
+    partition: prioritylab
+    comment: NIPS
     max_num_timeout: 5  # will requeue on timeout or preemption
 
 name: null  # can use this to have multiple runs with same params, eg name=1,2,3,4,5
