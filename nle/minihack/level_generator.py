@@ -159,15 +159,17 @@ GEOMETRY:center,center
 
         if name != "random":
             name = f'"{name}"'
+            self.footer += f"OBJECT:('{symbol}',{name}),{place}"
 
-        self.footer += f"OBJECT:('{symbol}',{name}),{place}"
+            if cursestate is not None:
+                assert cursestate in ["blessed", "uncursed", "cursed", "random"]
+                if cursestate != "random":
+                    self.footer += f",{cursestate}"
 
-        if cursestate is not None:
-            assert cursestate in ["blessed", "uncursed", "cursed", "random"]
-            if cursestate != "random":
-                self.footer += f",{cursestate}"
+            self.footer += "\n"
 
-        self.footer += "\n"
+        else:
+            self.footer += f"OBJECT:random,{place}\n"
 
     def add_object_area(self, area_name, name="random", symbol="%", cursestate=None):
         place = f"rndcoord({area_name})"
