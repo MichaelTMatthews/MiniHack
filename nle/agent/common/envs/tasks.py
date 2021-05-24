@@ -145,6 +145,11 @@ ENVS = dict(
     levitate_ring_fixed=skills_levitate.MiniHackLevitateRingFixed,
     levitate_potion_fixed=skills_levitate.MiniHackLevitatePotionFixed,
     levitate_random_fixed=skills_levitate.MiniHackLevitateRandomFixed,
+    levitate_lava=skills_levitate.MiniHackLevitateLava,
+    levitate_lava_IP=skills_levitate.MiniHackLevitateLavaInvPotion,
+    levitate_lava_IPF=skills_levitate.MiniHackLevitateLavaInvPotionFixed,
+    levitate_lava_IR=skills_levitate.MiniHackLevitateLavaInvRing,
+    levitate_lava_IRF=skills_levitate.MiniHackLevitateLavaInvRingFixed,
 )
 
 
