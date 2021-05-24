@@ -47,6 +47,7 @@ penalty_step: -0.001
 reward_lose: 0
 reward_win: 1
 character: mon-hum-neu-mal
+save_tty: False
 obs_keys: "glyphs,chars,colors,specials,blstats,message"
 ## typical characters we use
 # mon-hum-neu-mal
