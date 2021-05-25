@@ -102,6 +102,8 @@ ENVS = dict(
     # MiniHack Boxoban
     boxoban_hard=boxohack.MiniHackBoxobanHard,
     boxoban_medium=boxohack.MiniHackBoxobanMedium,
+    boxoban_hard_shaped=boxohack.MiniHackBoxobanHardShaped,
+    boxoban_medium_shaped=boxohack.MiniHackBoxobanMediumShaped,
     # MiniHack Simple Skills
     mini_eat=skills_simple.MiniHackEat,
     mini_pray=skills_simple.MiniHackPray,

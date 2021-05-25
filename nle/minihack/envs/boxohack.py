@@ -39,7 +39,7 @@ class BoxoHack(MiniHackNavigation):
 
         self._flags = tuple(kwargs.pop("flags", []))
         self._levels = load_boxoban_levels(cur_levels_path)
-        self._reward_shaping_coefficient = kwargs.pop("reward_shaping_coefficient", 0.1)
+        self._reward_shaping_coefficient = kwargs.pop("reward_shaping_coefficient", 0)
 
         super().__init__(*args, des_file=self.get_lvl_gen().get_des(), **kwargs)
 
@@ -113,6 +113,7 @@ class MiniHackBoxobanMedium(BoxoHack):
     def __init__(self, *args, **kwargs):
         kwargs["level_set"] = "medium"
         kwargs["level_mode"] = "train"
+        kwargs["reward_shaping_coefficient"] = 0
         super().__init__(*args, **kwargs)
 
 
@@ -120,6 +121,23 @@ class MiniHackBoxobanHard(BoxoHack):
     def __init__(self, *args, **kwargs):
         kwargs["level_set"] = "hard"
         kwargs["level_mode"] = ""
+        kwargs["reward_shaping_coefficient"] = 0
+        super().__init__(*args, **kwargs)
+
+
+class MiniHackBoxobanMediumShaped(BoxoHack):
+    def __init__(self, *args, **kwargs):
+        kwargs["level_set"] = "medium"
+        kwargs["level_mode"] = "train"
+        kwargs["reward_shaping_coefficient"] = 0.2
+        super().__init__(*args, **kwargs)
+
+
+class MiniHackBoxobanHardShaped(BoxoHack):
+    def __init__(self, *args, **kwargs):
+        kwargs["level_set"] = "hard"
+        kwargs["level_mode"] = ""
+        kwargs["reward_shaping_coefficient"] = 0.2
         super().__init__(*args, **kwargs)
 
 
@@ -127,8 +145,15 @@ registration.register(
     id="MiniHack-Boxoban-Medium-v0",
     entry_point="nle.minihack.envs.boxohack:MiniHackBoxobanMedium",
 )
-
 registration.register(
     id="MiniHack-Boxoban-Hard-v0",
     entry_point="nle.minihack.envs.boxohack:MiniHackBoxobanHard",
+)
+registration.register(
+    id="MiniHack-Boxoban-Medium-Shaped-v0",
+    entry_point="nle.minihack.envs.boxohack:MiniHackBoxobanMediumShaped",
+)
+registration.register(
+    id="MiniHack-Boxoban-Hard-Shaped-v0",
+    entry_point="nle.minihack.envs.boxohack:MiniHackBoxobanHardShaped",
 )
