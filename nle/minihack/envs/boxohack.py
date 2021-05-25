@@ -1,10 +1,11 @@
 # Copyright (c) Facebook, Inc. and its affiliates.
 import os
 import random
+
 import numpy as np
-from nle.minihack import MiniHackNavigation, LevelGenerator
-from gym.envs import registration
 import pkg_resources
+from gym.envs import registration
+from nle.minihack import LevelGenerator, MiniHackNavigation
 
 LEVELS_PATH = os.path.join(
     pkg_resources.resource_filename("nle", "minihack/dat"), "boxoban-levels-master"
@@ -38,6 +39,7 @@ class BoxoHack(MiniHackNavigation):
 
         self._flags = tuple(kwargs.pop("flags", []))
         self._levels = load_boxoban_levels(cur_levels_path)
+        self._reward_shaping_coefficient = kwargs.pop("reward_shaping_coefficient", 0.1)
 
         super().__init__(*args, des_file=self.get_lvl_gen().get_des(), **kwargs)
 
@@ -76,27 +78,35 @@ class BoxoHack(MiniHackNavigation):
 
     def reset(self):
         self.update(self.get_lvl_gen().get_des())
-        self._goal_pos_set = None
-        return super().reset()
+        initial_obs = super().reset()
+        self._goal_pos_set = self._object_positions(self.last_observation, "{")
+        return initial_obs
 
     def _is_episode_end(self, observation):
-        # If no goals in the observation, all of them are covered with boulders.
-        char_obs = observation[self._original_observation_keys.index("chars")]
-        if self._goal_pos_set is None:
-            self._goal_pos_set = set(
-                (x, y) for x, y in zip(*np.where(char_obs == ord("{")))
-            )
-        if (
-            ord("{")  # use fountain as a goal for boulders
-            not in observation[self._original_observation_keys.index("chars")]
-        ) and self._goal_pos_set == set(
-            (x, y) for x, y in zip(*np.where(char_obs == ord("`")))
-        ):
-            # we need to check for goal pos because we might stand on the last fountain
-            # without a boulder and hide it from the observation
+        # If every boulder is on a fountain, we're done
+        if self._goal_pos_set == self._object_positions(observation, "`"):
             return self.StepStatus.TASK_SUCCESSFUL
         else:
             return self.StepStatus.RUNNING
+
+    def _reward_fn(self, last_observation, observation, end_status):
+        if end_status == self.StepStatus.TASK_SUCCESSFUL:
+            return 1
+        elif end_status != self.StepStatus.RUNNING:
+            return 0
+        return (
+            self._count_boulders_on_fountains(observation)
+            - self._count_boulders_on_fountains(last_observation)
+        ) * self._reward_shaping_coefficient
+
+    def _count_boulders_on_fountains(self, observation):
+        return len(
+            self._goal_pos_set.intersection(self._object_positions(observation, "`"))
+        )
+
+    def _object_positions(self, observation, object_char):
+        char_obs = observation[self._original_observation_keys.index("chars")]
+        return set((x, y) for x, y in zip(*np.where(char_obs == ord(object_char))))
 
 
 class MiniHackBoxobanMedium(BoxoHack):
