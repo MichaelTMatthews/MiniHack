@@ -36,6 +36,7 @@ ENVS = dict(
     small_room_dark=room.MiniHackRoom5x5Dark,
     small_room_monster=room.MiniHackRoom5x5Monster,
     small_room_trap=room.MiniHackRoom5x5Trap,
+    small_room_ultimate=room.MiniHackRoom5x5Ultimate,
     big_room=room.MiniHackRoom15x15,
     big_room_random=room.MiniHackRoom15x15Random,
     big_room_dark=room.MiniHackRoom15x15Dark,

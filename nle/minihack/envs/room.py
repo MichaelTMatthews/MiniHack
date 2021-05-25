@@ -52,6 +52,13 @@ class MiniHackRoom5x5Trap(MiniHackRoom):
         super().__init__(*args, size=5, random=True, n_trap=1, **kwargs)
 
 
+class MiniHackRoom5x5Ultimate(MiniHackRoom):
+    def __init__(self, *args, **kwargs):
+        super().__init__(
+            *args, size=5, random=True, lit=False, n_monster=1, n_trap=1, **kwargs
+        )
+
+
 registration.register(
     id="MiniHack-Room-5x5-v0",
     entry_point="nle.minihack.envs.room:MiniHackRoom5x5",
@@ -71,6 +78,10 @@ registration.register(
 registration.register(
     id="MiniHack-Room-Trap-5x5-v0",
     entry_point="nle.minihack.envs.room:MiniHackRoom5x5Trap",
+)
+registration.register(
+    id="MiniHack-Room-Ultimate-5x5-v0",
+    entry_point="nle.minihack.envs.room:MiniHackRoom5x5Ultimate",
 )
 
 
