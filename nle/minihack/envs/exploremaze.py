@@ -8,6 +8,13 @@ EAT_ACTION = Command.EAT
 ACTIONS = tuple(list(NAVIGATE_ACTIONS) + [EAT_ACTION])
 
 
+def stairs_reward_function(env, previous_observation, action, observation):
+    # Agent is on stairs down
+    if observation[env._internal_index][4]:
+        return 1
+    return 0
+
+
 class MiniHackExploreMaze(MiniHackNavigation):
     """Environment for a memory challenge."""
 
@@ -27,11 +34,11 @@ class MiniHackExploreMaze(MiniHackNavigation):
         reward_manager.add_message_event(
             ["Mission Complete."], terminal_required=True, terminal_sufficient=True
         )
+        reward_manager.add_custom_reward_fn(stairs_reward_function)
         super().__init__(
             *args,
             des_file=des_file,
             reward_manager=reward_manager,
-            penalty_time=-0.001,  # ensures motivation to finish level quickly
             **kwargs,
         )
 
