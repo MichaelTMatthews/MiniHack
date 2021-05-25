@@ -27,18 +27,18 @@ class MiniHackHideAndSeekBig(MiniHackNavigation):
 
 
 registration.register(
-    id="MiniHack-HnS-Mapped-v0",
+    id="MiniHack-HideSeek-Mapped-v0",
     entry_point="nle.minihack.envs.hidenseek:MiniHackHideAndSeekMapped",
 )
 registration.register(
-    id="MiniHack-HnS-v0",
+    id="MiniHack-HideSeek-v0",
     entry_point="nle.minihack.envs.hidenseek:MiniHackHideAndSeek",
 )
 registration.register(
-    id="MiniHack-HnS-Lava-v0",
+    id="MiniHack-HideSeek-Lava-v0",
     entry_point="nle.minihack.envs.hidenseek:MiniHackHideAndSeekLava",
 )
 registration.register(
-    id="MiniHack-HnS-Big-v0",
+    id="MiniHack-HideSeek-Big-v0",
     entry_point="nle.minihack.envs.hidenseek:MiniHackHideAndSeekBig",
 )
