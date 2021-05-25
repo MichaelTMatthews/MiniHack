@@ -53,6 +53,16 @@ class MiniHackExploreMazeHard(MiniHackExploreMaze):
         super().__init__(*args, des_file="exploremazehard.des", **kwargs)
 
 
+class MiniHackExploreMazeEasyMapped(MiniHackExploreMaze):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, des_file="exploremazeeasy_premapped.des", **kwargs)
+
+
+class MiniHackExploreMazeHardMapped(MiniHackExploreMaze):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, des_file="exploremazehard_premapped.des", **kwargs)
+
+
 registration.register(
     id="MiniHack-ExploreMaze-Easy-v0",
     entry_point="nle.minihack.envs.exploremaze:MiniHackExploreMazeEasy",
@@ -60,4 +70,12 @@ registration.register(
 registration.register(
     id="MiniHack-ExploreMaze-Hard-v0",
     entry_point="nle.minihack.envs.exploremaze:MiniHackExploreMazeHard",
+)
+registration.register(
+    id="MiniHack-ExploreMaze-Easy-Mapped-v0",
+    entry_point="nle.minihack.envs.exploremaze:MiniHackExploreMazeEasyMapped",
+)
+registration.register(
+    id="MiniHack-ExploreMaze-Hard-Mapped-v0",
+    entry_point="nle.minihack.envs.exploremaze:MiniHackExploreMazeHardMapped",
 )

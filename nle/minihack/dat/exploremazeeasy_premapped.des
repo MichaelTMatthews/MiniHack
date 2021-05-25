@@ -1,5 +1,5 @@
 MAZE: "mylevel",' '
-FLAGS: hardfloor
+FLAGS: hardfloor,premapped
 GEOMETRY:left,top
 MAP
 |-------------------|

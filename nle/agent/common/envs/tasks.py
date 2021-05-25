@@ -13,7 +13,7 @@ from nle.minihack.envs import (
     river,
     memento,
     hidenseek,
-    deepexplore,
+    exploremaze,
     skills_simple,
     skills_levitate,
     skills_wod,
@@ -80,11 +80,11 @@ ENVS = dict(
     hidenseek_mapped=hidenseek.MiniHackHideAndSeekMapped,
     hidenseek_lava=hidenseek.MiniHackHideAndSeekLava,
     hidenseek_big=hidenseek.MiniHackHideAndSeekBig,
-    # MiniHack Harvest/DeepExplore
-    harvest2=deepexplore.MiniHackDeepExplore2,
-    harvest3=deepexplore.MiniHackDeepExplore3,
-    harvest5=deepexplore.MiniHackDeepExplore5,
-    harvest8=deepexplore.MiniHackDeepExplore8,
+    # MiniHack ExploreMaze
+    explore_easy=exploremaze.MiniHackExploreMazeEasy,
+    explore_easy_map=exploremaze.MiniHackExploreMazeEasyMapped,
+    explore_hard=exploremaze.MiniHackExploreMazeHard,
+    explore_hard_map=exploremaze.MiniHackExploreMazeHardMapped,
     # MiniHack MultiRooms
     multiroom_2=minigrid.MiniHackMultiRoomN2,
     multiroom_4=minigrid.MiniHackMultiRoomN4,
