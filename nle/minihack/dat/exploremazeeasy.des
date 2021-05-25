@@ -2,7 +2,7 @@ MAZE: "mylevel",' '
 FLAGS: hardfloor
 GEOMETRY:left,top
 MAP
-|------------
+|-----------|
 |           |
 |           |
 |           |
