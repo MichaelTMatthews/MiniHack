@@ -1,0 +1,28 @@
+MAZE: "mylevel",' '
+FLAGS: hardfloor
+GEOMETRY:left,top
+MAP
+|-----------|
+|           |
+|           |
+|           |
+|           |
+|           |
+|           |
+|           |
+|-----.-----|
+|...........|
+|...........|
+-------------
+ENDMAP
+$maze_start = rndcoord(line (0,0),(12,0))
+MAZEWALK:$maze_start,south
+REGION:(1,1,21,21), lit, "ordinary"
+$bottom_room = selection: fillrect(1,9,11,10)
+LOOP [4] {
+    OBJECT: ('%',"apple"),rndcoord($bottom_room)
+}
+STAIR:(01,05,12,07),(0,0,0,0),down
+STAIR:(01,01,12,01),(0,0,0,0),up
+BRANCH:(01,01,12,01),(0,0,0,0)
+TERRAIN: randline (7,1),(7,9),8, '.'

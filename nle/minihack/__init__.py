@@ -19,6 +19,7 @@ import nle.minihack.envs.river
 import nle.minihack.envs.hidenseek
 import nle.minihack.envs.lab
 import nle.minihack.envs.deepexplore
+import nle.minihack.envs.exploremaze
 import nle.minihack.envs.skills_simple
 import nle.minihack.envs.skills_wod
 import nle.minihack.envs.skills_levitate
