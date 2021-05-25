@@ -21,8 +21,8 @@ defaults:
 hydra:
   launcher:
     timeout_min: 4300
-    cpus_per_task: 20
-    gpus_per_node: 2
+    cpus_per_task: 10
+    gpus_per_node: 1
     tasks_per_node: 1
     mem_gb: 20
     nodes: 1
@@ -80,7 +80,7 @@ unroll_length: 80         # 80 is standard
 num_learner_threads: 1
 num_inference_threads: 1
 disable_cuda: false
-learner_device: cuda:1
+learner_device: cuda:0
 actor_device: cuda:0
 
 # Model settings.

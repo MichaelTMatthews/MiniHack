@@ -78,6 +78,7 @@ class MiniHackLevitatePotionFixed(MiniHackLevitate):
 
 class MiniHackLevitateRandom(MiniHackLevitate):
     def __init__(self, *args, **kwargs):
+        kwargs["max_episode_steps"] = kwargs.pop("max_episode_steps", 400)
         des_file = """
 MAZE: "mylevel", ' '
 FLAGS:hardfloor
@@ -106,6 +107,7 @@ IF [33%] {
 
 class MiniHackLevitateRandomFixed(MiniHackLevitate):
     def __init__(self, *args, **kwargs):
+        kwargs["max_episode_steps"] = kwargs.pop("max_episode_steps", 400)
         des_file = """
 MAZE: "mylevel", ' '
 FLAGS:hardfloor
@@ -135,6 +137,7 @@ BRANCH:(2,2,2,2),(0,0,0,0)
 
 class MiniHackLevitateLava(MiniHackSkill):
     def __init__(self, *args, **kwargs):
+        kwargs["max_episode_steps"] = kwargs.pop("max_episode_steps", 400)
         des_file = """
 MAZE: "mylevel", ' '
 FLAGS:hardfloor
@@ -163,6 +166,116 @@ IF [33%] {
 }
 BRANCH:(1,1,5,5),(0,0,0,0)
 STAIR:rndcoord($right_bank),down
+"""
+        super().__init__(*args, des_file=des_file, **kwargs)
+
+
+class MiniHackLevitateLavaInvPotion(MiniHackSkill):
+    def __init__(self, *args, **kwargs):
+        kwargs["max_episode_steps"] = kwargs.pop("max_episode_steps", 400)
+        kwargs["options"] = kwargs.pop("options", [])
+        kwargs["options"].append("autopickup")
+        des_file = """
+MAZE: "mylevel", ' '
+FLAGS:hardfloor
+INIT_MAP: solidfill,' '
+GEOMETRY:center,center
+MAP
+-------------
+|.....L.....|
+|.....L.....|
+|.....L.....|
+|.....L.....|
+|.....L.....|
+-------------
+ENDMAP
+REGION:(0,0,12,6),lit,"ordinary"
+$right_bank = selection:fillrect (7,1,11,5)
+OBJECT:('!',"levitation"),(2,2),blessed
+BRANCH:(2,2,2,2),(0,0,0,0)
+STAIR:rndcoord($right_bank),down
+"""
+        super().__init__(*args, des_file=des_file, **kwargs)
+
+
+class MiniHackLevitateLavaInvPotionFixed(MiniHackSkill):
+    def __init__(self, *args, **kwargs):
+        kwargs["max_episode_steps"] = kwargs.pop("max_episode_steps", 400)
+        kwargs["options"] = kwargs.pop("options", [])
+        kwargs["options"].append("autopickup")
+        des_file = """
+MAZE: "mylevel", ' '
+FLAGS:hardfloor
+INIT_MAP: solidfill,' '
+GEOMETRY:center,center
+MAP
+-------------
+|.....L.....|
+|.....L.....|
+|.....L.....|
+|.....L.....|
+|.....L.....|
+-------------
+ENDMAP
+REGION:(0,0,12,6),lit,"ordinary"
+OBJECT:('!',"levitation"),(2,2),blessed
+BRANCH:(2,2,2,2),(0,0,0,0)
+STAIR:(10,3),down
+"""
+        super().__init__(*args, des_file=des_file, **kwargs)
+
+
+class MiniHackLevitateLavaInvRing(MiniHackSkill):
+    def __init__(self, *args, **kwargs):
+        kwargs["max_episode_steps"] = kwargs.pop("max_episode_steps", 400)
+        kwargs["options"] = kwargs.pop("options", [])
+        kwargs["options"].append("autopickup")
+        des_file = """
+MAZE: "mylevel", ' '
+FLAGS:hardfloor
+INIT_MAP: solidfill,' '
+GEOMETRY:center,center
+MAP
+-------------
+|.....L.....|
+|.....L.....|
+|.....L.....|
+|.....L.....|
+|.....L.....|
+-------------
+ENDMAP
+REGION:(0,0,12,6),lit,"ordinary"
+$right_bank = selection:fillrect (7,1,11,5)
+OBJECT:('=',"levitation"),(2,2),blessed
+BRANCH:(2,2,2,2),(0,0,0,0)
+STAIR:rndcoord($right_bank),down
+"""
+        super().__init__(*args, des_file=des_file, **kwargs)
+
+
+class MiniHackLevitateLavaInvRingFixed(MiniHackSkill):
+    def __init__(self, *args, **kwargs):
+        kwargs["max_episode_steps"] = kwargs.pop("max_episode_steps", 400)
+        kwargs["options"] = kwargs.pop("options", [])
+        kwargs["options"].append("autopickup")
+        des_file = """
+MAZE: "mylevel", ' '
+FLAGS:hardfloor
+INIT_MAP: solidfill,' '
+GEOMETRY:center,center
+MAP
+-------------
+|.....L.....|
+|.....L.....|
+|.....L.....|
+|.....L.....|
+|.....L.....|
+-------------
+ENDMAP
+REGION:(0,0,12,6),lit,"ordinary"
+OBJECT:('=',"levitation"),(2,2),blessed
+BRANCH:(2,2,2,2),(0,0,0,0)
+STAIR:(10,3),down
 """
         super().__init__(*args, des_file=des_file, **kwargs)
 
@@ -202,4 +315,20 @@ registration.register(
 registration.register(
     id="MiniHack-Levitate-Lava-v0",
     entry_point="nle.minihack.envs.skills_levitate:MiniHackLevitateLava",
+)
+registration.register(
+    id="MiniHack-Levitate-LavaInvPotion-v0",
+    entry_point="nle.minihack.envs.skills_levitate:MiniHackLevitateLavaInvPotion",
+)
+registration.register(
+    id="MiniHack-Levitate-LavaInvPotionFixed-v0",
+    entry_point="nle.minihack.envs.skills_levitate:MiniHackLevitateLavaInvPotionFixed",
+)
+registration.register(
+    id="MiniHack-Levitate-LavaInvRing-v0",
+    entry_point="nle.minihack.envs.skills_levitate:MiniHackLevitateLavaInvRing",
+)
+registration.register(
+    id="MiniHack-Levitate-LavaInvRingFixed-v0",
+    entry_point="nle.minihack.envs.skills_levitate:MiniHackLevitateLavaInvRingFixed",
 )
