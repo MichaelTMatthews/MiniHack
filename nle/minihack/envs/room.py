@@ -91,12 +91,19 @@ class MiniHackRoom15x15Dark(MiniHackRoom):
 
 class MiniHackRoom15x15Monster(MiniHackRoom):
     def __init__(self, *args, **kwargs):
-        super().__init__(*args, size=15, random=True, n_monster=3, **kwargs)
+        super().__init__(*args, size=15, random=True, n_monster=4, **kwargs)
 
 
-class MiniHackRoom15x15MonsterTrap(MiniHackRoom):
+class MiniHackRoom15x15Trap(MiniHackRoom):
     def __init__(self, *args, **kwargs):
-        super().__init__(*args, size=15, random=True, n_monster=3, n_trap=10, **kwargs)
+        super().__init__(*args, size=15, random=True, n_monster=0, n_trap=15, **kwargs)
+
+
+class MiniHackRoom15x15Ultimate(MiniHackRoom):
+    def __init__(self, *args, **kwargs):
+        super().__init__(
+            *args, size=15, random=True, lit=False, n_monster=4, n_trap=15, **kwargs
+        )
 
 
 registration.register(
@@ -116,6 +123,10 @@ registration.register(
     entry_point="nle.minihack.envs.room:MiniHackRoom15x15Monster",
 )
 registration.register(
-    id="MiniHack-Room-Monster-Trap-15x15-v0",
-    entry_point="nle.minihack.envs.room:MiniHackRoom15x15MonsterTrap",
+    id="MiniHack-Room-Trap-15x15-v0",
+    entry_point="nle.minihack.envs.room:MiniHackRoom15x15Trap",
+)
+registration.register(
+    id="MiniHack-Room-Ultimate-15x15-v0",
+    entry_point="nle.minihack.envs.room:MiniHackRoom15x15Ultimate",
 )

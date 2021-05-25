@@ -40,7 +40,8 @@ ENVS = dict(
     big_room_random=room.MiniHackRoom15x15Random,
     big_room_dark=room.MiniHackRoom15x15Dark,
     big_room_monster=room.MiniHackRoom15x15Monster,
-    big_room_monster_trap=room.MiniHackRoom15x15MonsterTrap,
+    big_room_trap=room.MiniHackRoom15x15Trap,
+    big_room_ultimate=room.MiniHackRoom15x15Ultimate,
     # MiniHack Corridor
     corridor2=corridor.MiniHackCorridor2,
     corridor3=corridor.MiniHackCorridor3,
