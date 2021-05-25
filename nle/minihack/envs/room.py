@@ -102,7 +102,7 @@ class MiniHackRoom15x15Dark(MiniHackRoom):
 
 class MiniHackRoom15x15Monster(MiniHackRoom):
     def __init__(self, *args, **kwargs):
-        super().__init__(*args, size=15, random=True, n_monster=4, **kwargs)
+        super().__init__(*args, size=15, random=True, n_monster=3, **kwargs)
 
 
 class MiniHackRoom15x15Trap(MiniHackRoom):
@@ -113,7 +113,7 @@ class MiniHackRoom15x15Trap(MiniHackRoom):
 class MiniHackRoom15x15Ultimate(MiniHackRoom):
     def __init__(self, *args, **kwargs):
         super().__init__(
-            *args, size=15, random=True, lit=False, n_monster=4, n_trap=15, **kwargs
+            *args, size=15, random=True, lit=False, n_monster=3, n_trap=15, **kwargs
         )
 
 
