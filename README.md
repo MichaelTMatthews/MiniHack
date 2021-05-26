@@ -1,9 +1,23 @@
-![NetHack Learning Environment (NLE)](https://github.com/facebookresearch/nle/raw/master/dat/nle/logo.png)
-
---------------------------------------------------------------------------------
-
-[![CircleCI](https://circleci.com/gh/facebookresearch/nle.svg?style=shield)](https://circleci.com/gh/facebookresearch/nle) [![PyPI version](https://img.shields.io/pypi/v/nle.svg)](https://pypi.python.org/pypi/nle/)
- [![Downloads](https://static.pepy.tech/personalized-badge/nle?period=total&units=international_system&left_color=black&right_color=orange&left_text=Downloads)](https://pepy.tech/project/nle)
+```
+        <                                                
+        ###                                              
+         ###                                             
+          ###                                            
+           ###            ##########                     
+            ###       #################                  
+              ##  #  ###             ####                
+               ###  ##    ###### ###   ##                
+              # #####    ###    ####   ###               
+                  ##    ###     ###    ###               
+                  ##   ###      ###    ###               
+                  ##   ###      ###    ##                
+                  ##   ###     ###   ###                 
+                  ###   ###############                  
+                   ###                 ##>               
+                     #####          #####                
+                       ###############                   
+                            ##### 
+```
 
 The NetHack Learning Environment (NLE) is a Reinforcement Learning environment presented at [NeurIPS 2020](https://neurips.cc/Conferences/2020).
 NLE is based on [NetHack 3.6.6](https://github.com/NetHack/NetHack/tree/NetHack-3.6.6_PostRelease) and designed to provide a standard RL interface to the game, and comes with tasks that function as a first step to evaluate agents on this new environment.
@@ -20,11 +34,9 @@ You can read more about NLE in the [NeurIPS 2020 paper](https://arxiv.org/abs/20
 README](./README.nh), at [nethack.org](https://nethack.org/), and on the
 [NetHack wiki](https://nethackwiki.com).
 
-![Example of an agent running on NLE](https://github.com/facebookresearch/nle/raw/master/dat/nle/example_run.gif)
 
-# Papers using the NetHack Learning Environment
-- Zhang et al. [BeBold: Exploration Beyond the Boundary of Explored Regions](https://arxiv.org/abs/2012.08621) (Berkley, FAIR, Dec 2020)
-- Küttler et al. [The NetHack Learning Environment](https://arxiv.org/abs/2006.13760) (FAIR, Oxford, NYU, UCL, NeurIPS 2020)
+# Papers using the MiniHack The Planet
+- Samvelyan et al. [MiniHack The Planet](https://arxiv.org/abs/2006.13760) (FAIR, UCL, Oxford)
 
 Open a [pull request](https://github.com/facebookresearch/nle/edit/master/README.md) to add papers
 
@@ -80,12 +92,6 @@ $ pre-commit install
 ```
 
 
-## Docker
-
-We have provided some docker images. Please see the [relevant
-README](docker/README.md).
-
-
 ## Trying it out
 
 After installation, one can try out any of the provided tasks as follows:
@@ -129,60 +135,10 @@ $ pip install "nle[agent]"
 $ python -m nle.agent.agent --num_actors 80 --batch_size 32 --unroll_length 80 --learning_rate 0.0001 --entropy_cost 0.0001 --use_lstm --total_steps 1000000000
 ```
 
-Plot the mean return over the last 100 episodes:
-```bash
-$ python -m nle.scripts.plot
-```
-```
-                              averaged episode return
-
-  140 +---------------------------------------------------------------------+
-      |             +             +            ++-+ ++++++++++++++++++++++++|
-      |             :             :          ++++++++||||||||||||||||||||||||
-  120 |-+...........:.............:...+-+.++++|||||||||||||||||||||||||||||||
-      |             :        +++++++++++++++||||||||||AAAAAAAAAAAAAAAAAAAAAA|
-      |            +++++++++++++||||||||||||||AAAAAAAAAAAA|||||||||||||||||||
-  100 |-+......+++++|+|||||||||||||||||||||||AA||||||||||||||||||||||||||||||
-      |       +++|||||||||||||||AAAAAAAAAAAAAA|||||||||||+++++++++++++++++++|
-      |    ++++|||||AAAAAAAAAAAAAA||||||||||||++++++++++++++-+:             |
-   80 |-++++|||||AAAAAA|||||||||||||||||||||+++++-+...........:...........+-|
-      | ++|||||AAA|||||||||||||||++++++++++++-+ :             :             |
-   60 |++||AAAAA|||||+++++++++++++-+............:.............:...........+-|
-      |++|AA||||++++++-|-+        :             :             :             |
-      |+|AA|||+++-+ :             :             :             :             |
-   40 |+|A+++++-+...:.............:.............:.............:...........+-|
-      |+AA+-+       :             :             :             :             |
-      |AA-+         :             :             :             :             |
-   20 |AA-+.........:.............:.............:.............:...........+-|
-      |++-+         :             :             :             :             |
-      |+-+          :             :             :             :             |
-    0 |-+...........:.............:.............:.............:...........+-|
-      |+            :             :             :             :             |
-      |+            +             +             +             +             |
-  -20 +---------------------------------------------------------------------+
-      0           2e+08         4e+08         6e+08         8e+08         1e+09
-                                       steps
-```
-
 # Contributing
 
 We welcome contributions to NLE. If you are interested in contributing please 
 see [this document](./CONTRIBUTING.md) 
-
-
-# Architecture
-
-NLE is direct fork of [NetHack](https://github.com/nethack/nethack) and 
-therefore contains code that operates on many different levels of abstraction.
-This ranges from low-level game logic, to the higher-level administration of 
-repeated nethack games, and finally to binding of these games to Python `gym`
-environment.
-
-If you want to learn more about the architecture of `nle` and how it works
-under the hood, checkout the [architecture document](./doc/nle/ARCHITECTURE.md). 
-This may be a useful starting point for anyone looking to contribute to the
-lower level elements of NLE.
-
 
 # Related Environments
 - [gym\_nethack](http://campbelljc.com/research/gym_nethack/)
@@ -195,14 +151,10 @@ lower level elements of NLE.
 - [OpenAI Procgen Benchmark](https://openai.com/blog/procgen-benchmark/)
 - [Obstacle Tower](https://github.com/Unity-Technologies/obstacle-tower-env)
 
-# Interview about the environment with Weights&Biases
-[Facebook AI Research’s Tim & Heinrich on democratizing reinforcement learning research](https://www.youtube.com/watch?v=oYSNXTkeCtw)
-
-[![Interview with Weigths&Biases](https://img.youtube.com/vi/oYSNXTkeCtw/0.jpg)](https://www.youtube.com/watch?v=oYSNXTkeCtw)
 
 # Citation
 
-If you use NLE in any of your work, please cite:
+If you use MiniHack in any of your work, please cite:
 
 ```
 @inproceedings{kuettler2020nethack,
@@ -218,3 +170,25 @@ If you use NLE in any of your work, please cite:
   year      = {2020},
 }
 ```
+
+If you use MiniHack's interface on environments ported from other benchmarks, please cite the original paper as well:
+
+- MiniGrid
+
+@misc{gym_minigrid,
+  author = {Chevalier-Boisvert, Maxime and Willems, Lucas and Pal, Suman},
+  title = {Minimalistic Gridworld Environment for OpenAI Gym},
+  year = {2018},
+  publisher = {GitHub},
+  journal = {GitHub repository},
+  howpublished = {\url{https://github.com/maximecb/gym-minigrid}},
+}
+
+- Boxoban
+
+@misc{boxobanlevels,
+  author = {Arthur Guez, Mehdi Mirza, Karol Gregor, Rishabh Kabra, Sebastien Racaniere, Theophane Weber, David Raposo, Adam Santoro, Laurent Orseau, Tom Eccles, Greg Wayne, David Silver, Timothy Lillicrap, Victor Valdes},
+  title = {An investigation of Model-free planning: boxoban levels},
+  howpublished= {https://github.com/deepmind/boxoban-levels/},
+  year = "2018",
+}
