@@ -175,6 +175,7 @@ If you use MiniHack's interface on environments ported from other benchmarks, pl
 
 - MiniGrid
 
+```
 @misc{gym_minigrid,
   author = {Chevalier-Boisvert, Maxime and Willems, Lucas and Pal, Suman},
   title = {Minimalistic Gridworld Environment for OpenAI Gym},
@@ -183,12 +184,15 @@ If you use MiniHack's interface on environments ported from other benchmarks, pl
   journal = {GitHub repository},
   howpublished = {\url{https://github.com/maximecb/gym-minigrid}},
 }
+```
 
 - Boxoban
 
+```
 @misc{boxobanlevels,
   author = {Arthur Guez, Mehdi Mirza, Karol Gregor, Rishabh Kabra, Sebastien Racaniere, Theophane Weber, David Raposo, Adam Santoro, Laurent Orseau, Tom Eccles, Greg Wayne, David Silver, Timothy Lillicrap, Victor Valdes},
   title = {An investigation of Model-free planning: boxoban levels},
   howpublished= {https://github.com/deepmind/boxoban-levels/},
   year = "2018",
 }
+```
