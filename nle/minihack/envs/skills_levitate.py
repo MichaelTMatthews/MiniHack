@@ -170,6 +170,59 @@ STAIR:rndcoord($right_bank),down
         super().__init__(*args, des_file=des_file, **kwargs)
 
 
+class MiniHackLevitateLavaPotion(MiniHackSkill):
+    def __init__(self, *args, **kwargs):
+        kwargs["max_episode_steps"] = kwargs.pop("max_episode_steps", 400)
+        des_file = """
+MAZE: "mylevel", ' '
+FLAGS:hardfloor
+INIT_MAP: solidfill,' '
+GEOMETRY:center,center
+MAP
+-------------
+|.....L.....|
+|.....L.....|
+|.....L.....|
+|.....L.....|
+|.....L.....|
+-------------
+ENDMAP
+REGION:(0,0,12,6),lit,"ordinary"
+$left_bank = selection:fillrect (1,1,5,5)
+$right_bank = selection:fillrect (7,1,11,5)
+OBJECT:('!',"levitation"),rndcoord($left_bank),blessed
+BRANCH:(1,1,5,5),(0,0,0,0)
+STAIR:rndcoord($right_bank),down
+"""
+        super().__init__(*args, des_file=des_file, **kwargs)
+
+
+class MiniHackLevitateLavaPotionFixed(MiniHackSkill):
+    def __init__(self, *args, **kwargs):
+        kwargs["max_episode_steps"] = kwargs.pop("max_episode_steps", 400)
+        des_file = """
+MAZE: "mylevel", ' '
+FLAGS:hardfloor
+INIT_MAP: solidfill,' '
+GEOMETRY:center,center
+MAP
+-------------
+|.....L.....|
+|.....L.....|
+|.....L.....|
+|.....L.....|
+|.....L.....|
+-------------
+ENDMAP
+REGION:(0,0,12,6),lit,"ordinary"
+$right_bank = selection:fillrect (7,1,11,5)
+OBJECT:('!',"levitation"),(4,3),blessed
+BRANCH:(3,3,3,3),(0,0,0,0)
+STAIR:(10,3),down
+"""
+        super().__init__(*args, des_file=des_file, **kwargs)
+
+
 class MiniHackLevitateLavaInvPotion(MiniHackSkill):
     def __init__(self, *args, **kwargs):
         kwargs["max_episode_steps"] = kwargs.pop("max_episode_steps", 400)
@@ -315,6 +368,14 @@ registration.register(
 registration.register(
     id="MiniHack-Levitate-Lava-v0",
     entry_point="nle.minihack.envs.skills_levitate:MiniHackLevitateLava",
+)
+registration.register(
+    id="MiniHack-Levitate-LavaPotion-v0",
+    entry_point="nle.minihack.envs.skills_levitate:MiniHackLevitateLavaPotion",
+)
+registration.register(
+    id="MiniHack-Levitate-LavaPotion-Fixed-v0",
+    entry_point="nle.minihack.envs.skills_levitate:MiniHackLevitateLavaPotionFixed",
 )
 registration.register(
     id="MiniHack-Levitate-LavaInvPotion-v0",

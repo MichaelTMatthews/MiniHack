@@ -3,20 +3,21 @@ from collections.abc import Iterable
 from numbers import Number
 
 import hydra
+import nle.agent.rllib.models  # noqa: F401
 import numpy as np
 import ray
 import ray.tune.integration.wandb
 from nle.agent.rllib.envs import RLLibNLEEnv  # noqa: F401
-import nle.agent.rllib.models  # noqa: F401
-from ray.tune.registry import register_env
 from omegaconf import DictConfig, OmegaConf
 from ray import tune
-from ray.rllib.agents import dqn, impala, ppo, a3c
+from ray.rllib.models.catalog import MODEL_DEFAULTS
+from ray.rllib.agents import a3c, dqn, impala, ppo
 from ray.tune.integration.wandb import (
     _VALID_ITERABLE_TYPES,
     _VALID_TYPES,
     WandbLoggerCallback,
 )
+from ray.tune.registry import register_env
 from ray.tune.utils import merge_dicts
 
 
@@ -53,8 +54,22 @@ def train(cfg: DictConfig) -> None:
 
     config = algo.DEFAULT_CONFIG.copy()
 
-    # Generic Configuration
-    config.update(
+    args_config = OmegaConf.to_container(cfg)
+
+    # Algo-specific config. Requires hydra config keys to match rllib exactly
+    algo_config = args_config.pop(cfg.algo)
+
+    # Remove unnecessary config keys
+    for algo in NAME_TO_TRAINER.keys():
+        if algo != cfg.algo:
+            args_config.pop(algo, None)
+
+    # Merge config from hydra (will have some rogue keys but that's ok)
+    config = merge_dicts(config, args_config)
+
+    # Update configuration with parsed arguments in specific ways
+    config = merge_dicts(
+        config,
         {
             "framework": "torch",
             "num_gpus": cfg.num_gpus,
@@ -66,26 +81,31 @@ def train(cfg: DictConfig) -> None:
                 "name": cfg.env,
             },
             "train_batch_size": cfg.train_batch_size,
-            "model": {
-                "custom_model": "rllib_nle_model",
-                "custom_model_config": {"flags": cfg, "algo": cfg.algo},
-                "use_lstm": cfg.use_lstm,
-                "lstm_use_prev_reward": True,
-                "lstm_use_prev_action": True,
-                "lstm_cell_size": cfg.hidden_dim,  # same as h_dim in models.NetHackNet
-            },
+            "model": merge_dicts(
+                MODEL_DEFAULTS,
+                {
+                    "custom_model": "rllib_nle_model",
+                    "custom_model_config": {"flags": cfg, "algo": cfg.algo},
+                    "use_lstm": cfg.use_lstm,
+                    "lstm_use_prev_reward": True,
+                    "lstm_use_prev_action": True,
+                    "lstm_cell_size": cfg.hidden_dim,
+                },
+            ),
             "num_workers": cfg.num_cpus,
             "num_envs_per_worker": int(cfg.num_actors / cfg.num_cpus),
             "evaluation_interval": 100,
             "evaluation_num_episodes": 50,
             "evaluation_config": {"explore": False},
             "rollout_fragment_length": cfg.unroll_length,
-        }
+        },
     )
 
-    # Algo-specific config. Requires hydra config keys to match rllib exactly
-    algo_config = OmegaConf.to_container(cfg[cfg.algo])
+    # Merge algo-specific config at top level
     config = merge_dicts(config, algo_config)
+
+    # Ensure we can use the config we've specified above
+    trainer_class = trainer.with_updates(default_config=config)
 
     callbacks = []
     if cfg.wandb:
@@ -112,8 +132,9 @@ def train(cfg: DictConfig) -> None:
         return isinstance(obj, _VALID_TYPES)
 
     ray.tune.integration.wandb._is_allowed_type = _is_allowed_type
+
     tune.run(
-        trainer,
+        trainer_class,
         stop={"timesteps_total": cfg.total_steps},
         config=config,
         name=cfg.name,
