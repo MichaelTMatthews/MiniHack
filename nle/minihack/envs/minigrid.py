@@ -9,7 +9,14 @@ MOVE_AND_KICK_ACTIONS = tuple(list(CompassDirection) + [Command.OPEN, Command.KI
 
 class MiniGridHack(MiniHackNavigation):
     def __init__(self, *args, **kwargs):
-        import gym_minigrid  # noqa: F401
+        # Only ask users to install gym-minigrid if they actually need it
+        try:
+            import gym_minigrid  # noqa: F401
+        except ModuleNotFoundError:
+            raise ModuleNotFoundError(
+                "To use MiniGrid-based environments, please install \
+                    gym-minigrid: pip3 install gym-minigrid"
+            )
 
         self.minigrid_env = gym.make(kwargs.pop("env_name"))
         self.num_mon = kwargs.pop("num_mon", 0)
