@@ -23,6 +23,7 @@ import nle.minihack.envs.skills_invis
 import nle.minihack.envs.lab
 import nle.minihack.envs.scratch
 import nle.minihack.envs.hideandseek
+import nle.minihack.envs.planet
 
 
 __all__ = [

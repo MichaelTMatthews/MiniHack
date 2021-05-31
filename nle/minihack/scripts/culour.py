@@ -22,6 +22,7 @@ TERMINAL_COLOR_TO_CURSES = {
     TerminalColors.YELLOW: curses.COLOR_YELLOW,
     TerminalColors.BLUE: curses.COLOR_BLUE,
     TerminalColors.MAGENTA: curses.COLOR_MAGENTA,
+    '[30': curses.COLOR_BLUE,
     '[31': curses.COLOR_RED,
     '[36': curses.COLOR_GREEN,
     '[37': curses.COLOR_YELLOW,
