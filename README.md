@@ -35,14 +35,14 @@ README](./README.nh), at [nethack.org](https://nethack.org/), and on the
 [NetHack wiki](https://nethackwiki.com).
 
 
-# Papers using the MiniHack The Planet
-- Samvelyan et al. [MiniHack The Planet](https://arxiv.org/abs/2006.13760) (FAIR, UCL, Oxford)
+<!-- # Papers using the MiniHack The Planet
+- Samvelyan et al. [MiniHack The Planet](https://arxiv.org/abs/20XX.YYYY) (FAIR, UCL, Oxford)
 
-Open a [pull request](https://github.com/facebookresearch/nle/edit/master/README.md) to add papers
+Open a [pull request](https://github.com/facebookresearch/nle/edit/master/README.md) to add papers -->
 
 # Getting started
 
-Starting with NLE environments is extremely simple, provided one is familiar
+Starting with MiniHack environments is extremely simple, provided one is familiar
 with other gym / RL environments.
 
 
