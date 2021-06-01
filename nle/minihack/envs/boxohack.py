@@ -41,6 +41,7 @@ class BoxoHack(MiniHackNavigation):
 
         cur_levels_path = os.path.join(LEVELS_PATH, level_set, level_mode)
 
+        self._time_penalty = kwargs.pop("penalty_time", 0)
         self._flags = tuple(kwargs.pop("flags", []))
         self._levels = load_boxoban_levels(cur_levels_path)
         self._reward_shaping_coefficient = kwargs.pop("reward_shaping_coefficient", 0)
@@ -99,9 +100,13 @@ class BoxoHack(MiniHackNavigation):
         elif end_status != self.StepStatus.RUNNING:
             return 0
         return (
-            self._count_boulders_on_fountains(observation)
-            - self._count_boulders_on_fountains(last_observation)
-        ) * self._reward_shaping_coefficient
+            self._time_penalty
+            + (
+                self._count_boulders_on_fountains(observation)
+                - self._count_boulders_on_fountains(last_observation)
+            )
+            * self._reward_shaping_coefficient
+        )
 
     def _count_boulders_on_fountains(self, observation):
         return len(
@@ -111,6 +116,14 @@ class BoxoHack(MiniHackNavigation):
     def _object_positions(self, observation, object_char):
         char_obs = observation[self._original_observation_keys.index("chars")]
         return set((x, y) for x, y in zip(*np.where(char_obs == ord(object_char))))
+
+
+class MiniHackBoxobanUnfiltered(BoxoHack):
+    def __init__(self, *args, **kwargs):
+        kwargs["level_set"] = "unfiltered"
+        kwargs["level_mode"] = "train"
+        kwargs["reward_shaping_coefficient"] = 0
+        super().__init__(*args, **kwargs)
 
 
 class MiniHackBoxobanMedium(BoxoHack):
@@ -129,11 +142,21 @@ class MiniHackBoxobanHard(BoxoHack):
         super().__init__(*args, **kwargs)
 
 
+class MiniHackBoxobanUnfilteredShaped(BoxoHack):
+    def __init__(self, *args, **kwargs):
+        kwargs["level_set"] = "unfiltered"
+        kwargs["level_mode"] = "train"
+        kwargs["reward_shaping_coefficient"] = 0.1
+        kwargs["penalty_time"] = -0.001
+        super().__init__(*args, **kwargs)
+
+
 class MiniHackBoxobanMediumShaped(BoxoHack):
     def __init__(self, *args, **kwargs):
         kwargs["level_set"] = "medium"
         kwargs["level_mode"] = "train"
-        kwargs["reward_shaping_coefficient"] = 0.2
+        kwargs["reward_shaping_coefficient"] = 0.1
+        kwargs["penalty_time"] = -0.001
         super().__init__(*args, **kwargs)
 
 
@@ -141,10 +164,15 @@ class MiniHackBoxobanHardShaped(BoxoHack):
     def __init__(self, *args, **kwargs):
         kwargs["level_set"] = "hard"
         kwargs["level_mode"] = ""
-        kwargs["reward_shaping_coefficient"] = 0.2
+        kwargs["reward_shaping_coefficient"] = 0.1
+        kwargs["penalty_time"] = -0.001
         super().__init__(*args, **kwargs)
 
 
+registration.register(
+    id="MiniHack-Boxoban-Unfiltered-v0",
+    entry_point="nle.minihack.envs.boxohack:MiniHackBoxobanUnfiltered",
+)
 registration.register(
     id="MiniHack-Boxoban-Medium-v0",
     entry_point="nle.minihack.envs.boxohack:MiniHackBoxobanMedium",
@@ -152,6 +180,10 @@ registration.register(
 registration.register(
     id="MiniHack-Boxoban-Hard-v0",
     entry_point="nle.minihack.envs.boxohack:MiniHackBoxobanHard",
+)
+registration.register(
+    id="MiniHack-Boxoban-Unfiltered-Shaped-v0",
+    entry_point="nle.minihack.envs.boxohack:MiniHackBoxobanUnfilteredShaped",
 )
 registration.register(
     id="MiniHack-Boxoban-Medium-Shaped-v0",
