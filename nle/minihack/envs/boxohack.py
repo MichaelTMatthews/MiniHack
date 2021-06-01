@@ -4,12 +4,15 @@ import random
 
 import numpy as np
 import pkg_resources
+from nle import nethack
 from gym.envs import registration
 from nle.minihack import LevelGenerator, MiniHackNavigation
 
 LEVELS_PATH = os.path.join(
     pkg_resources.resource_filename("nle", "minihack/dat"), "boxoban-levels-master"
 )
+# The agent can only move towards 4 cardinal directions (instead of default 8)
+MOVE_ACTIONS = tuple(nethack.CompassCardinalDirection)
 
 
 def load_boxoban_levels(cur_levels_path):
@@ -32,6 +35,7 @@ def load_boxoban_levels(cur_levels_path):
 class BoxoHack(MiniHackNavigation):
     def __init__(self, *args, **kwargs):
         kwargs["max_episode_steps"] = kwargs.pop("max_episode_steps", 400)
+        kwargs["actions"] = kwargs.pop("actions", MOVE_ACTIONS)
         level_set = kwargs.pop("level_set", "unfiltered")
         level_mode = kwargs.pop("level_mode", "train")
 

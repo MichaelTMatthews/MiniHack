@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-# This file is adapted from https://github.com/maximecb/gym-minigrid/blob/master/manual_control.py
+# This file is adapted from
+# github.com/maximecb/gym-minigrid/blob/master/manual_control.py
 
 import argparse
 import numpy as np
