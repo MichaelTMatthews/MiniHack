@@ -174,7 +174,7 @@ If you use MiniHack in any of your work, please cite:
 
 If you use MiniHack's interface on environments ported from other benchmarks, please cite the original paper as well:
 
-- MiniGrid
+- [MiniGrid](https://github.com/maximecb/gym-minigrid/) (see [LICENSE](https://github.com/maximecb/gym-minigrid/blob/master/LICENSE))
 
 ```
 @misc{gym_minigrid,
@@ -187,7 +187,7 @@ If you use MiniHack's interface on environments ported from other benchmarks, pl
 }
 ```
 
-- Boxoban
+- [Boxoban](https://github.com/deepmind/boxoban-levels/) (see [LICENSE](https://github.com/deepmind/boxoban-levels/blob/master/LICENSE))
 
 ```
 @misc{boxobanlevels,
