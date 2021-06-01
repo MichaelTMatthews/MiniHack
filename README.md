@@ -1,3 +1,5 @@
+# MiniHack the Planet: A Sandbox for Open-Ended Reinforcement Learning Research
+
 ```
         <                                                
         ###                                              
