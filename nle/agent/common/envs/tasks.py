@@ -102,8 +102,10 @@ ENVS = dict(
     multiroom_4_extreme=minigrid.MiniHackMultiRoomN4Extreme,
     multiroom_6_extreme=minigrid.MiniHackMultiRoomN6Extreme,
     # MiniHack Boxoban
+    boxoban_unfiltered=boxohack.MiniHackBoxobanUnfiltered,
     boxoban_hard=boxohack.MiniHackBoxobanHard,
     boxoban_medium=boxohack.MiniHackBoxobanMedium,
+    boxoban_unfiltered_shaped=boxohack.MiniHackBoxobanUnfilteredShaped,
     boxoban_hard_shaped=boxohack.MiniHackBoxobanHardShaped,
     boxoban_medium_shaped=boxohack.MiniHackBoxobanMediumShaped,
     # MiniHack Simple Skills
