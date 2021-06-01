@@ -116,12 +116,14 @@ $ python -m nle.scripts.play
 # Use a random agent
 $ python -m nle.scripts.play --mode random
 
-# Play the full game using directly the NetHack internal interface
-# (Useful for debugging outside of the gym environment)
-$ python -m nle.scripts.play --env NetHackScore-v0 # works with random agent too
+# Play the MiniHack in the Terminal
+$ python -m nle.scripts.play --env MiniHack-River-v0 # works with random agent too
 
 # See all the options
 $ python -m nle.scripts.play --help
+
+# Play the MiniHack with GUI tiles
+$ python -m nle.scripts.play_gui --env MiniHack-River-v0
 ```
 
 Note that `nle.scripts.play` can also be run with `nle-play`, if the package
@@ -138,7 +140,7 @@ $ python -m nle.agent.agent --num_actors 80 --batch_size 32 --unroll_length 80 -
 
 # Contributing
 
-We welcome contributions to NLE. If you are interested in contributing please 
+We welcome contributions to MiniHack. If you are interested in contributing please 
 see [this document](./CONTRIBUTING.md) 
 
 # Related Environments
@@ -154,7 +156,7 @@ see [this document](./CONTRIBUTING.md)
 
 
 # Citation
-
+<!-- 
 If you use MiniHack in any of your work, please cite:
 
 ```
@@ -171,7 +173,7 @@ If you use MiniHack in any of your work, please cite:
   year      = {2020},
 }
 ```
-
+ -->
 If you use MiniHack's interface on environments ported from other benchmarks, please cite the original paper as well:
 
 - [MiniGrid](https://github.com/maximecb/gym-minigrid/) (see [LICENSE](https://github.com/maximecb/gym-minigrid/blob/master/LICENSE))
