@@ -17,6 +17,7 @@ from nle.minihack.envs import (
     skills_simple,
     skills_lava,
     skills_wod,
+    skills_quest,
 )
 from nle.agent.common.envs.wrapper import CounterWrapper, CropWrapper, PrevWrapper
 
@@ -149,6 +150,10 @@ ENVS = dict(
     lava_lev_potion_pick=skills_lava.MiniHackLCLevitatePotionPickup,
     lava_lev_ring_inv=skills_lava.MiniHackLCLevitateRingInv,
     lava_lev_ring_pick=skills_lava.MiniHackLCLevitateRingPickup,
+    # MiniHack Quest
+    quest_easy=skills_quest.MiniHackQuestEasy,
+    quest_medium=skills_quest.MiniHackQuestMedium,
+    quest_hard=skills_quest.MiniHackQuestHard,
 )
 
 
