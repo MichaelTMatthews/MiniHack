@@ -15,7 +15,7 @@ from nle.minihack.envs import (
     hidenseek,
     exploremaze,
     skills_simple,
-    skills_levitate,
+    skills_lava,
     skills_wod,
 )
 from nle.agent.common.envs.wrapper import CounterWrapper, CropWrapper, PrevWrapper
@@ -142,22 +142,13 @@ ENVS = dict(
     wod_medium=skills_wod.MiniHackWoDMedium,
     wod_hard=skills_wod.MiniHackWoDHard,
     wod_pro=skills_wod.MiniHackWoDPro,
-    # MiniHack Levitat
-    levitate_boot=skills_levitate.MiniHackLevitateBoots,
-    levitate_ring=skills_levitate.MiniHackLevitateRing,
-    levitate_potion=skills_levitate.MiniHackLevitatePotion,
-    levitate_random=skills_levitate.MiniHackLevitateRandom,
-    levitate_boot_fixed=skills_levitate.MiniHackLevitateBootsFixed,
-    levitate_ring_fixed=skills_levitate.MiniHackLevitateRingFixed,
-    levitate_potion_fixed=skills_levitate.MiniHackLevitatePotionFixed,
-    levitate_random_fixed=skills_levitate.MiniHackLevitateRandomFixed,
-    levitate_lava=skills_levitate.MiniHackLevitateLava,
-    levitate_lava_P=skills_levitate.MiniHackLevitateLavaPotion,
-    levitate_lava_PF=skills_levitate.MiniHackLevitateLavaPotionFixed,
-    levitate_lava_IP=skills_levitate.MiniHackLevitateLavaInvPotion,
-    levitate_lava_IPF=skills_levitate.MiniHackLevitateLavaInvPotionFixed,
-    levitate_lava_IR=skills_levitate.MiniHackLevitateLavaInvRing,
-    levitate_lava_IRF=skills_levitate.MiniHackLevitateLavaInvRingFixed,
+    # MiniHack Lava Crossing
+    lava=skills_lava.MiniHackLC,
+    lava_lev=skills_lava.MiniHackLCLevitate,
+    lava_lev_potion_inv=skills_lava.MiniHackLCLevitatePotionInv,
+    lava_lev_potion_pick=skills_lava.MiniHackLCLevitatePotionPickup,
+    lava_lev_ring_inv=skills_lava.MiniHackLCLevitateRingInv,
+    lava_lev_ring_pick=skills_lava.MiniHackLCLevitateRingPickup,
 )
 
 
