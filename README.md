@@ -149,24 +149,30 @@ We welcome contributions to MiniHack. If you are interested in contributing plea
 see [this document](./CONTRIBUTING.md) 
 
 # Citation
-<!-- 
+ 
 If you use MiniHack in any of your work, please cite:
 
+
+\textbf{M. }, R. Kirk, V. Kurin, J. Parker-Holder, M. Jiang, E. Hambro, F. Petroni, H. K\"{u}ttler, E. Grefenstette, T. Rockt\"{a}schel, "MiniHack the Planet: A Sandbox for Open-Ended Reinforcement Learning Research", Submitted to: \textit{NeurIPS 2021: Datasets and Benchmarks trac
+
 ```
-@inproceedings{kuettler2020nethack,
-  author    = {Heinrich K{\"{u}}ttler and
-               Nantas Nardelli and
-               Alexander H. Miller and
-               Roberta Raileanu and
-               Marco Selvatici and
-               Edward Grefenstette and
-               Tim Rockt{\"{a}}schel},
-  title     = {{The NetHack Learning Environment}},
-  booktitle = {Proceedings of the Conference on Neural Information Processing Systems (NeurIPS)},
-  year      = {2020},
+@inproceedings{samvelyan2021MiniHack,
+  author = {Mikayel Samvelyan and
+            Robert Kirk and
+            Vitaly Kurin and
+            Jack Parker-Holder and
+            Minqi Jiang and
+            Eric Hambro and
+            Fabio Petroni and
+            Heinrich K\"{u}ttler and
+            Edward Grefenstette and
+            Tim Rockt{\"{a}}schel},
+  title     = {{MiniHack the Planet: A Sandbox for NetHack Learning Environment}},
+  howpublished= {https://github.com/MiniHackPlanet/MiniHack},
+  year      = {2021},
 }
 ```
- -->
+
 If you use MiniHack's interface on environments ported from other benchmarks, please cite the original paper as well:
 
 - [MiniGrid](https://github.com/maximecb/gym-minigrid/) (see [LICENSE](https://github.com/maximecb/gym-minigrid/blob/master/LICENSE))
