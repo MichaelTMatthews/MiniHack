@@ -21,7 +21,10 @@
                             ##### 
 ```
 
-MiniHack is a sandbox framework for easily designing environments for Reinforcement Learning. MiniHack is based on the [The NetHack Learning Environment (NLE)](https://github.com/facebookresearch/nle) and provides a standard RL interface for customly created tesbeds.
+MiniHack is a sandbox framework for easily designing environments for
+Reinforcement Learning. MiniHack is based on the [The NetHack Learning
+Environment (NLE)](https://github.com/facebookresearch/nle) and provides a
+standard RL interface for customly created tesbeds.
 
 NetHack is one of the oldest and arguably most impactful videogames in history,
 as well as being one of the hardest roguelikes currently being played by humans.
@@ -31,7 +34,8 @@ being much cheaper to run compared to other challenging testbeds. Through NLE,
 we wish to establish NetHack as one of the next challenges for research in
 decision making and machine learning.
 
-You can read more about NLE in the [NeurIPS 2020 paper](https://arxiv.org/abs/2006.13760), and about NetHack in its [original
+You can read more about NLE in the [NeurIPS 2020
+paper](https://arxiv.org/abs/2006.13760), and about NetHack in its [original
 README](./README.nh), at [nethack.org](https://nethack.org/), and on the
 [NetHack wiki](https://nethackwiki.com).
 
@@ -130,14 +134,33 @@ $ python -m nle.scripts.play_gui --env MiniHack-River-v0
 Note that `nle.scripts.play` can also be run with `nle-play`, if the package
 has been properly installed.
 
-Additionally, a [TorchBeast](https://github.com/facebookresearch/torchbeast)
-agent is bundled in `nle.agent` together with a simple model to provide a
-starting point for experiments:
+Several baseline agents are included as part of MiniHack, which can be
+installed and used as follows:
 
+* a [TorchBeast](https://github.com/facebookresearch/torchbeast) agent is
+  bundled in `nle.agent.polybeast` together with a simple model to provide
+  a starting point for experiments. To install and train this agent, first
+  install torchbeast be following the instructions
+  [here](https://github.com/facebookresearch/torchbeast#installing-polybeast),
+  then use the following commands:
 ``` bash
-$ pip install "nle[agent]"
-$ python -m nle.agent.agent --num_actors 80 --batch_size 32 --unroll_length 80 --learning_rate 0.0001 --entropy_cost 0.0001 --use_lstm --total_steps 1000000000
+$ pip install "nle[polybeast_agent]"
+$ python -m nle.agent.polybeast.polyhydra --num_actors=80 --batch_size=32 --unroll_length=80 --learning_rate=0.0001 --entropy_cost=0.0001 --use_lstm=true --total_steps=1000000000
 ```
+
+* An [RLlib](https://github.com/ray-project/ray#rllib-quick-start) agent is
+  provided in `nle.agent.rllib`, with a similar model to the torchbeast agent.
+  This can be used to try out a variety of different RL algorithms - several
+  examples are provided. To install and train this agent use the following
+  commands:
+```bash
+$ pip install "nle[rllib_agent]"
+$ python -m nle.agent.rllib.train --algo=ppo
+```
+
+More information on running these agents, and instructions on how to reproduce
+the results of the MiniHack paper, can be found in [this
+document](./nle/agent/README.md).
 
 # Contributing
 
@@ -154,6 +177,7 @@ see [this document](./CONTRIBUTING.md)
 - [Project Malmo](https://www.microsoft.com/en-us/research/project/project-malmo/)
 - [OpenAI Procgen Benchmark](https://openai.com/blog/procgen-benchmark/)
 - [Obstacle Tower](https://github.com/Unity-Technologies/obstacle-tower-env)
+- [Griddly](https://github.com/Bam4d/Griddly/)
 
 
 # Citation

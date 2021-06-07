@@ -86,6 +86,7 @@ packages = [
 entry_points = {
     "console_scripts": [
         "nle-play = nle.scripts.play:main",
+        "nle-guiplay = nle.scripts.play_gui:main",
         "nle-ttyrec = nle.scripts.ttyrec:main",
         "nle-ttyplay = nle.scripts.ttyplay:main",
     ]
@@ -104,14 +105,20 @@ extras_deps = {
         "sphinx>=2.4.4",
         "sphinx-rtd-theme==0.4.3",
     ],
-    "agent": ["torch>=1.3.1"],
+    "polybeast_agent": ["torch>=1.3.1"],
+    "rllib_agent": [
+        "torch>=1.3.1",
+        "ray[rllib]>=1.3.0",
+        "hydra-core>=1.0.0",
+        "hydra-colorlog>=1.0.0",
+    ],
 }
 
 extras_deps["all"] = [item for group in extras_deps.values() for item in group]
 
 
 if __name__ == "__main__":
-    package_name = os.getenv("NLE_PACKAGE_NAME", "nle")
+    package_name = os.getenv("NLE_PACKAGE_NAME", "minihack")
     cwd = os.path.dirname(os.path.abspath(__file__))
     version = open("version.txt", "r").read().strip()
     sha = "Unknown"
@@ -141,13 +148,13 @@ if __name__ == "__main__":
         name=package_name,
         version=version,
         description=(
-            "The NetHack Learning Environment (NLE): "
-            "a reinforcement learning environment based on NetHack"
+            "MiniHack: A Sandbox for Open-Ended Reinforcement Learning"
+            "Research Based On NLE and NetHack"
         ),
         long_description=long_description,
         long_description_content_type="text/markdown",
         author="The NLE Dev Team",
-        url="https://github.com/facebookresearch/nle",
+        url="https://github.com/MiniHackPlanet/minihack",
         license="NetHack General Public License",
         entry_points=entry_points,
         packages=packages,
