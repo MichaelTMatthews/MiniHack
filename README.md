@@ -51,7 +51,6 @@ Open a [pull request](https://github.com/facebookresearch/nle/edit/master/README
 Starting with MiniHack environments is extremely simple, provided one is familiar
 with other gym / RL environments.
 
-
 ## Installation
 
 NLE requires `python>=3.5`, `cmake>=3.14` to be installed and available both when building the
@@ -92,7 +91,7 @@ $ pip install nle
 NOTE: If you want to extend / develop NLE, please install the package as follows:
 
 ``` bash
-$ git clone https://github.com/ucl-dark/nle --recursive
+$ git clone https://github.com/MiniHackPlanet/MiniHack --recursive
 $ pip install -e ".[dev]"
 $ pre-commit install
 ```
@@ -105,34 +104,35 @@ After installation, one can try out any of the provided tasks as follows:
 ```python
 >>> import gym
 >>> import nle
->>> env = gym.make("NetHackScore-v0")
+>>> env = gym.make("MiniHack-Eat-v0")
 >>> env.reset()  # each reset generates a new dungeon
 >>> env.step(1)  # move agent '@' north
 >>> env.render()
 ```
 
-NLE also comes with a few scripts that allow to get some environment rollouts,
+MiniHack also comes with a few scripts that allow to get some environment rollouts,
 and play with the action space:
 
 ```bash
-# Play NetHackStaircase-v0 as a human
-$ python -m nle.scripts.play
+# Play the MiniHack in the Terminal as a human
+$ python -m nle.scripts.play --env MiniHack-River-v0
 
 # Use a random agent
-$ python -m nle.scripts.play --mode random
-
-# Play the MiniHack in the Terminal
-$ python -m nle.scripts.play --env MiniHack-River-v0 # works with random agent too
+$ python -m nle.scripts.play --env MiniHack-River-v0  --mode random
 
 # See all the options
 $ python -m nle.scripts.play --help
 
-# Play the MiniHack with GUI tiles
+# Play the MiniHack with graphical user interface (gui)
 $ python -m nle.scripts.play_gui --env MiniHack-River-v0
 ```
 
 Note that `nle.scripts.play` can also be run with `nle-play`, if the package
 has been properly installed.
+
+MiniHack comes with a set of predefined set of tasks. For the full list see [here](./TASKS.md)
+
+## Baseline Agents
 
 Several baseline agents are included as part of MiniHack, which can be
 installed and used as follows:
