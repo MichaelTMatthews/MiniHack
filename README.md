@@ -167,19 +167,6 @@ document](./nle/agent/README.md).
 We welcome contributions to MiniHack. If you are interested in contributing please 
 see [this document](./CONTRIBUTING.md) 
 
-# Related Environments
-- [gym\_nethack](http://campbelljc.com/research/gym_nethack/)
-- [rogueinabox](https://github.com/rogueinabox/rogueinabox)
-- [rogue-gym](https://github.com/kngwyu/rogue-gym)
-- [MiniGrid](https://github.com/maximecb/gym-minigrid)
-- [CoinRun](https://github.com/openai/coinrun)
-- [MineRL](http://minerl.io/docs)
-- [Project Malmo](https://www.microsoft.com/en-us/research/project/project-malmo/)
-- [OpenAI Procgen Benchmark](https://openai.com/blog/procgen-benchmark/)
-- [Obstacle Tower](https://github.com/Unity-Technologies/obstacle-tower-env)
-- [Griddly](https://github.com/Bam4d/Griddly/)
-
-
 # Citation
 <!-- 
 If you use MiniHack in any of your work, please cite:
