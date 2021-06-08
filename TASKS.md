@@ -350,8 +350,8 @@ enrich them, rather then porting all possible tasks.
 
 | Name                                         | Capability  |
 |----------------------------------------------|-------------|
-| `MultiRoom-N2-v0                             | Exploration |
-| `MultiRoom-N4-v0                             | Exploration |
+| `MultiRoom-N2-v0`                            | Exploration |
+| `MultiRoom-N4-v0`                             | Exploration |
 | `MultiRoom-N2-Monster-v0`                    | Exploration |
 | `MultiRoom-N4-Monster-v0`                    | Exploration |
 | `MultiRoom-N2-Locked-v0`                     | Exploration |
