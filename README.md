@@ -7,15 +7,19 @@ Reinforcement Learning. MiniHack is based on the [The NetHack Learning
 Environment (NLE)](https://github.com/facebookresearch/nle) and provides a
 standard RL interface for customly created tesbeds.
 
-MiniHack comes with a set of predefined set of tasks. For the full list see [here](./TASKS.md).
+It not only provides a diverse suite of challenging tasks but is primarily built for easily designing new ones.
+The motivation behind MiniHack is to be able to perform RL experiments in a controlled setting while being able to increasingly scale the difficulty and complexity of the tasks by removing simplifying assumptions.
+To this end, MiniHack leverages the description file (des-file) format of the game of NetHack, thereby enabling the creation of many challenging and diverse environments.
+
+For the full list of existing tasks, see [here](./TASKS.md).
+
+## NetHack
 
 NetHack is one of the oldest and arguably most impactful videogames in history,
 as well as being one of the hardest roguelikes currently being played by humans.
 It is procedurally generated, rich in entities and dynamics, and overall an
 extremely challenging environment for current state-of-the-art RL agents, while
-being much cheaper to run compared to other challenging testbeds. Through NLE,
-we wish to establish NetHack as one of the next challenges for research in
-decision making and machine learning.
+being much cheaper to run compared to other challenging testbeds.
 
 MiniHack, NLE and NetHack use [NETHACK GENERAL PUBLIC LICENSE](https://github.com/facebookresearch/nle/blob/master/LICENSE).
 
@@ -73,7 +77,6 @@ $ git clone https://github.com/MiniHackPlanet/MiniHack --recursive
 $ pip install -e ".[dev]"
 $ pre-commit install
 ```
-
 
 ## Trying it out
 
