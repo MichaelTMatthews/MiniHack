@@ -152,9 +152,6 @@ see [this document](./CONTRIBUTING.md)
  
 If you use MiniHack in any of your work, please cite:
 
-
-M Samvelyan, R. Kirk, V. Kurin, J. Parker-Holder, M. Jiang, E. Hambro, F. Petroni, H. Küttler, E. Grefenstette, T. Rocktäschel, "MiniHack the Planet: A Sandbox for Open-Ended Reinforcement Learning Research", Submitted to: NeurIPS 2021: Datasets and Benchmarks track
-
 ```
 @inproceedings{samvelyan2021MiniHack,
   author = {Mikayel Samvelyan and
