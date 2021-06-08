@@ -105,12 +105,20 @@ extras_deps = {
         "sphinx>=2.4.4",
         "sphinx-rtd-theme==0.4.3",
     ],
-    "polybeast_agent": ["torch>=1.3.1"],
+    "polybeast_agent": [
+        "torch>=1.3.1",
+        "hydra-core>=1.0.0",
+        "hydra-colorlog>=1.0.0",
+        "hydra-submitit-launcher>=1.1.1",
+        "wandb>=0.10.31",
+    ],
     "rllib_agent": [
         "torch>=1.3.1",
         "ray[rllib]>=1.3.0",
         "hydra-core>=1.0.0",
         "hydra-colorlog>=1.0.0",
+        "hydra-submitit-launcher>=1.1.1",
+        "wandb>=0.10.31",
     ],
 }
 
