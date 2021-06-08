@@ -7,6 +7,8 @@ Reinforcement Learning. MiniHack is based on the [The NetHack Learning
 Environment (NLE)](https://github.com/facebookresearch/nle) and provides a
 standard RL interface for customly created tesbeds.
 
+MiniHack comes with a set of predefined set of tasks. For the full list see [here](./TASKS.md).
+
 NetHack is one of the oldest and arguably most impactful videogames in history,
 as well as being one of the hardest roguelikes currently being played by humans.
 It is procedurally generated, rich in entities and dynamics, and overall an
@@ -14,11 +16,6 @@ extremely challenging environment for current state-of-the-art RL agents, while
 being much cheaper to run compared to other challenging testbeds. Through NLE,
 we wish to establish NetHack as one of the next challenges for research in
 decision making and machine learning.
-
-You can read more about NLE in the [NeurIPS 2020
-paper](https://arxiv.org/abs/2006.13760), and about NetHack in its [original
-README](./README.nh), at [nethack.org](https://nethack.org/), and on the
-[NetHack wiki](https://nethackwiki.com).
 
 MiniHack, NLE and NetHack use [NETHACK GENERAL PUBLIC LICENSE](https://github.com/facebookresearch/nle/blob/master/LICENSE).
 
@@ -110,8 +107,6 @@ $ python -m nle.scripts.play_gui --env MiniHack-River-v0
 
 Note that `nle.scripts.play` can also be run with `nle-play`, if the package
 has been properly installed.
-
-MiniHack comes with a set of predefined set of tasks. For the full list see [here](./TASKS.md)
 
 ## Baseline Agents
 
