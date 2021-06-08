@@ -47,10 +47,10 @@ All environment and training parameters can be specified using command line argu
 
 ## Replicating Results of the Paper
 
-To replicate results of the paper performed using TorchBeast, simply run a sweep 5 runs with IMPALA and RND agents.The `total_steps` parameter must be set appropriately.
+To replicate results of the paper performed using TorchBeast, simply run a sweep 5 runs with IMPALA and RND agents on corresponding environments. The `total_steps` parameter must be set appropriately.
 
 ```bash
-python3 -m hackrl.polyhydra -m model=baseline,rnd name=1,2,3,4,5 env=big_room_random,big_room_monster total_steps=10000000
+python3 -m nle.agent.polybeast.polyhydra -m model=baseline,rnd name=1,2,3,4,5 env=big_room_random,big_room_monster total_steps=10000000
 ```
 
 For navigation tasks, the default parameters are already set. For skill acquisition tasks, additionally add `learning_rate=0.00005 msg.model=lt_cnn`.
