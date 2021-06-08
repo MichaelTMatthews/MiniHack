@@ -20,6 +20,10 @@ agent can attack monsters by moving towards them when located in an adjacent
 grid cell. Stepping on a lava tile instantly kills the agent. When the room is
 dark, the agent can only observe adjacent grid cells.
 
+Examples of the `Room-Ultimate-15x15` task:
+
+![](./doc/minihack/imgs/rooms.png)
+
 ### Corridor
  These tasks make use of the `RANDOM_CORRIDORS`
 command in the `des-file`. The objective is to reach the staircase down, which
@@ -30,6 +34,10 @@ episodes. Different variants of this environment have different numbers of
 rooms, making the exploration challenge more difficult (`Corridor-R2`,
 `Corridor-R3`, and `Corridor-R5` environments are composed of 2,
 3, and 5 rooms, respectively).
+
+Examples of the `Corridor-R5` task:
+
+![](./doc/minihack/imgs/corridors.png)
 
 ### KeyRoom
  These tasks require an agent to pickup a key, navigate to
@@ -43,6 +51,10 @@ To increase the difficulty of the tasks, dark versions of the tasks are
 introduced (`KeyRoom-Dark-S5` and `KeyRoom-Dark-S15`), where the
 key cannot be seen if it is not in any of the agent's adjacent grid cells.
 
+Examples of the `KeyRoom-S15` task:
+
+![](./doc/minihack/imgs/keyrooms.png)
+
 ### MazeWalk
  These navigation tasks make use of the `MAZEWALK`
 command in the `des-file`, which procedurally generates diverse mazes on the
@@ -51,6 +63,10 @@ and `MazeWalk-45x19` environments. In the mapped versions of these tasks
 (`MazeWalk-Mapped-9x9`, `MazeWalk-Mapped-15x15`, and
 `MazeWalk-Mapped-45x19`), the map of the maze and the goal's locations
 are visible to the agent.
+
+Examples of the `MazeWalk-15x15` task:
+
+![](./doc/minihack/imgs/mazewalks.png)
 
 ### River
  This group of tasks requires the agent to cross a river
@@ -62,6 +78,10 @@ each other. In the more challenging tasks of the group, the agent needs to
 additionally fight monsters (`River-Monster`), avoid pushing boulders
 into lava rather than water (`River-Lava`), or both
 (`River-MonsterLava`).
+
+Examples of the `River` task:
+
+![](./doc/minihack/imgs/rivers.png)
 
 ### HideNSeek
  In the `HideNSeek` task, the agent is spawned in
@@ -77,6 +97,10 @@ additionally include lava tiles that need to be avoided
 the locations of all environment features but not the powerful monster
 `HideNSeek-Mapped`.
 
+Examples of the `HideNSeek` task:
+
+![](./doc/minihack/imgs/hidenseeks.png)
+
 ### CorridorBattle
  The `CorridorBattle` task challenges the
 agent to make best use of the dungeon features to effectively defeat a horde of
@@ -86,6 +110,10 @@ on the other hand, would result the agent simultaneously incurring damage from
 several directions and a quick death. The task also is offered in dark mode
 (`CorridorBattle-Dark`), challenging the agent to remember the number of
 rats killed in order to plan subsequent actions.
+
+An example of the `CorridorBattle` task:
+
+![](./doc/minihack/imgs/battle.png)
 
 ### Memento
  This group of tasks test the agent's ability to use memory
@@ -100,6 +128,10 @@ We provide three versions of this environment: one with a short corridor before
 a fork with two paths to choose from (`Memento-Short-F2`), one with a
 long corridor with a two-path fork (`Memento-F2`), and one with a long
 corridor and a four-fork path (`Memento-F4`).
+
+An example of the `Memento-F4` task:
+
+![](./doc/minihack/imgs/memento.png)
 
 ### MazeExplore
 These tasks test the agent's ability to perform deep
@@ -117,6 +149,12 @@ before and after the staircase down. Variants can also be mapped
 the agent can observe the layout of the entire grid, making it easier to
 navigate the maze. Even in the mapped setting the apples aren't visible until
 the agent reaches the final room.
+
+Examples of the `MazeExplore-Hard` task. The apples are located near the right
+vertical wall (unobservable in the figure). The goal is located in the middle
+area of the grid.
+
+![](./doc/minihack/imgs/mazeexplores.png)
 
 ### Table of navigation tasks
 
@@ -211,6 +249,10 @@ these tasks (`Eat-Distract`, `Pray-Distract` and
 `Wear-Distract`). These tasks can be used as building blocks for more
 advanced skill acquisition tasks. 
 
+Examples of `Eat-Distract`, `Wear-Distract` and `Pray-Distract`:
+
+![](./doc/minihack/imgs/simple_skills.png)
+
 ### Lava Crossing
  An example of a more advanced task involves crossing
 a river of lava. The agent can accomplish this by either levitating over it
@@ -228,6 +270,12 @@ objects randomly sampled and placed at the random location. In
 map, while in the `LavaCross` task these include all of the objects for
 levitation as well as freezing.
 
+ Five random instances of the `LavaCross` task, where the agent needs to cross
+ the lava using (i) potion of levitation, (ii) ring of levitation, (iii)
+ levitation boots, (iv) frost horn, or (v) wand of cold.
+
+![](./doc/minihack/imgs/lavacross.png)
+
 ### Wand of Death
  MiniHack is very convenient for making incremental
 changes to the difficulty of a task. To illustrate this, we provide a sequence
@@ -242,6 +290,10 @@ staircase. In the most difficult task of the sequence, the `WoD-Pro`,
 the agent starts inside a big labyrinth. It needs to find the WoD inside the
 maze and reach its centre, which is guarded by a deadly Minotaur.
 
+An example of the `WoD-Hard` task:
+
+![](./doc/minihack/imgs/wod.png)
+
 ### Quest
  In the `Quest` tasks, the agents first needs
 to cross a river of lava with whichever object it can find, which can be any
@@ -251,6 +303,10 @@ WoD. The WoD is required to kill the powerful monster standing between the
 agent and the goal. In `Quest_Easy`, the map layout is relatively
 simple and fixed, whereas in the `Quest_Pro` version it is procedurally
 generated and also requires navigation through complicated mazes.
+
+Examples of the `Quest-Hard` task:
+
+![](./doc/minihack/imgs/quest_hard.png)
 
 ### Table of skill acquisition tasks
 

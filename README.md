@@ -25,7 +25,7 @@ MiniHack, NLE and NetHack use [NETHACK GENERAL PUBLIC LICENSE](https://github.co
 <!-- # Papers using the MiniHack The Planet
 - Samvelyan et al. [MiniHack The Planet](https://arxiv.org/abs/20XX.YYYY) (FAIR, UCL, Oxford)
 
-Open a [pull request](https://github.com/facebookresearch/nle/edit/master/README.md) to add papers -->
+Open a [pull request](https://github.com/MiniHackPlanet/MiniHack/edit/master/README.md) to add papers -->
 
 # Getting started
 
@@ -69,7 +69,7 @@ $ pip install nle
 ```
 
 
-NOTE: If you want to extend / develop NLE, please install the package as follows:
+NOTE: If you want to extend / develop MiniHack, please install the package as follows:
 
 ``` bash
 $ git clone https://github.com/MiniHackPlanet/MiniHack --recursive
@@ -153,7 +153,7 @@ see [this document](./CONTRIBUTING.md)
 If you use MiniHack in any of your work, please cite:
 
 
-\textbf{M. }, R. Kirk, V. Kurin, J. Parker-Holder, M. Jiang, E. Hambro, F. Petroni, H. K\"{u}ttler, E. Grefenstette, T. Rockt\"{a}schel, "MiniHack the Planet: A Sandbox for Open-Ended Reinforcement Learning Research", Submitted to: \textit{NeurIPS 2021: Datasets and Benchmarks trac
+M Samvelyan, R. Kirk, V. Kurin, J. Parker-Holder, M. Jiang, E. Hambro, F. Petroni, H. Küttler, E. Grefenstette, T. Rocktäschel, "MiniHack the Planet: A Sandbox for Open-Ended Reinforcement Learning Research", Submitted to: NeurIPS 2021: Datasets and Benchmarks track
 
 ```
 @inproceedings{samvelyan2021MiniHack,
