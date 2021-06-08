@@ -153,7 +153,7 @@ see [this document](./CONTRIBUTING.md)
 If you use MiniHack in any of your work, please cite:
 
 ```
-@inproceedings{samvelyan2021MiniHack,
+@misc{samvelyan2021MiniHack,
   author = {Mikayel Samvelyan and
             Robert Kirk and
             Vitaly Kurin and
