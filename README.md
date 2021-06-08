@@ -64,9 +64,9 @@ Afterwards it's a matter of setting up your environment. We advise using a conda
 environment for this:
 
 ```bash
-$ conda create -n nle python=3.8
-$ conda activate nle
-$ pip install nle
+$ conda create -n minihack python=3.8
+$ conda activate minihack
+$ pip install minihack
 ```
 
 
@@ -108,9 +108,6 @@ $ python -m nle.scripts.play --help
 $ python -m nle.scripts.play_gui --env MiniHack-River-v0
 ```
 
-Note that `nle.scripts.play` can also be run with `nle-play`, if the package
-has been properly installed.
-
 ## Baseline Agents
 
 Several baseline agents are included as part of MiniHack, which can be
@@ -124,7 +121,7 @@ installed and used as follows:
   then use the following commands:
 ``` bash
 $ pip install "nle[polybeast_agent]"
-$ python -m nle.agent.polybeast.polyhydra --num_actors=80 --batch_size=32 --unroll_length=80 --learning_rate=0.0001 --entropy_cost=0.0001 --use_lstm=true --total_steps=1000000000
+$ python3 -m nle.agent.polybeast.polyhydra env=small_room_random learning_rate=0.0001 use_lstm=true total_steps=1000000
 ```
 
 * An [RLlib](https://github.com/ray-project/ray#rllib-quick-start) agent is
@@ -134,7 +131,7 @@ $ python -m nle.agent.polybeast.polyhydra --num_actors=80 --batch_size=32 --unro
   commands:
 ```bash
 $ pip install "nle[rllib_agent]"
-$ python -m nle.agent.rllib.train --algo=ppo
+$ python -m nle.agent.rllib.train algo=dqn
 ```
 
 More information on running these agents, and instructions on how to reproduce
