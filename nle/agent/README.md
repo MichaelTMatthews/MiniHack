@@ -55,7 +55,7 @@ python3 -m hackrl.polyhydra -m model=baseline,rnd name=1,2,3,4,5 env=big_room_ra
 
 For navigation tasks, the default parameters are already set. For skill acquisition tasks, additionally add `learning_rate=0.00005 msg.model=lt_cnn`.
 
-The full list of environment name shortcuts can be looked up [here](./nle/agent/env_names.yaml).
+The full list of environment name shortcuts can be looked up [here](./env_names.yaml).
 
 # RLlib
 
