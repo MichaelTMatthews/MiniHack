@@ -57,6 +57,15 @@ For navigation tasks, the default parameters are already set. For skill acquisit
 
 The full list of environment name shortcuts can be looked up [here](./env_names.yaml).
 
+## Ported environments
+
+To use environments ported from [MiniGrid](https://github.com/maximecb/gym-minigrid), additionally install the original package:
+```bash
+pip3 install gym-minigrid
+```
+
+To download publically available [Boxoban levels](https://github.com/deepmind/boxoban-levels), run the `download_boxoban_levels.py` script in the `nle/minihack/scripts/` directory.
+
 # RLlib
 
 ## Running experiments
