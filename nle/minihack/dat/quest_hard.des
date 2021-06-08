@@ -28,7 +28,7 @@ $entry_room = selection:fillrect (3,4,6,8)
 MAZEWALK:(00,06),west
 STAIR:(44,06),down
 DOOR:closed,(00,06)
-DOOR:closed,(10,00)
+DOOR:closed,(10,06)
 
 # One of this object can help cross the lava
 IF [50%] {
