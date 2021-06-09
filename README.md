@@ -77,10 +77,9 @@ environment for this:
 ```bash
 $ conda create -n minihack python=3.8
 $ conda activate minihack
-$ pip install minihack
 ```
 
-NOTE: If you want to extend / develop MiniHack, please install the package as follows:
+Please install MiniHack package as follows:
 
 ``` bash
 $ git clone https://github.com/MiniHackPlanet/MiniHack --recursive
