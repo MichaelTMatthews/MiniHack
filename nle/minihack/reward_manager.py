@@ -1,12 +1,13 @@
 # Copyright (c) Facebook, Inc. and its affiliates.
 from __future__ import annotations
+
 import enum
 from abc import ABC, abstractmethod
-from dataclasses import dataclass
-from typing import List, cast, Tuple, Any, Callable, TYPE_CHECKING
+from typing import TYPE_CHECKING, Any, Callable, List, Tuple
 
 if TYPE_CHECKING:
     from nle.minihack import MiniHack
+
 from nle.nethack import Command, CompassDirection
 
 Y_cmd = CompassDirection.NW
@@ -37,42 +38,99 @@ COMESTIBLES = [
 ]
 
 
-class Info:
-    pass
+class Event(ABC):
+    def __init__(
+        self,
+        reward: float,
+        repeatable: bool,
+        terminal_required: bool,
+        terminal_sufficient: bool,
+    ):
+        self.reward = reward
+        self.repeatable = repeatable
+        self.terminal_required = terminal_required
+        self.terminal_sufficient = terminal_sufficient
+        self.achieved = False
+
+    @abstractmethod
+    def check(self, env, previous_observation, action, observation) -> float:
+        pass
+
+    def reset(self):
+        self.achieved = False
+
+    def _set_achieved(self) -> float:
+        if not self.repeatable:
+            self.achieved = True
+        return self.reward
 
 
-@dataclass
-class LocActionInfo(Info):
-    loc: str
-    action: Command
-    status: bool = False
-    index: int = -1
+def _standing_on_top(env, location):
+    return not env.screen_contains(location)
 
 
-@dataclass
-class MessageInfo(Info):
-    messages: List[str]
+class LocActionEvent(Event):
+    def __init__(
+        self, *args, loc: str, action: Command, status: bool = False, index: int = -1
+    ):
+        super().__init__(*args)
+        self.loc = loc
+        self.action = action
+        self.status = status
+        self.index = index
+
+    def check(self, env, previous_observation, action, observation) -> float:
+        if env._actions[action] == self.action and _standing_on_top(env, self.loc):
+            self.status = True
+        elif env._actions[action] == Y_cmd and self.status:
+            return self._set_achieved()
+        else:
+            self.status = False
+        return 0
+
+    def reset(self):
+        super().reset()
+        self.status = False
 
 
-@dataclass
-class CoordInfo(Info):
-    coordinates: Tuple[int, int]
+class LocEvent(Event):
+    def __init__(self, *args, loc: str):
+        super().__init__(*args)
+        self.loc = loc
+
+    def check(self, env, previous_observation, action, observation) -> float:
+        if _standing_on_top(env, self.loc):
+            return self._set_achieved()
+        return 0.0
 
 
-@dataclass
-class LocInfo(Info):
-    loc: str
+class CoordEvent(Event):
+    def __init__(self, *args, coordinates: Tuple[int, int]):
+        super().__init__(*args)
+        self.coordinates = coordinates
+
+    def check(self, env, previous_observation, action, observation) -> float:
+        coordinates = tuple(observation[env._blstats_index][:2])
+        if self.coordinates == coordinates:
+            return self._set_achieved()
+        return 0.0
 
 
-@dataclass
-class Event:
-    event_type: EventType
-    info: Info
-    reward: int
-    repeatable: bool = False
-    terminal_required: bool = False
-    terminal_sufficient: bool = False
-    achieved: bool = False
+class MessageEvent(Event):
+    def __init__(self, *args, messages: List[str]):
+        super().__init__(*args)
+        self.messages = messages
+
+    def check(self, env, previous_observation, action, observation) -> float:
+        curr_msg = (
+            observation[env._original_observation_keys.index("message")]
+            .tobytes()
+            .decode("utf-8")
+        )
+        for msg in self.messages:
+            if msg in curr_msg:
+                return self._set_achieved()
+        return 0.0
 
 
 class AbstractRewardManager(ABC):
@@ -140,17 +198,19 @@ class RewardManager(AbstractRewardManager):
         """
         self.custom_reward_functions.append(reward_fn)
 
+    def add_event(self, event: Event):
+        self.events.append(event)
+
     def _add_message_event(
         self, msgs, reward, repeatable, terminal_required, terminal_sufficient
     ):
-        self.events.append(
-            Event(
-                EventType.MESSAGE,
-                MessageInfo(msgs),
+        self.add_event(
+            MessageEvent(
                 reward,
                 repeatable,
                 terminal_required,
                 terminal_sufficient,
+                messages=msgs,
             )
         )
 
@@ -164,15 +224,14 @@ class RewardManager(AbstractRewardManager):
                 "Action {} is not in the action space.".format(action.upper())
             )
 
-        info = LocActionInfo(loc.lower(), action)
-        self.events.append(
-            Event(
-                EventType.LOC_ACTION,
-                info,
+        self.add_event(
+            LocActionEvent(
                 reward,
                 repeatable,
                 terminal_required,
                 terminal_sufficient,
+                loc=loc.lower(),
+                action=action,
             )
         )
 
@@ -295,14 +354,13 @@ class RewardManager(AbstractRewardManager):
         terminal_required=True,
         terminal_sufficient=False,
     ):
-        self.events.append(
-            Event(
-                EventType.COORD,
-                CoordInfo(coordinates),
+        self.add_event(
+            CoordEvent(
                 reward,
                 repeatable,
                 terminal_required,
                 terminal_sufficient,
+                coordinates=coordinates,
             )
         )
 
@@ -314,14 +372,13 @@ class RewardManager(AbstractRewardManager):
         terminal_required=True,
         terminal_sufficient=False,
     ):
-        self.events.append(
-            Event(
-                EventType.LOC,
-                LocInfo(location),
+        self.add_event(
+            LocEvent(
                 reward,
                 repeatable,
                 terminal_required,
                 terminal_sufficient,
+                loc=location,
             )
         )
 
@@ -329,47 +386,6 @@ class RewardManager(AbstractRewardManager):
         if not event.repeatable:
             event.achieved = True
         return event.reward
-
-    def _check_event(
-        self,
-        env: MiniHack,
-        event: Event,
-        previous_observation: dict,
-        action: int,
-        observation: dict,
-    ) -> float:
-        info: Info
-        if event.event_type == EventType.MESSAGE:
-            info = cast(MessageInfo, event.info)
-            event_msgs = info.messages
-            curr_msg = (
-                observation[env._original_observation_keys.index("message")]
-                .tobytes()
-                .decode("latin-1")
-            )
-            for msg in event_msgs:
-                if msg in curr_msg:
-                    return self._set_achieved(event)
-        elif event.event_type == EventType.LOC_ACTION:
-            info = cast(LocActionInfo, event.info)
-            if env._actions[action] == info.action and self._standing_on_top(
-                env, info.loc
-            ):
-                info.status = True
-            elif env._actions[action] == Y_cmd and info.status:
-                return self._set_achieved(event)
-            else:
-                info.status = False
-        elif event.event_type == EventType.LOC:
-            info = cast(LocInfo, event.info)
-            if self._standing_on_top(env, info.loc):
-                return self._set_achieved(event)
-        elif event.event_type == EventType.COORD:
-            info = cast(CoordInfo, event.info)
-            coordinates = tuple(observation[env._blstats_index][:2])
-            if info.coordinates == coordinates:
-                return self._set_achieved(event)
-        return 0.0
 
     def _standing_on_top(self, env, name):
         """Returns whether the agents is standing on top of the given object.
@@ -389,9 +405,7 @@ class RewardManager(AbstractRewardManager):
         for event in self.events:
             if event.achieved:
                 continue
-            reward += self._check_event(
-                env, event, previous_observation, action, observation
-            )
+            reward += event.check(env, previous_observation, action, observation)
 
         for custom_reward_function in self.custom_reward_functions:
             reward += custom_reward_function(
@@ -427,9 +441,7 @@ class RewardManager(AbstractRewardManager):
     def reset(self):
         self._reward = 0.0
         for event in self.events:
-            event.achieved = False
-            if event.event_type == EventType.LOC_ACTION:
-                event.info.status = False  # type: ignore
+            event.reset()
 
 
 class SequentialRewardManager(RewardManager):
@@ -442,9 +454,7 @@ class SequentialRewardManager(RewardManager):
 
     def check_episode_end_call(self, env, previous_observation, action, observation):
         event = self.events[self.current_event_idx]
-        reward = self._check_event(
-            env, event, previous_observation, action, observation
-        )
+        reward = event.check(env, previous_observation, action, observation)
         if event.achieved:
             self.current_event_idx += 1
         self._reward += reward
