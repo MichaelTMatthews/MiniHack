@@ -405,8 +405,7 @@ class RewardManager(AbstractRewardManager):
         for event in self.events:
             if event.achieved:
                 continue
-            reward += event.check(
-              , previous_observation, action, observation)
+            reward += event.check(env, previous_observation, action, observation)
 
         for custom_reward_function in self.custom_reward_functions:
             reward += custom_reward_function(
