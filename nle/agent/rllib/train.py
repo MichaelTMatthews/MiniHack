@@ -1,13 +1,24 @@
 import os
+from collections.abc import Iterable
+from numbers import Number
 
 import hydra
+import nle.agent.rllib.models  # noqa: F401
+import numpy as np
 import ray
+import ray.tune.integration.wandb
 from nle.agent.rllib.envs import RLLibNLEEnv  # noqa: F401
-from nle.agent.rllib.models import RLLibNLENetwork  # noqa: F401
 from omegaconf import DictConfig, OmegaConf
 from ray import tune
-from ray.rllib.agents import impala
-from ray.tune.integration.wandb import WandbLoggerCallback
+from ray.rllib.models.catalog import MODEL_DEFAULTS
+from ray.rllib.agents import a3c, dqn, impala, ppo
+from ray.tune.integration.wandb import (
+    _VALID_ITERABLE_TYPES,
+    _VALID_TYPES,
+    WandbLoggerCallback,
+)
+from ray.tune.registry import register_env
+from ray.tune.utils import merge_dicts
 
 
 def get_full_config(cfg: DictConfig) -> DictConfig:
@@ -20,47 +31,82 @@ def get_full_config(cfg: DictConfig) -> DictConfig:
     return OmegaConf.create(env_flags)
 
 
+NAME_TO_TRAINER: dict = {
+    "impala": (impala, impala.ImpalaTrainer),
+    "a2c": (a3c, a3c.A2CTrainer),
+    "dqn": (dqn, dqn.DQNTrainer),
+    "ppo": (ppo, ppo.PPOTrainer),
+}
+
+
 @hydra.main(config_name="config")
 def train(cfg: DictConfig) -> None:
     ray.init(num_gpus=cfg.num_gpus, num_cpus=cfg.num_cpus + 1)
     cfg = get_full_config(cfg)
+    register_env("RLlibNLE-v0", RLLibNLEEnv)
 
-    config = impala.DEFAULT_CONFIG.copy()
-    config.update(
+    try:
+        algo, trainer = NAME_TO_TRAINER[cfg.algo]
+    except KeyError:
+        raise ValueError(
+            "The algorithm you specified isn't currently supported: %s", cfg.algo
+        )
+
+    config = algo.DEFAULT_CONFIG.copy()
+
+    args_config = OmegaConf.to_container(cfg)
+
+    # Algo-specific config. Requires hydra config keys to match rllib exactly
+    algo_config = args_config.pop(cfg.algo)
+
+    # Remove unnecessary config keys
+    for algo in NAME_TO_TRAINER.keys():
+        if algo != cfg.algo:
+            args_config.pop(algo, None)
+
+    # Merge config from hydra (will have some rogue keys but that's ok)
+    config = merge_dicts(config, args_config)
+
+    # Update configuration with parsed arguments in specific ways
+    config = merge_dicts(
+        config,
         {
             "framework": "torch",
             "num_gpus": cfg.num_gpus,
             "seed": cfg.seed,
-            "env": "rllib_nle_env",
+            "env": "RLlibNLE-v0",
             "env_config": {
                 "flags": cfg,
                 "observation_keys": cfg.obs_keys.split(","),
+                "name": cfg.env,
             },
-            "train_batch_size": cfg.batch_size,
-            "model": {
-                "custom_model": "rllib_nle_model",
-                "custom_model_config": {"flags": cfg},
-                "use_lstm": cfg.use_lstm,
-                "lstm_use_prev_reward": True,
-                "lstm_use_prev_action": True,
-                "lstm_cell_size": cfg.hidden_dim,  # same as h_dim in models.NetHackNet
-            },
+            "train_batch_size": cfg.train_batch_size,
+            "model": merge_dicts(
+                MODEL_DEFAULTS,
+                {
+                    "custom_model": "rllib_nle_model",
+                    "custom_model_config": {"flags": cfg, "algo": cfg.algo},
+                    "use_lstm": cfg.use_lstm,
+                    "lstm_use_prev_reward": True,
+                    "lstm_use_prev_action": True,
+                    "lstm_cell_size": cfg.hidden_dim,
+                },
+            ),
             "num_workers": cfg.num_cpus,
             "num_envs_per_worker": int(cfg.num_actors / cfg.num_cpus),
             "evaluation_interval": 100,
             "evaluation_num_episodes": 50,
             "evaluation_config": {"explore": False},
-            "entropy_coeff": cfg.entropy_cost,
-            "vf_loss_coeff": cfg.baseline_cost,
             "rollout_fragment_length": cfg.unroll_length,
-            "grad_clip": cfg.grad_norm_clip,
-            "gamma": cfg.discounting,
-            "lr": cfg.learning_rate,
-            "decay": cfg.alpha,
-            "momentum": cfg.momentum,
-            "epsilon": cfg.epsilon,
-        }
+        },
     )
+
+    # Merge algo-specific config at top level
+    config = merge_dicts(config, algo_config)
+
+    # Ensure we can use the config we've specified above
+    trainer_class = trainer.with_updates(default_config=config)
+
     callbacks = []
     if cfg.wandb:
         callbacks.append(
@@ -73,8 +119,22 @@ def train(cfg: DictConfig) -> None:
             )
         )
         os.environ["TUNE_DISABLE_AUTO_CALLBACK_LOGGERS"] = "1"  # Only log to wandb
+
+    # Hacky monkey-patching to allow for OmegaConf config
+    def _is_allowed_type(obj):
+        """Return True if type is allowed for logging to wandb"""
+        if isinstance(obj, DictConfig):
+            return True
+        if isinstance(obj, np.ndarray) and obj.size == 1:
+            return isinstance(obj.item(), Number)
+        if isinstance(obj, Iterable) and len(obj) > 0:
+            return isinstance(obj[0], _VALID_ITERABLE_TYPES)
+        return isinstance(obj, _VALID_TYPES)
+
+    ray.tune.integration.wandb._is_allowed_type = _is_allowed_type
+
     tune.run(
-        impala.ImpalaTrainer,
+        trainer_class,
         stop={"timesteps_total": cfg.total_steps},
         config=config,
         name=cfg.name,

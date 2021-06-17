@@ -1,38 +1,48 @@
-![NetHack Learning Environment (NLE)](https://github.com/facebookresearch/nle/raw/master/dat/nle/logo.png)
+# MiniHack the Planet: A Sandbox for Open-Ended Reinforcement Learning Research
 
---------------------------------------------------------------------------------
+![MiniHack Environments](/doc/minihack_envs.png)
 
-[![CircleCI](https://circleci.com/gh/facebookresearch/nle.svg?style=shield)](https://circleci.com/gh/facebookresearch/nle) [![PyPI version](https://img.shields.io/pypi/v/nle.svg)](https://pypi.python.org/pypi/nle/)
- [![Downloads](https://static.pepy.tech/personalized-badge/nle?period=total&units=international_system&left_color=black&right_color=orange&left_text=Downloads)](https://pepy.tech/project/nle)
+MiniHack is a sandbox framework for easily designing environments for
+Reinforcement Learning. MiniHack is based on the [The NetHack Learning
+Environment (NLE)](https://github.com/facebookresearch/nle) and provides a
+standard RL interface for customly created tesbeds.
 
-The NetHack Learning Environment (NLE) is a Reinforcement Learning environment presented at [NeurIPS 2020](https://neurips.cc/Conferences/2020).
-NLE is based on [NetHack 3.6.6](https://github.com/NetHack/NetHack/tree/NetHack-3.6.6_PostRelease) and designed to provide a standard RL interface to the game, and comes with tasks that function as a first step to evaluate agents on this new environment.
+It not only provides a diverse suite of challenging tasks but is primarily built for easily designing new ones.
+The motivation behind MiniHack is to be able to perform RL experiments in a controlled setting while being able to increasingly scale the difficulty and complexity of the tasks by removing simplifying assumptions.
+To this end, MiniHack leverages the description file (des-file) format of the game of NetHack, thereby enabling the creation of many challenging and diverse environments.
+
+For the full list of existing tasks, see [here](./TASKS.md).
+
+## Des-file format
+
+The des-file format is a domain-specific language created by the developers of NetHack for describing the levels of the game. des-files are human-readable specifications of levels: distributions of grid layouts together with monsters, objects on the floor, environment features (e.g. walls, water, lava), etc. 
+
+Levels defined via des-file can be fairly rich, as the underlying programming language has support for variables, loops, conditional statements, as well as probability distributions.
+Crucially, it supports underspecified statements, such as generating a random monster or an object at a random location on the map.
+Furthermore, it features commands that procedurally generate diverse grid layouts in a single line.
+
+For more information, check out our [interactive tutorial](./notebooks/des_file_tutorial.ipynb) or the [documentation](https://nethackwiki.com/wiki/Des-file_format) on NetHack Wiki..
+
+## NetHack
 
 NetHack is one of the oldest and arguably most impactful videogames in history,
 as well as being one of the hardest roguelikes currently being played by humans.
 It is procedurally generated, rich in entities and dynamics, and overall an
 extremely challenging environment for current state-of-the-art RL agents, while
-being much cheaper to run compared to other challenging testbeds. Through NLE,
-we wish to establish NetHack as one of the next challenges for research in
-decision making and machine learning.
+being much cheaper to run compared to other challenging testbeds.
 
-You can read more about NLE in the [NeurIPS 2020 paper](https://arxiv.org/abs/2006.13760), and about NetHack in its [original
-README](./README.nh), at [nethack.org](https://nethack.org/), and on the
-[NetHack wiki](https://nethackwiki.com).
+MiniHack, NLE and NetHack use [NETHACK GENERAL PUBLIC LICENSE](https://github.com/facebookresearch/nle/blob/master/LICENSE).
 
-![Example of an agent running on NLE](https://github.com/facebookresearch/nle/raw/master/dat/nle/example_run.gif)
 
-# Papers using the NetHack Learning Environment
-- Zhang et al. [BeBold: Exploration Beyond the Boundary of Explored Regions](https://arxiv.org/abs/2012.08621) (Berkley, FAIR, Dec 2020)
-- Küttler et al. [The NetHack Learning Environment](https://arxiv.org/abs/2006.13760) (FAIR, Oxford, NYU, UCL, NeurIPS 2020)
+<!-- # Papers using the MiniHack The Planet
+- Samvelyan et al. [MiniHack The Planet](https://arxiv.org/abs/20XX.YYYY) (FAIR, UCL, Oxford)
 
-Open a [pull request](https://github.com/facebookresearch/nle/edit/master/README.md) to add papers
+Open a [pull request](https://github.com/MiniHackPlanet/MiniHack/edit/master/README.md) to add papers -->
 
 # Getting started
 
-Starting with NLE environments is extremely simple, provided one is familiar
+Starting with MiniHack environments is extremely simple, provided one is familiar
 with other gym / RL environments.
-
 
 ## Installation
 
@@ -65,26 +75,18 @@ Afterwards it's a matter of setting up your environment. We advise using a conda
 environment for this:
 
 ```bash
-$ conda create -n nle python=3.8
-$ conda activate nle
-$ pip install nle
+$ conda create -n minihack python=3.8
+$ conda activate minihack
 ```
 
-
-NOTE: If you want to extend / develop NLE, please install the package as follows:
+Install MiniHack package as follows:
 
 ``` bash
-$ git clone https://github.com/ucl-dark/nle --recursive
+$ git clone https://github.com/MiniHackPlanet/MiniHack --recursive
+$ cd MiniHack
 $ pip install -e ".[dev]"
 $ pre-commit install
 ```
-
-
-## Docker
-
-We have provided some docker images. Please see the [relevant
-README](docker/README.md).
-
 
 ## Trying it out
 
@@ -93,128 +95,109 @@ After installation, one can try out any of the provided tasks as follows:
 ```python
 >>> import gym
 >>> import nle
->>> env = gym.make("NetHackScore-v0")
+>>> env = gym.make("MiniHack-River-v0")
 >>> env.reset()  # each reset generates a new dungeon
 >>> env.step(1)  # move agent '@' north
 >>> env.render()
 ```
 
-NLE also comes with a few scripts that allow to get some environment rollouts,
+MiniHack also comes with a few scripts that allow to get some environment rollouts,
 and play with the action space:
 
 ```bash
-# Play NetHackStaircase-v0 as a human
-$ python -m nle.scripts.play
+# Play the MiniHack in the Terminal as a human
+$ python -m nle.scripts.play --env MiniHack-River-v0
 
 # Use a random agent
-$ python -m nle.scripts.play --mode random
-
-# Play the full game using directly the NetHack internal interface
-# (Useful for debugging outside of the gym environment)
-$ python -m nle.scripts.play --env NetHackScore-v0 # works with random agent too
+$ python -m nle.scripts.play --env MiniHack-River-v0  --mode random
 
 # See all the options
 $ python -m nle.scripts.play --help
+
+# Play the MiniHack with graphical user interface (gui)
+$ python -m nle.scripts.play_gui --env MiniHack-River-v0
 ```
 
-Note that `nle.scripts.play` can also be run with `nle-play`, if the package
-has been properly installed.
+## Baseline Agents
 
-Additionally, a [TorchBeast](https://github.com/facebookresearch/torchbeast)
-agent is bundled in `nle.agent` together with a simple model to provide a
-starting point for experiments:
+Several baseline agents are included as part of MiniHack, which can be
+installed and used as follows:
 
+* a [TorchBeast](https://github.com/facebookresearch/torchbeast) agent is
+  bundled in `nle.agent.polybeast` together with a simple model to provide
+  a starting point for experiments. To install and train this agent, first
+  install torchbeast be following the instructions
+  [here](https://github.com/facebookresearch/torchbeast#installing-polybeast),
+  then use the following commands:
 ``` bash
-$ pip install "nle[agent]"
-$ python -m nle.agent.agent --num_actors 80 --batch_size 32 --unroll_length 80 --learning_rate 0.0001 --entropy_cost 0.0001 --use_lstm --total_steps 1000000000
+$ pip install "nle[polybeast_agent]"
+$ python3 -m nle.agent.polybeast.polyhydra env=small_room_random learning_rate=0.0001 use_lstm=true total_steps=1000000
 ```
 
-Plot the mean return over the last 100 episodes:
+* An [RLlib](https://github.com/ray-project/ray#rllib-quick-start) agent is
+  provided in `nle.agent.rllib`, with a similar model to the torchbeast agent.
+  This can be used to try out a variety of different RL algorithms - several
+  examples are provided. To install and train this agent use the following
+  commands:
 ```bash
-$ python -m nle.scripts.plot
+$ pip install "nle[rllib_agent]"
+$ python -m nle.agent.rllib.train algo=dqn
 ```
-```
-                              averaged episode return
 
-  140 +---------------------------------------------------------------------+
-      |             +             +            ++-+ ++++++++++++++++++++++++|
-      |             :             :          ++++++++||||||||||||||||||||||||
-  120 |-+...........:.............:...+-+.++++|||||||||||||||||||||||||||||||
-      |             :        +++++++++++++++||||||||||AAAAAAAAAAAAAAAAAAAAAA|
-      |            +++++++++++++||||||||||||||AAAAAAAAAAAA|||||||||||||||||||
-  100 |-+......+++++|+|||||||||||||||||||||||AA||||||||||||||||||||||||||||||
-      |       +++|||||||||||||||AAAAAAAAAAAAAA|||||||||||+++++++++++++++++++|
-      |    ++++|||||AAAAAAAAAAAAAA||||||||||||++++++++++++++-+:             |
-   80 |-++++|||||AAAAAA|||||||||||||||||||||+++++-+...........:...........+-|
-      | ++|||||AAA|||||||||||||||++++++++++++-+ :             :             |
-   60 |++||AAAAA|||||+++++++++++++-+............:.............:...........+-|
-      |++|AA||||++++++-|-+        :             :             :             |
-      |+|AA|||+++-+ :             :             :             :             |
-   40 |+|A+++++-+...:.............:.............:.............:...........+-|
-      |+AA+-+       :             :             :             :             |
-      |AA-+         :             :             :             :             |
-   20 |AA-+.........:.............:.............:.............:...........+-|
-      |++-+         :             :             :             :             |
-      |+-+          :             :             :             :             |
-    0 |-+...........:.............:.............:.............:...........+-|
-      |+            :             :             :             :             |
-      |+            +             +             +             +             |
-  -20 +---------------------------------------------------------------------+
-      0           2e+08         4e+08         6e+08         8e+08         1e+09
-                                       steps
-```
+More information on running these agents, and instructions on how to reproduce
+the results of the MiniHack paper, can be found in [this
+document](./nle/agent/README.md).
+We also provide baseline learning curves of the MiniHack paper in Weights&Biases format for all of our experiments. They can be accessed [here](https://wandb.ai/minihack).
 
 # Contributing
 
-We welcome contributions to NLE. If you are interested in contributing please 
+We welcome contributions to MiniHack. If you are interested in contributing please 
 see [this document](./CONTRIBUTING.md) 
 
-
-# Architecture
-
-NLE is direct fork of [NetHack](https://github.com/nethack/nethack) and 
-therefore contains code that operates on many different levels of abstraction.
-This ranges from low-level game logic, to the higher-level administration of 
-repeated nethack games, and finally to binding of these games to Python `gym`
-environment.
-
-If you want to learn more about the architecture of `nle` and how it works
-under the hood, checkout the [architecture document](./doc/nle/ARCHITECTURE.md). 
-This may be a useful starting point for anyone looking to contribute to the
-lower level elements of NLE.
-
-
-# Related Environments
-- [gym\_nethack](http://campbelljc.com/research/gym_nethack/)
-- [rogueinabox](https://github.com/rogueinabox/rogueinabox)
-- [rogue-gym](https://github.com/kngwyu/rogue-gym)
-- [MiniGrid](https://github.com/maximecb/gym-minigrid)
-- [CoinRun](https://github.com/openai/coinrun)
-- [MineRL](http://minerl.io/docs)
-- [Project Malmo](https://www.microsoft.com/en-us/research/project/project-malmo/)
-- [OpenAI Procgen Benchmark](https://openai.com/blog/procgen-benchmark/)
-- [Obstacle Tower](https://github.com/Unity-Technologies/obstacle-tower-env)
-
-# Interview about the environment with Weights&Biases
-[Facebook AI Research’s Tim & Heinrich on democratizing reinforcement learning research](https://www.youtube.com/watch?v=oYSNXTkeCtw)
-
-[![Interview with Weigths&Biases](https://img.youtube.com/vi/oYSNXTkeCtw/0.jpg)](https://www.youtube.com/watch?v=oYSNXTkeCtw)
-
 # Citation
-
-If you use NLE in any of your work, please cite:
+ 
+If you use MiniHack in any of your work, please cite:
 
 ```
-@inproceedings{kuettler2020nethack,
-  author    = {Heinrich K{\"{u}}ttler and
-               Nantas Nardelli and
-               Alexander H. Miller and
-               Roberta Raileanu and
-               Marco Selvatici and
-               Edward Grefenstette and
-               Tim Rockt{\"{a}}schel},
-  title     = {{The NetHack Learning Environment}},
-  booktitle = {Proceedings of the Conference on Neural Information Processing Systems (NeurIPS)},
-  year      = {2020},
+@misc{samvelyan2021MiniHack,
+  author = {Mikayel Samvelyan and
+            Robert Kirk and
+            Vitaly Kurin and
+            Jack Parker-Holder and
+            Minqi Jiang and
+            Eric Hambro and
+            Fabio Petroni and
+            Heinrich K\"{u}ttler and
+            Edward Grefenstette and
+            Tim Rockt{\"{a}}schel},
+  title     = {{MiniHack the Planet: A Sandbox for NetHack Learning Environment}},
+  howpublished= {https://github.com/MiniHackPlanet/MiniHack},
+  year      = {2021},
+}
+```
+
+If you use MiniHack's interface on environments ported from other benchmarks, please cite the original paper as well:
+
+- [MiniGrid](https://github.com/maximecb/gym-minigrid/) (see [LICENSE](https://github.com/maximecb/gym-minigrid/blob/master/LICENSE))
+
+```
+@misc{gym_minigrid,
+  author = {Chevalier-Boisvert, Maxime and Willems, Lucas and Pal, Suman},
+  title = {Minimalistic Gridworld Environment for OpenAI Gym},
+  year = {2018},
+  publisher = {GitHub},
+  journal = {GitHub repository},
+  howpublished = {\url{https://github.com/maximecb/gym-minigrid}},
+}
+```
+
+- [Boxoban](https://github.com/deepmind/boxoban-levels/) (see [LICENSE](https://github.com/deepmind/boxoban-levels/blob/master/LICENSE))
+
+```
+@misc{boxobanlevels,
+  author = {Arthur Guez, Mehdi Mirza, Karol Gregor, Rishabh Kabra, Sebastien Racaniere, Theophane Weber, David Raposo, Adam Santoro, Laurent Orseau, Tom Eccles, Greg Wayne, David Silver, Timothy Lillicrap, Victor Valdes},
+  title = {An investigation of Model-free planning: boxoban levels},
+  howpublished= {https://github.com/deepmind/boxoban-levels/},
+  year = "2018",
 }
 ```

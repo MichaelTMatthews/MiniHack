@@ -210,4 +210,7 @@ outputs/
 latest
 
 nle/minihack/dat/*.json
+boxoban-levels-master/
 Session.vim
+
+wandb

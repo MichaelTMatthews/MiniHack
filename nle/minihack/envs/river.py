@@ -53,7 +53,7 @@ class MiniHackRiver(MiniHackNavigation):
         for _ in range(n_boulder):
             lvl_gen.add_object_area("$boulder_area", name="boulder", symbol="`")
 
-        lvl_gen.add_goal_pos((25, 2))
+        lvl_gen.add_goal_pos((24, 2))
 
         super().__init__(*args, des_file=lvl_gen.get_des(), **kwargs)
 

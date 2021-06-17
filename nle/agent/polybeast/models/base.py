@@ -25,7 +25,7 @@ from nle.agent.common.models.transformer import TransformerEncoder
 NUM_GLYPHS = nethack.MAX_GLYPH
 NUM_FEATURES = nethack.BLSTATS_SHAPE[0]
 PAD_CHAR = 0
-NUM_CHARS = 128
+NUM_CHARS = 256
 
 
 class NetHackNet(nn.Module):

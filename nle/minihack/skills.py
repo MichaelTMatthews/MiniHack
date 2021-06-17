@@ -16,9 +16,9 @@ class MiniHackSkill(MiniHack):
         kwargs["options"] = kwargs.pop("options", [])
         kwargs["options"].append("pettype:none")
         kwargs["options"].append("!autopickup")
-        kwargs["perform_menu_steps"] = kwargs.pop("perform_known_steps", False)
+        kwargs["perform_menu_steps"] = kwargs.pop("perform_known_steps", True)
         kwargs["character"] = kwargs.pop("character", "cav-hum-new-mal")
-        kwargs["max_episode_steps"] = kwargs.pop("max_episode_steps", 100)
+        kwargs["max_episode_steps"] = kwargs.pop("max_episode_steps", 250)
         self._no_rand_mon()
 
         default_keys = [

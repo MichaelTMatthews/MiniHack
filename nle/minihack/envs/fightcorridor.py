@@ -33,11 +33,11 @@ class MiniHackFightCorridorDark(MiniHackFightCorridor):
 
 
 registration.register(
-    id="MiniHack-FightCorridor-v0",
+    id="MiniHack-CorridorBattle-v0",
     entry_point="nle.minihack.envs.fightcorridor:MiniHackFightCorridor",
 )
 
 registration.register(
-    id="MiniHack-FightCorridor-Dark-v0",
+    id="MiniHack-CorridorBattle-Dark-v0",
     entry_point="nle.minihack.envs.fightcorridor:MiniHackFightCorridorDark",
 )

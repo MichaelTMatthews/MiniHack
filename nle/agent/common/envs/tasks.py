@@ -13,8 +13,13 @@ from nle.minihack.envs import (
     river,
     memento,
     hidenseek,
+    exploremaze,
+    skills_simple,
+    skills_lava,
+    skills_wod,
+    skills_quest,
 )
-from nle.agent.common.envs.wrapper import CounterWrapper
+from nle.agent.common.envs.wrapper import CounterWrapper, CropWrapper, PrevWrapper
 
 
 ENVS = dict(
@@ -32,11 +37,13 @@ ENVS = dict(
     small_room_dark=room.MiniHackRoom5x5Dark,
     small_room_monster=room.MiniHackRoom5x5Monster,
     small_room_trap=room.MiniHackRoom5x5Trap,
+    small_room_ultimate=room.MiniHackRoom5x5Ultimate,
     big_room=room.MiniHackRoom15x15,
     big_room_random=room.MiniHackRoom15x15Random,
     big_room_dark=room.MiniHackRoom15x15Dark,
     big_room_monster=room.MiniHackRoom15x15Monster,
-    big_room_monster_trap=room.MiniHackRoom15x15MonsterTrap,
+    big_room_trap=room.MiniHackRoom15x15Trap,
+    big_room_ultimate=room.MiniHackRoom15x15Ultimate,
     # MiniHack Corridor
     corridor2=corridor.MiniHackCorridor2,
     corridor3=corridor.MiniHackCorridor3,
@@ -54,8 +61,8 @@ ENVS = dict(
     mazewalk_small_mapped=mazewalk.MiniHackMazeWalk9x9Premapped,
     mazewalk_big=mazewalk.MiniHackMazeWalk15x15,
     mazewalk_big_mapped=mazewalk.MiniHackMazeWalk15x15Premapped,
-    mazewalk_huge=mazewalk.MiniHackMazeWalkMax,
-    mazewalk_huge_mapped=mazewalk.MiniHackMazeWalkMaxPremapped,
+    mazewalk_huge=mazewalk.MiniHackMazeWalk45x19,
+    mazewalk_huge_mapped=mazewalk.MiniHackMazeWalk45x19Premapped,
     # MiniHack Fight Corridor
     fight_corridor=fightcorridor.MiniHackFightCorridor,
     fight_corridor_dark=fightcorridor.MiniHackFightCorridorDark,
@@ -72,6 +79,13 @@ ENVS = dict(
     # MiniHack Hide&Seek
     hidenseek=hidenseek.MiniHackHideAndSeek,
     hidenseek_mapped=hidenseek.MiniHackHideAndSeekMapped,
+    hidenseek_lava=hidenseek.MiniHackHideAndSeekLava,
+    hidenseek_big=hidenseek.MiniHackHideAndSeekBig,
+    # MiniHack ExploreMaze
+    explore_easy=exploremaze.MiniHackExploreMazeEasy,
+    explore_easy_map=exploremaze.MiniHackExploreMazeEasyMapped,
+    explore_hard=exploremaze.MiniHackExploreMazeHard,
+    explore_hard_map=exploremaze.MiniHackExploreMazeHardMapped,
     # MiniHack MultiRooms
     multiroom_2=minigrid.MiniHackMultiRoomN2,
     multiroom_4=minigrid.MiniHackMultiRoomN4,
@@ -89,8 +103,57 @@ ENVS = dict(
     multiroom_4_extreme=minigrid.MiniHackMultiRoomN4Extreme,
     multiroom_6_extreme=minigrid.MiniHackMultiRoomN6Extreme,
     # MiniHack Boxoban
+    boxoban_unfiltered=boxohack.MiniHackBoxobanUnfiltered,
     boxoban_hard=boxohack.MiniHackBoxobanHard,
     boxoban_medium=boxohack.MiniHackBoxobanMedium,
+    boxoban_unfiltered_shaped=boxohack.MiniHackBoxobanUnfilteredShaped,
+    boxoban_hard_shaped=boxohack.MiniHackBoxobanHardShaped,
+    boxoban_medium_shaped=boxohack.MiniHackBoxobanMediumShaped,
+    # MiniHack Simple Skills
+    mini_eat=skills_simple.MiniHackEat,
+    mini_pray=skills_simple.MiniHackPray,
+    mini_sink=skills_simple.MiniHackSink,
+    mini_read=skills_simple.MiniHackRead,
+    mini_zap=skills_simple.MiniHackZap,
+    mini_puton=skills_simple.MiniHackPutOn,
+    mini_wear=skills_simple.MiniHackWear,
+    mini_wield=skills_simple.MiniHackWield,
+    mini_locked=skills_simple.MiniHackLockedDoor,
+    # MiniHack Simple Skills (Fixed versions)
+    mini_eat_fixed=skills_simple.MiniHackEatFixed,
+    mini_pray_fixed=skills_simple.MiniHackPrayFixed,
+    mini_sink_fixed=skills_simple.MiniHackSinkFixed,
+    mini_read_fixed=skills_simple.MiniHackReadFixed,
+    mini_zap_fixed=skills_simple.MiniHackZapFixed,
+    mini_puton_fixed=skills_simple.MiniHackPutOnFixed,
+    mini_wear_fixed=skills_simple.MiniHackWearFixed,
+    mini_wield_fixed=skills_simple.MiniHackWieldFixed,
+    mini_locked_fixed=skills_simple.MiniHackLockedDoorFixed,
+    # MiniHack Simple Skills (Fixed versions)
+    mini_eat_distr=skills_simple.MiniHackEatDistr,
+    mini_pray_distr=skills_simple.MiniHackPrayDistr,
+    mini_sink_distr=skills_simple.MiniHackSinkDistr,
+    mini_read_distr=skills_simple.MiniHackReadDistr,
+    mini_zap_distr=skills_simple.MiniHackZapDistr,
+    mini_puton_distr=skills_simple.MiniHackPutOnDistr,
+    mini_wear_distr=skills_simple.MiniHackWearDistr,
+    mini_wield_distr=skills_simple.MiniHackWieldDistr,
+    # WoD
+    wod_easy=skills_wod.MiniHackWoDEasy,
+    wod_medium=skills_wod.MiniHackWoDMedium,
+    wod_hard=skills_wod.MiniHackWoDHard,
+    wod_pro=skills_wod.MiniHackWoDPro,
+    # MiniHack Lava Crossing
+    lava=skills_lava.MiniHackLC,
+    lava_lev=skills_lava.MiniHackLCLevitate,
+    lava_lev_potion_inv=skills_lava.MiniHackLCLevitatePotionInv,
+    lava_lev_potion_pick=skills_lava.MiniHackLCLevitatePotionPickup,
+    lava_lev_ring_inv=skills_lava.MiniHackLCLevitateRingInv,
+    lava_lev_ring_pick=skills_lava.MiniHackLCLevitateRingPickup,
+    # MiniHack Quest
+    quest_easy=skills_quest.MiniHackQuestEasy,
+    quest_medium=skills_quest.MiniHackQuestMedium,
+    quest_hard=skills_quest.MiniHackQuestHard,
 )
 
 
@@ -102,10 +165,20 @@ def create_env(flags, env_id=0, lock=threading.Lock()):
     # Create environment instances for actors
     with lock:
         env_class = ENVS[flags.env]
+        if flags.model == "tty":
+            observation_keys = ("tty_chars", "tty_colors", "tty_cursor", "blstats")
+        else:
+            observation_keys = flags.obs_keys.split(",")
+
+        if flags.save_tty:
+            savedir = ""  # NLE choses location
+        else:
+            savedir = None
+
         kwargs = dict(
-            savedir=None,
+            savedir=savedir,
             archivefile=None,
-            observation_keys=flags.obs_keys.split(","),
+            observation_keys=observation_keys,
             penalty_step=flags.penalty_step,
             penalty_time=flags.penalty_time,
             penalty_mode=flags.fn_penalty_step,
@@ -113,14 +186,17 @@ def create_env(flags, env_id=0, lock=threading.Lock()):
         if not is_env_minihack(env_class):
             kwargs.update(max_episode_steps=flags.max_num_steps)
             kwargs.update(character=flags.character)
-        if flags.env in ("staircase", "pet", "oracle"):
-            kwargs.update(reward_win=flags.reward_win, reward_lose=flags.reward_lose)
+        # if flags.env in ("staircase", "pet", "oracle"):
+        #     kwargs.update(reward_win=flags.reward_win, reward_lose=flags.reward_lose)
         elif env_id == 0:
             # print("Ignoring flags.reward_win and flags.reward_lose")
             pass
         env = env_class(**kwargs)
         if flags.state_counter != "none":
             env = CounterWrapper(env, flags.state_counter)
+        if flags.model == "tty":
+            env = CropWrapper(env)
+            env = PrevWrapper(env)
         if flags.seedspath is not None and len(flags.seedspath) > 0:
             raise NotImplementedError("seedspath > 0 not implemented yet.")
 

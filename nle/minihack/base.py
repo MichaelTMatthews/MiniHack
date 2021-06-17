@@ -2,6 +2,7 @@
 
 import os
 import subprocess
+import random
 
 import gym
 import numpy as np
@@ -95,6 +96,7 @@ class MiniHack(NetHackStaircase):
         obs_crop_pad=0,
         reward_manager=None,
         use_wiki=False,
+        seeds=None,
         **kwargs,
     ):
         # No pet
@@ -127,6 +129,8 @@ class MiniHack(NetHackStaircase):
         self.reward_manager = reward_manager
         if self.reward_manager is not None:
             self.reward_manager.reset()
+
+        self._level_seeds = seeds
 
         super().__init__(*args, **kwargs)
 
@@ -176,6 +180,9 @@ class MiniHack(NetHackStaircase):
     def reset(self, *args, **kwargs):
         if self.reward_manager is not None:
             self.reward_manager.reset()
+        if self._level_seeds is not None:
+            seed = random.choice(self._level_seeds)
+            self.seed(seed, seed, reseed=False)
         return super().reset(*args, **kwargs)
 
     def _reward_fn(self, last_observation, observation, end_status):
@@ -209,7 +216,7 @@ class MiniHack(NetHackStaircase):
             if result:
                 return self.StepStatus.TASK_SUCCESSFUL
 
-        # Revert to staircase episode end check (so we always end if we reach
+        # Revert to staircase check (so we always end if we reach it)
         return super()._is_episode_end(observation)
 
     def update(self, des_file):

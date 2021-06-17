@@ -243,7 +243,11 @@ class RewardManager(AbstractRewardManager):
         terminal_required=True,
         terminal_sufficient=False,
     ):
-        msgs = [f"This {name} is delicious"]
+        msgs = [
+            f"This {name} is delicious",
+            "Blecch!  Rotten food!",
+            "last bite of your meal",
+        ]
         if name == "apple":
             msgs.append("Delicious!  Must be a Macintosh!")
             msgs.append("Core dumped.")
@@ -401,7 +405,8 @@ class RewardManager(AbstractRewardManager):
         for event in self.events:
             if event.achieved:
                 continue
-            reward += event.check(env, previous_observation, action, observation)
+            reward += event.check(
+              , previous_observation, action, observation)
 
         for custom_reward_function in self.custom_reward_functions:
             reward += custom_reward_function(
