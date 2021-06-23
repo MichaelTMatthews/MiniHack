@@ -45,7 +45,9 @@ def get_des_file_rendering(
     env = MHCustom(savedir=None, archivefile=None, observation_keys=("pixel",))
     if n_images == 1:
         obs = get_pixel_obs(env, full_obs=full_obs)
-        image = get_image(obs["pixel"], full_screen=full_screen)
+        image = get_image(
+            obs["pixel"], full_screen=full_screen, resize=resize, relative=relative
+        )
         return image
     else:
         images = []
@@ -54,8 +56,8 @@ def get_des_file_rendering(
             images.append(
                 get_image(
                     obs["pixel"],
-                    resize=(0.5, 0.5),
-                    relative=True,
+                    resize=resize,
+                    relative=relative,
                     full_screen=full_screen,
                 )
             )
