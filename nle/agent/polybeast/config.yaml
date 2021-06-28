@@ -12,8 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 defaults:
-- hydra/job_logging: colorlog
-- hydra/hydra_logging: colorlog
+#- hydra/job_logging: colorlog
+#- hydra/hydra_logging: colorlog
 - hydra/launcher: submitit_slurm
 
 # pip install hydra-core hydra_colorlog
@@ -95,6 +95,7 @@ layers: 5          # number of cnn layers for crop/glyph model
 crop_model: cnn
 crop_dim: 9        # size of crop
 use_index_select: true    # use index select instead of normal embedding lookup
+max_learner_queue_size: 1024
 
 
 # Loss settings.

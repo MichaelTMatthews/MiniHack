@@ -113,7 +113,7 @@ def main(flags: DictConfig):
         # this is useful e.g. if you did total_steps=N before and want to increase it
         flags = OmegaConf.merge(new_flags, cli_conf)
 
-    logging.info(flags.pretty(resolve=True))
+    # logging.info(flags.pretty(resolve=True))
     OmegaConf.save(flags, "config.yaml")
 
     flags = get_common_flags(flags)
