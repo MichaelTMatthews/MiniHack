@@ -79,9 +79,13 @@ batch_size: 32            # 32 is standard, can use 128 with small model variant
 unroll_length: 80         # 80 is standard
 num_learner_threads: 1
 num_inference_threads: 1
-disable_cuda: false
-learner_device: cuda:0
-actor_device: cuda:0
+#disable_cuda: false
+#learner_device: cuda:0
+#actor_device: cuda:0
+
+disable_cuda: true
+learner_device: cpu
+actor_device: cpu
 
 # Model settings.
 model: baseline    # random, baseline, rnd, ride
