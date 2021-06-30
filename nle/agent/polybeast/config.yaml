@@ -83,10 +83,6 @@ num_inference_threads: 1
 #learner_device: cuda:0
 #actor_device: cuda:0
 
-disable_cuda: true
-learner_device: cpu
-actor_device: cpu
-
 # Model settings.
 model: baseline    # random, baseline, rnd, ride
 use_lstm: true
