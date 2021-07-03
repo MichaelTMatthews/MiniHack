@@ -140,7 +140,7 @@ ENVS = dict(
     mini_wear_distr=skills_simple.MiniHackWearDistr,
     mini_wield_distr=skills_simple.MiniHackWieldDistr,
     # MiniHack Composite Skills
-    mini_eat_and_war=skills_composed.MiniHackEatAndWearFixed,
+    mini_eat_and_wear=skills_composed.MiniHackEatAndWearFixed,
     # WoD
     wod_easy=skills_wod.MiniHackWoDEasy,
     wod_medium=skills_wod.MiniHackWoDMedium,
