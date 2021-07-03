@@ -125,7 +125,7 @@ class MiniHackWearFixed(MiniHackSkill):
 
     def __init__(self, *args, **kwargs):
         lvl_gen = LevelGenerator(w=5, h=5, lit=True)
-        lvl_gen.add_object("robe", "[", place=(0, 0))
+        lvl_gen.add_object("robe", "[", place=(4, 0))
         lvl_gen.set_start_pos((2, 2))
         des_file = lvl_gen.get_des()
 

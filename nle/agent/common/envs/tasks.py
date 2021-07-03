@@ -18,6 +18,7 @@ from nle.minihack.envs import (
     skills_lava,
     skills_wod,
     skills_quest,
+    skills_composed,
 )
 from nle.agent.common.envs.wrapper import CounterWrapper, CropWrapper, PrevWrapper
 
@@ -138,6 +139,8 @@ ENVS = dict(
     mini_puton_distr=skills_simple.MiniHackPutOnDistr,
     mini_wear_distr=skills_simple.MiniHackWearDistr,
     mini_wield_distr=skills_simple.MiniHackWieldDistr,
+    # MiniHack Composite Skills
+    mini_eat_and_war=skills_composed.MiniHackEatAndWearFixed,
     # WoD
     wod_easy=skills_wod.MiniHackWoDEasy,
     wod_medium=skills_wod.MiniHackWoDMedium,

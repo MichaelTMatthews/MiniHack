@@ -27,6 +27,7 @@ import nle.minihack.envs.skills_invis
 import nle.minihack.envs.skills_lava
 import nle.minihack.envs.skills_chest
 import nle.minihack.envs.skills_quest
+import nle.minihack.envs.skills_composed
 
 __all__ = [
     "MiniHack",
