@@ -207,6 +207,7 @@ nle/fbs/
 nle/nethackdir
 .boxoban_levels
 outputs/
+multirun/
 latest
 
 nle/minihack/dat/*.json
