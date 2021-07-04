@@ -1,5 +1,11 @@
-from nle.minihack import MiniHackSkill, LevelGenerator, RewardManager
+from nle.minihack import (
+    MiniHackSkill,
+    LevelGenerator,
+    IntersectionRewardManager,
+)
 from gym.envs import registration
+
+# python -m nle.scripts.play --env MiniHack-EatAndWear-Fixed-v0
 
 
 class MiniHackEatAndWearFixed(MiniHackSkill):
@@ -14,7 +20,7 @@ class MiniHackEatAndWearFixed(MiniHackSkill):
         lvl_gen.set_start_pos((2, 2))
         des_file = lvl_gen.get_des()
 
-        reward_manager = RewardManager()
+        reward_manager = IntersectionRewardManager()
         reward_manager.add_eat_event("apple")
         reward_manager.add_wear_event("robe")
 

@@ -1,7 +1,7 @@
 # Copyright (c) Facebook, Inc. and its affiliates.
 
 from nle.minihack.level_generator import LevelGenerator
-from nle.minihack.reward_manager import RewardManager
+from nle.minihack.reward_manager import RewardManager, IntersectionRewardManager
 from nle.minihack.base import MiniHack
 from nle.minihack.navigation import MiniHackNavigation
 from nle.minihack.skills import MiniHackSkill
@@ -36,4 +36,5 @@ __all__ = [
     "LevelGenerator",
     "RewardManager",
     "NetHackWiki",
+    "IntersectionRewardManager",
 ]
