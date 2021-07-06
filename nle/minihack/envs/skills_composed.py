@@ -2,6 +2,7 @@ from nle.minihack import (
     MiniHackSkill,
     LevelGenerator,
     IntersectionRewardManager,
+    RewardManager,
 )
 from gym.envs import registration
 
@@ -29,7 +30,25 @@ class MiniHackEatAndWearFixed(MiniHackSkill):
         )
 
 
+class MiniHackEatOrWearFixed(MiniHackSkill):
+    """Environment that will either generate a robe or an apple."""
+
+    def __init__(self, *args, **kwargs):
+        reward_manager = RewardManager()
+        reward_manager.add_eat_event("apple", terminal_sufficient=True)
+        reward_manager.add_wear_event("robe", terminal_sufficient=True)
+
+        super().__init__(
+            *args, des_file="eat_or_wear.des", reward_manager=reward_manager, **kwargs
+        )
+
+
 registration.register(
     id="MiniHack-EatAndWear-Fixed-v0",
     entry_point="nle.minihack.envs.skills_composed:MiniHackEatAndWearFixed",
+)
+
+registration.register(
+    id="MiniHack-EatOrWear-Fixed-v0",
+    entry_point="nle.minihack.envs.skills_composed:MiniHackEatOrWearFixed",
 )

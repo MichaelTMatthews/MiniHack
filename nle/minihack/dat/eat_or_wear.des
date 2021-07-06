@@ -1,0 +1,16 @@
+MAZE: "mylevel", ' '
+FLAGS:hardfloor
+INIT_MAP: solidfill,' '
+GEOMETRY:center,center
+MAP
+.....
+.....
+.....
+.....
+.....
+ENDMAP
+REGION:(0,0,4,4),lit,"ordinary"
+
+$r = 1d2
+[$r==1]:OBJECT:('%',"apple"),(0, 0),uncursed
+[$r==2]:OBJECT:('[',"robe"),(4, 0),uncursed
