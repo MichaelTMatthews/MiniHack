@@ -54,6 +54,8 @@ parser.add_argument('--project', default='nle', type=str, metavar='P',
                     help='Name of the project (as being used by wandb).')
 parser.add_argument('--entity', default='nethack', type=str, metavar='P',
                     help='Which team to log to.')
+parser.add_argument('--name', type=str,
+                    help='Name of run.  Useful for multiple runs.')
 
 # Training settings.
 parser.add_argument("--pipes_basename", default="unix:/tmp/polybeast",
