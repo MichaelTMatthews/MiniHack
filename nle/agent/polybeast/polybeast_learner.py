@@ -588,10 +588,12 @@ def train(flags):
     elif flags.state_dict_path and os.path.exists(flags.state_dict_path):
         logging.info("Initialising state dict from: %s" % flags.state_dict_path)
         checkpoint_states = torch.load(
-            flags.checkpoint, map_location=flags.learner_device
+            flags.state_dict_path, map_location=flags.learner_device
         )
         model.load_state_dict(checkpoint_states["model_state_dict"])
         logging.info(f"Resuming preempted job, current stats:\n{stats}")
+    else:
+        logging.info("Initialising model from scratch.")
 
     # Initialize actor model like learner model.
     actor_model.load_state_dict(model.state_dict())
