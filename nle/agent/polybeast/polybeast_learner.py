@@ -591,6 +591,9 @@ def train(flags):
             flags.state_dict_path, map_location=flags.learner_device
         )
         model.load_state_dict(checkpoint_states["model_state_dict"])
+        optimizer.load_state_dict(checkpoint_states["optimizer_state_dict"])
+        scheduler.load_state_dict(checkpoint_states["scheduler_state_dict"])
+        stats = checkpoint_states["stats"]
         logging.info(f"Resuming preempted job, current stats:\n{stats}")
     else:
         logging.info("Initialising model from scratch.")
