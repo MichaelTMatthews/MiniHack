@@ -39,6 +39,9 @@ project: minihack  # specifies the project name to log to
 entity: michaelmatthews  # the team to log to
 group: scrap  # defines a group name for the experiment
 
+# Checkpointing settings
+state_dict_path: none
+
 # Polybeast settings
 mock: false
 single_ttyrec: true
