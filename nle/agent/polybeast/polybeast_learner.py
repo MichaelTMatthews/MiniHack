@@ -590,7 +590,7 @@ def train(flags):
         checkpoint_states = torch.load(
             flags.state_dict_path, map_location=flags.learner_device
         )
-        # model.load_state_dict(checkpoint_states["model_state_dict"])
+        model.load_state_dict(checkpoint_states["model_state_dict"])
         logging.info(f"Resuming preempted job, current stats:\n{stats}")
     else:
         logging.info("Initialising model from scratch.")
