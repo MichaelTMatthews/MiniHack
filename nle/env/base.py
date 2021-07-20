@@ -407,9 +407,9 @@ class NLE(gym.Env):
         info = {}
         if end_status:
             # TODO: fix stats
-            stats = self._collect_stats(last_observation, end_status)
-            stats = stats._asdict()
-            # stats = {}
+            # stats = self._collect_stats(last_observation, end_status)
+            # stats = stats._asdict()
+            stats = {}
             info["stats"] = stats
 
             if self._stats_logger is not None:
