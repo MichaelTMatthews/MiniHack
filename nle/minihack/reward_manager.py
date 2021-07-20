@@ -4,6 +4,7 @@ from __future__ import annotations
 import enum
 from abc import ABC, abstractmethod
 from typing import TYPE_CHECKING, Any, Callable, List, Tuple
+import logging
 
 if TYPE_CHECKING:
     from nle.minihack import MiniHack
@@ -541,7 +542,7 @@ class IntersectionRewardManager(RewardManager):
             reward += event.check(env, previous_observation, action, observation)
 
             if self._stored_reward > 2:
-                print(self._stored_reward, event, reward, action)
+                logging.info(self._stored_reward, event, reward, action)
         self._stored_reward += reward
 
         completed = self._check_complete()
