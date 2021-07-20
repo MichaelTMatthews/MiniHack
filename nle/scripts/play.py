@@ -137,7 +137,6 @@ def play(env, mode, ngames, max_steps, seeds, savedir, no_render, render_mode, d
             print("Final reward:", reward)
             print("End status:", info["end_status"].name)
             print("Mean reward:", mean_reward)
-            print("Total reward:", mean_reward * steps)
 
         sps = steps / time_delta
         print("Episode: %i. Steps: %i. SPS: %f" % (episodes, steps, sps))

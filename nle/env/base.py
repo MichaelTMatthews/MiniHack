@@ -291,8 +291,8 @@ class NLE(gym.Env):
                 logger.info("Not saving any NLE data.")
 
         # TODO: Fix stats_file logic.
-        self._setup_statsfile = self.savedir is not None
-        # self._setup_statsfile = False
+        # self._setup_statsfile = self.savedir is not None
+        self._setup_statsfile = False
         self._stats_file = None
         self._stats_logger = None
 
