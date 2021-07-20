@@ -22,8 +22,8 @@ class MiniHackEatAndWearFixed(MiniHackSkill):
         des_file = lvl_gen.get_des()
 
         reward_manager = IntersectionRewardManager()
-        reward_manager.add_eat_event("apple")
-        reward_manager.add_wear_event("robe")
+        reward_manager.add_eat_event("apple", reward=0.9)
+        reward_manager.add_wear_event("robe", reward=1.1)
 
         super().__init__(
             *args, des_file=des_file, reward_manager=reward_manager, **kwargs

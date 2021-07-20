@@ -540,6 +540,8 @@ class IntersectionRewardManager(RewardManager):
                 continue
             reward += event.check(env, previous_observation, action, observation)
 
+            if self._stored_reward > 2:
+                print(self._stored_reward, event, reward, action)
         self._stored_reward += reward
 
         completed = self._check_complete()
