@@ -56,7 +56,7 @@ parser.add_argument('--entity', default='nethack', type=str, metavar='P',
                     help='Which team to log to.')
 parser.add_argument('--name', type=str,
                     help='Name of run.  Useful for multiple runs.')
-parser.add_argument('--state_dict_path', type=str, default=None,
+parser.add_argument('--state_dict_path', type=str, default='',
                     help='Initialises model state dict from given path.')
 
 # Training settings.
