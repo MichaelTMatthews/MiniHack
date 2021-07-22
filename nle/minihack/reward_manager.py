@@ -559,5 +559,5 @@ class IntersectionRewardManager(RewardManager):
         return result
 
     def reset(self):
-        super.reset()
+        super().reset()
         self._stored_reward = 0.0
