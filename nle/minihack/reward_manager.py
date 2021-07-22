@@ -529,6 +529,7 @@ class IntersectionRewardManager(RewardManager):
         super().__init__()
 
         self._stored_reward = 0
+        self._reward = 0
 
     def check_episode_end_call(
         self, env, previous_observation, action, observation
@@ -556,3 +557,7 @@ class IntersectionRewardManager(RewardManager):
                 result = False
 
         return result
+
+    def reset(self):
+        super.reset()
+        self._stored_reward = 0.0
