@@ -12,11 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+from omegaconf import OmegaConf
+import os
+import torch
+
 from nle.agent.common.envs import tasks
 from nle.env.base import DUNGEON_SHAPE
 from nle.agent.polybeast.models.base import BaseNet, RandomNet
 from nle.agent.polybeast.models.intrinsic import RNDNet, RIDENet
 from nle.agent.polybeast.models.tty import TtyBaseNet
+from nle.agent.polybeast.models.frozen_optioncritic import FOCNet
 
 
 def create_model(flags, device):
@@ -31,6 +36,8 @@ def create_model(flags, device):
         model_cls = RIDENet
     elif model_string == "tty":
         model_cls = TtyBaseNet
+    elif model_string == "foc":
+        model_cls = FOCNet
     elif model_string == "cnn" or model_string == "transformer":
         raise RuntimeError(
             "model=%s deprecated, use model=baseline crop_model=%s instead"

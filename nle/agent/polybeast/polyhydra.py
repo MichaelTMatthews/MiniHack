@@ -35,6 +35,7 @@ import multiprocessing as mp
 
 from nle.agent.polybeast import polybeast_env, polybeast_learner
 
+
 import torch
 
 if torch.__version__.startswith("1.5") or torch.__version__.startswith("1.6"):

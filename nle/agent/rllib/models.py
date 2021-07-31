@@ -65,7 +65,9 @@ class RLLibGlyphEmbedding(GlyphEmbedding):
 
 
 class NetHackNet(nn.Module):
-    AgentOutput = collections.namedtuple("AgentOutput", "action policy_logits baseline")
+    AgentOutput = collections.namedtuple(
+        "AgentOutput", "action policy_logits baseline extra_data"
+    )
 
     def __init__(self):
         super(NetHackNet, self).__init__()

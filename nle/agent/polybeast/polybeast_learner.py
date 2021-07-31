@@ -169,6 +169,7 @@ def inference(
                         core_outputs["action"],
                         core_outputs["policy_logits"],
                         core_outputs["baseline"],
+                        core_outputs["extra_data"],
                     )
                 ),
                 agent_state,
@@ -222,9 +223,18 @@ def learn(
 
         output, _ = model(observation, initial_agent_state, learning=True)
 
+        if flags.model == "foc":
+            # option_action
+            output["action"] = output["extra_data"]
+
         # Use last baseline value (from the value function) to bootstrap.
         learner_outputs = AgentOutput._make(
-            (output["action"], output["policy_logits"], output["baseline"])
+            (
+                output["action"],
+                output["policy_logits"],
+                output["baseline"],
+                output["action"],
+            )
         )
 
         # At this point, the environment outputs at time step `t` are the inputs
@@ -242,6 +252,24 @@ def learn(
         env_outputs = EnvOutput._make(env_outputs)
         actor_outputs = AgentOutput._make(actor_outputs)
         learner_outputs = AgentOutput._make(learner_outputs)
+
+        if flags.model == "foc":
+            actor_outputs = AgentOutput._make(
+                (
+                    actor_outputs.extra_data,
+                    actor_outputs.policy_logits,
+                    actor_outputs.baseline,
+                    actor_outputs.extra_data,
+                )
+            )
+            learner_outputs = AgentOutput._make(
+                (
+                    learner_outputs.extra_data,
+                    learner_outputs.policy_logits,
+                    learner_outputs.baseline,
+                    learner_outputs.extra_data,
+                )
+            )
 
         rewards = env_outputs.rewards
         if flags.normalize_reward:

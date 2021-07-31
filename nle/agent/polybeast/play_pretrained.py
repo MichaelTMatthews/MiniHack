@@ -7,12 +7,11 @@ import timeit
 
 import gym
 import torch
-from omegaconf import OmegaConf
 
 import nle  # noqa: F401
-import nle.agent.polybeast.models
 from nle import nethack
-from nle.agent.polybeast import polyhydra
+from nle.agent.polybeast.skill_transfer.skill_transfer import load_model
+
 
 _ACTIONS = tuple(
     [nethack.MiscAction.MORE]
@@ -43,22 +42,6 @@ def get_action(is_raw_env, pretrained_model, obs, hidden, done):
         # action = random.choice(_ACTIONS)
     input()
     return action, hidden
-
-
-def load_model(env, pretrained_path, pretrained_config_path):
-    flags = OmegaConf.load(pretrained_config_path)
-    flags["env"] = env
-    flags = polyhydra.get_common_flags(flags)
-    flags = polyhydra.get_environment_flags(flags)
-    flags = polyhydra.get_learner_flags(flags)
-    model = nle.agent.polybeast.models.create_model(flags, torch.device("cpu"))
-
-    checkpoint_states = torch.load(pretrained_path, map_location=torch.device("cpu"))
-
-    model.load_state_dict(checkpoint_states["model_state_dict"])
-
-    hidden = model.initial_state(batch_size=1)
-    return model, hidden
 
 
 def play(
