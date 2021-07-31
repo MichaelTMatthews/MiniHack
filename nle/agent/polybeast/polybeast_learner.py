@@ -233,7 +233,7 @@ def learn(
                 output["action"],
                 output["policy_logits"],
                 output["baseline"],
-                output["action"],
+                output["extra_data"],
             )
         )
 
