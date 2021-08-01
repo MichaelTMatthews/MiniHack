@@ -90,7 +90,7 @@ def play(
     done = False
 
     pretrained_model, hidden = load_model(
-        agent_env, pretrained_path, pretrained_config_path
+        agent_env, pretrained_path, pretrained_config_path, torch.device("cpu")
     )
 
     steps = 0

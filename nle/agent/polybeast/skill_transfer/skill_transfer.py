@@ -25,12 +25,12 @@ def create_basenet(flags, device):
     return model
 
 
-def load_model(env, pretrained_path, pretrained_config_path):
+def load_model(env, pretrained_path, pretrained_config_path, device):
     flags = OmegaConf.load(pretrained_config_path)
     flags["env"] = env
-    model = create_basenet(flags, torch.device("cpu"))
+    model = create_basenet(flags, device)
 
-    checkpoint_states = torch.load(pretrained_path, map_location=torch.device("cpu"))
+    checkpoint_states = torch.load(pretrained_path, map_location=device)
 
     model.load_state_dict(checkpoint_states["model_state_dict"])
     # model.training = False

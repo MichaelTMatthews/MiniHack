@@ -6,10 +6,6 @@ from nle.agent.polybeast.skill_transfer.skill_transfer import load_model
 
 class FOCNet(BaseNet):
     def __init__(self, observation_shape, num_actions, flags, device):
-        NUM_OPTIONS = 2
-
-        super(FOCNet, self).__init__(observation_shape, NUM_OPTIONS, flags, device)
-
         options_path = flags.foc_options_path.split(" ")
         configs_path = flags.foc_options_config_path.split(" ")
 
@@ -23,8 +19,10 @@ class FOCNet(BaseNet):
 
         self.num_options = len(options_path)
 
+        super(FOCNet, self).__init__(observation_shape, self.num_options, flags, device)
+
         self.options = [
-            load_model(flags.env, paths[0], paths[1])[0]
+            load_model(flags.env, paths[0], paths[1], device)[0]
             for paths in zip(options_path, configs_path)
         ]
 
