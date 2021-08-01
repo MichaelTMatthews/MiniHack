@@ -38,15 +38,27 @@ class FOCNet(BaseNet):
 
         action = []
         batch_size = output["policy_logits"].shape[0]
+        num_actors = output["policy_logits"].shape[1]
+
+        # print('a', output['action'].shape, batch_size, num_actors)
+
+        action = torch.zeros((batch_size, num_actors), dtype=torch.int64)
 
         for i in range(batch_size):
-            action.append(
-                option_outs[output["action"][i]][0]["action"][i].unflatten(
-                    dim=0, sizes=(1, -1)
-                )
-            )
+            for j in range(num_actors):
+                ind = output["action"][i][j]
+                action[i, j] = option_outs[ind][0]["action"][i][j]
 
-        action = torch.cat(action, dim=0)
+                # action[i, j] = output['action'][i, j]
+
+        # for i in range(batch_size):
+        #    action.append(
+        #        option_outs[output["action"][i]][0]["action"][i].unflatten(
+        #            dim=0, sizes=(1, -1)
+        #        )
+        #    )
+
+        # action = torch.cat(action, dim=0)
 
         return (
             dict(
