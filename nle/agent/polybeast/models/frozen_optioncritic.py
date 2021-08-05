@@ -49,17 +49,6 @@ class FOCNet(BaseNet):
                 ind = output["action"][i][j]
                 action[i, j] = option_outs[ind][0]["action"][i][j]
 
-                # action[i, j] = output['action'][i, j]
-
-        # for i in range(batch_size):
-        #    action.append(
-        #        option_outs[output["action"][i]][0]["action"][i].unflatten(
-        #            dim=0, sizes=(1, -1)
-        #        )
-        #    )
-
-        # action = torch.cat(action, dim=0)
-
         return (
             dict(
                 policy_logits=output["policy_logits"],
