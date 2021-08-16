@@ -169,7 +169,7 @@ def inference(
                         core_outputs["action"],
                         core_outputs["policy_logits"],
                         core_outputs["baseline"],
-                        core_outputs["extra_data"],
+                        core_outputs["chosen_option"],
                     )
                 ),
                 agent_state,
@@ -224,8 +224,8 @@ def learn(
         output, _ = model(observation, initial_agent_state, learning=True)
 
         if flags.model == "foc":
-            # option_action
-            output["action"] = output["extra_data"]
+            # chosen_option
+            output["action"] = output["chosen_option"]
 
         # Use last baseline value (from the value function) to bootstrap.
         learner_outputs = AgentOutput._make(
@@ -233,7 +233,7 @@ def learn(
                 output["action"],
                 output["policy_logits"],
                 output["baseline"],
-                output["extra_data"],
+                output["chosen_option"],
             )
         )
 
@@ -256,18 +256,18 @@ def learn(
         if flags.model == "foc":
             actor_outputs = AgentOutput._make(
                 (
-                    actor_outputs.extra_data,
+                    actor_outputs.chosen_option,
                     actor_outputs.policy_logits,
                     actor_outputs.baseline,
-                    actor_outputs.extra_data,
+                    actor_outputs.chosen_option,
                 )
             )
             learner_outputs = AgentOutput._make(
                 (
-                    learner_outputs.extra_data,
+                    learner_outputs.chosen_option,
                     learner_outputs.policy_logits,
                     learner_outputs.baseline,
-                    learner_outputs.extra_data,
+                    learner_outputs.chosen_option,
                 )
             )
 
@@ -416,6 +416,8 @@ def learn(
             )
 
             total_loss += int_pg_loss + int_baseline_loss
+
+        # KICKSTARTING LOSS
 
         # BACKWARD STEP
         optimizer.zero_grad()

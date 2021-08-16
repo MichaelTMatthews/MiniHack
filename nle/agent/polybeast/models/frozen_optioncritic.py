@@ -54,7 +54,7 @@ class FOCNet(BaseNet):
                 policy_logits=output["policy_logits"],
                 baseline=output["baseline"],
                 action=action,
-                extra_data=output["action"],
+                chosen_option=output["action"],
             ),
             core_state,
         )
