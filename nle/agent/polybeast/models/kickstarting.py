@@ -1,3 +1,5 @@
+import torch
+
 from nle.agent.polybeast.models.base import BaseNet
 from nle.agent.polybeast.skill_transfer.skill_transfer import load_model
 
@@ -12,7 +14,9 @@ class KSNet(BaseNet):
 
     def forward(self, inputs, core_state, learning=False):
         (output, core_state) = super().forward(inputs, core_state, learning)
-        (teacher_output, _) = self.teacher.forward(inputs, core_state, learning)
+
+        with torch.no_grad():
+            (teacher_output, _) = self.teacher.forward(inputs, core_state, learning)
 
         return (
             dict(
