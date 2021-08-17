@@ -422,6 +422,7 @@ def learn(
             total_loss += int_pg_loss + int_baseline_loss
 
         # KICKSTARTING LOSS
+        ks_loss = 0
         if flags.model == "ks":
             lam = 1
 
@@ -436,7 +437,8 @@ def learn(
 
         # BACKWARD STEP
         optimizer.zero_grad()
-        total_loss.backward()
+        # total_loss.backward()
+        ks_loss.backward()
         if flags.grad_norm_clipping > 0:
             nn.utils.clip_grad_norm_(model.parameters(), flags.grad_norm_clipping)
         optimizer.step()
