@@ -422,21 +422,17 @@ def learn(
             total_loss += int_pg_loss + int_baseline_loss
 
         # KICKSTARTING LOSS
-        if flags.model == "ks" and False:
+        if flags.model == "ks":
             lam = 1
 
-            ks_loss = 0
-            for timestep in range(actor_outputs.teacher_logits.shape[0]):
-                for actor_id in range(actor_outputs.teacher_logits.shape[1]):
-                    tl = actor_outputs.teacher_logits[timestep][actor_id]
-                    pl = actor_outputs.policy_logits[timestep][actor_id]
+            teacher_log_probs = torch.log_softmax(actor_outputs.teacher_logits, 2)
+            policy_log_probs = torch.log_softmax(actor_outputs.policy_logits, 2)
 
-                    teacher_dist = torch.softmax(tl, 0)
-                    policy_dist = torch.softmax(pl, 0)
+            ks_loss = nn.KLDivLoss(log_target=True, reduction="batchmean")(
+                teacher_log_probs, policy_log_probs
+            )
 
-                    ks_loss += lam * nn.KLDivLoss()(teacher_dist, policy_dist)
-
-            total_loss += ks_loss
+            total_loss += lam * ks_loss
 
         # BACKWARD STEP
         optimizer.zero_grad()
