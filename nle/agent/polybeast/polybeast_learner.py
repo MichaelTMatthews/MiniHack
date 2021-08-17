@@ -422,7 +422,7 @@ def learn(
             total_loss += int_pg_loss + int_baseline_loss
 
         # KICKSTARTING LOSS
-        if flags.model == "ks":
+        if flags.model == "ks" and False:
             lam = 1
 
             ks_loss = 0
