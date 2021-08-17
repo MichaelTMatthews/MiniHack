@@ -427,7 +427,7 @@ def learn(
             lam = 1
 
             teacher_log_probs = torch.log_softmax(actor_outputs.teacher_logits, 2)
-            policy_log_probs = torch.log_softmax(actor_outputs.policy_logits, 2)
+            policy_log_probs = torch.log_softmax(learner_outputs.policy_logits, 2)
 
             ks_loss = nn.KLDivLoss(log_target=True, reduction="batchmean")(
                 teacher_log_probs, policy_log_probs
