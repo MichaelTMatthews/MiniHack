@@ -43,6 +43,8 @@ group: scrap  # defines a group name for the experiment
 state_dict_path: none
 foc_options_path: none
 foc_options_config_path: none
+teacher_path: none
+teacher_config_path: none
 
 # Polybeast settings
 mock: false

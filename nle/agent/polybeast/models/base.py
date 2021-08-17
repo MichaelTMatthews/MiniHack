@@ -30,7 +30,7 @@ NUM_CHARS = 256
 
 class NetHackNet(nn.Module):
     AgentOutput = collections.namedtuple(
-        "AgentOutput", "action policy_logits baseline chosen_option"
+        "AgentOutput", "action policy_logits baseline chosen_option teacher_logits"
     )
 
     def __init__(self):
@@ -115,6 +115,7 @@ class RandomNet(NetHackNet):
                 baseline=baseline,
                 action=action,
                 chosen_option=action,
+                teacher_logits=policy_logits,
             ),
             core_state,
         )
@@ -549,5 +550,6 @@ class BaseNet(NetHackNet):
             baseline=baseline,
             action=action,
             chosen_option=action,
+            teacher_logits=policy_logits,
         )
         return (output, core_state)

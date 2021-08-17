@@ -170,6 +170,7 @@ def inference(
                         core_outputs["policy_logits"],
                         core_outputs["baseline"],
                         core_outputs["chosen_option"],
+                        core_outputs["teacher_logits"],
                     )
                 ),
                 agent_state,
@@ -234,6 +235,7 @@ def learn(
                 output["policy_logits"],
                 output["baseline"],
                 output["chosen_option"],
+                output["teacher_logits"],
             )
         )
 
@@ -260,6 +262,7 @@ def learn(
                     actor_outputs.policy_logits,
                     actor_outputs.baseline,
                     actor_outputs.chosen_option,
+                    actor_outputs.teacher_logits,
                 )
             )
             learner_outputs = AgentOutput._make(
@@ -268,6 +271,7 @@ def learn(
                     learner_outputs.policy_logits,
                     learner_outputs.baseline,
                     learner_outputs.chosen_option,
+                    learner_outputs.teacher_logits,
                 )
             )
 
@@ -418,6 +422,21 @@ def learn(
             total_loss += int_pg_loss + int_baseline_loss
 
         # KICKSTARTING LOSS
+        if flags.model == "ks":
+            lam = 1
+
+            ks_loss = 0
+            for timestep in range(actor_outputs.teacher_logits.shape[0]):
+                for actor_id in range(actor_outputs.teacher_logits.shape[1]):
+                    tl = actor_outputs.teacher_logits[timestep][actor_id]
+                    pl = actor_outputs.policy_logits[timestep][actor_id]
+
+                    teacher_dist = torch.softmax(tl, 0)
+                    policy_dist = torch.softmax(pl, 0)
+
+                    ks_loss += lam * nn.KLDivLoss()(teacher_dist, policy_dist)
+
+            total_loss += ks_loss
 
         # BACKWARD STEP
         optimizer.zero_grad()

@@ -28,7 +28,6 @@ class FOCNet(BaseNet):
 
     def forward(self, inputs, core_state, learning=False):
         (output, core_state) = super().forward(inputs, core_state, learning)
-        # TODO Think about recurrent state for the options
 
         with torch.no_grad():
             option_outs = [
@@ -36,11 +35,8 @@ class FOCNet(BaseNet):
                 for i in range(len(self.options))
             ]
 
-        action = []
         batch_size = output["policy_logits"].shape[0]
         num_actors = output["policy_logits"].shape[1]
-
-        # print('a', output['action'].shape, batch_size, num_actors)
 
         action = torch.zeros((batch_size, num_actors), dtype=torch.int64)
 
@@ -55,6 +51,7 @@ class FOCNet(BaseNet):
                 baseline=output["baseline"],
                 action=action,
                 chosen_option=output["action"],
+                teacher_logits=output["policy_logits"],
             ),
             core_state,
         )
