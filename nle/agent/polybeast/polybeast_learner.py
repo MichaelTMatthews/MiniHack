@@ -437,8 +437,7 @@ def learn(
 
         # BACKWARD STEP
         optimizer.zero_grad()
-        # total_loss.backward()
-        ks_loss.backward()
+        total_loss.backward()
         if flags.grad_norm_clipping > 0:
             nn.utils.clip_grad_norm_(model.parameters(), flags.grad_norm_clipping)
         optimizer.step()
