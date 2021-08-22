@@ -20,6 +20,7 @@ from nle.minihack.envs import (
     skills_quest,
     skills_composed,
 )
+from nle.minihack.envs.skill_transfer import skills_lavacross
 from nle.agent.common.envs.wrapper import CounterWrapper, CropWrapper, PrevWrapper
 
 
@@ -144,7 +145,9 @@ ENVS = dict(
     mini_eat_or_wear=skills_composed.MiniHackEatOrWearFixed,
     mini_eat_or_wear2=skills_composed.MiniHackEatOrWearFixed2,
     mini_eat_and_pray=skills_composed.MiniHackEatAndPray,
-    mini_pick_up_lev_ring=skills_composed.MiniHackPickUpLevitationRing,
+    mini_pick_up_lev_ring=skills_lavacross.MiniHackPickUpLevitationRing,
+    mini_put_on_lev_ring=skills_lavacross.MiniHackPutOnLevitationRing,
+    mini_lava_ring_pick_comp=skills_lavacross.MiniHackLCLevitateRingPickupComposed,
     # WoD
     wod_easy=skills_wod.MiniHackWoDEasy,
     wod_medium=skills_wod.MiniHackWoDMedium,

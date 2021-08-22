@@ -7,50 +7,7 @@ from nle.minihack import (
 from gym.envs import registration
 
 # python -m nle.scripts.play --env MiniHack-EatAndWear-Fixed-v0
-from nle.minihack.envs.interleaved_curriculum import MiniHackIC
-
-
-RING_PREFIXES = [
-    "pearl",
-    "iron",
-    "twisted",
-    "steel",
-    "wire",
-    "engagement",
-    "shiny",
-    "bronze",
-    "brass",
-    "copper",
-    "silver",
-    "gold",
-    "wooden",
-    "granite",
-    "opal",
-    "clay",
-    "coral",
-    "black",
-    "onyx",
-    "moonstone",
-    "tiger",
-    "eye",
-    "jade",
-    "agate",
-    "topaz",
-    "sapphire",
-    "ruby",
-    "diamond",
-    "ivory",
-    "emerald",
-]
-
-
-def a_or_an(adj):
-    if adj[0] in ["a", "e", "i", "o", "u"]:
-        return "an"
-    return "a"
-
-
-RING_NAMES = [(a_or_an(pref) + " " + pref + " ring") for pref in RING_PREFIXES]
+from nle.minihack.envs.skill_transfer.interleaved_curriculum import MiniHackIC
 
 
 class MiniHackEatAndWearFixed(MiniHackSkill):
@@ -133,28 +90,6 @@ class MiniHackEatAndPray(MiniHackSkill):
         )
 
 
-class MiniHackPickUpLevitationRing(MiniHackSkill):
-    """PickUp a ring in a random location"""
-
-    def __init__(self, *args, **kwargs):
-        kwargs["options"] = kwargs.pop("options", [])
-        kwargs["options"].append("autopickup")
-
-        lvl_gen = LevelGenerator(w=10, h=10, lit=True)
-        lvl_gen.add_object("levitation", "=")
-        # Add distractions to make skill more generalisable
-        lvl_gen.add_monster()
-        lvl_gen.add_object()
-        des_file = lvl_gen.get_des()
-
-        reward_manager = RewardManager()
-        reward_manager.add_message_event(RING_PREFIXES)
-
-        super().__init__(
-            *args, des_file=des_file, reward_manager=reward_manager, **kwargs
-        )
-
-
 registration.register(
     id="MiniHack-EatAndWear-Fixed-v0",
     entry_point="nle.minihack.envs.skills_composed:MiniHackEatAndWearFixed",
@@ -173,9 +108,4 @@ registration.register(
 registration.register(
     id="MiniHack-EatAndPray-v0",
     entry_point="nle.minihack.envs.skills_composed:MiniHackEatAndPray",
-)
-
-registration.register(
-    id="MiniHack-PickUpLevitationRing-v0",
-    entry_point="nle.minihack.envs.skills_composed:MiniHackPickUpLevitationRing",
 )

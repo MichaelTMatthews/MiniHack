@@ -28,6 +28,7 @@ import nle.minihack.envs.skills_lava
 import nle.minihack.envs.skills_chest
 import nle.minihack.envs.skills_quest
 import nle.minihack.envs.skills_composed
+import nle.minihack.envs.skill_transfer.skills_lavacross
 
 __all__ = [
     "MiniHack",
