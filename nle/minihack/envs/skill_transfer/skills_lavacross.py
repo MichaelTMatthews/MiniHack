@@ -56,8 +56,7 @@ RING_LAVA_CROSS_COMMANDS = tuple(
     [
         *MOVE_ACTIONS,
         nethack.Command.PUTON,
-        ord("r"),
-        ord("l"),
+        ord("z"),
         ord("f"),
         ord("g"),
         ord(","),
@@ -69,8 +68,8 @@ class MiniHackPickUpLevitationRing(MiniHackSkill):
     """PickUp a ring in a random location"""
 
     def __init__(self, *args, **kwargs):
-        kwargs["options"] = kwargs.pop("options", [])
-        kwargs["options"].append("autopickup")
+        # kwargs["options"] = kwargs.pop("options", [])
+        # kwargs["options"].append("autopickup")
 
         # Limit Action Space
         kwargs["actions"] = kwargs.pop("actions", RING_LAVA_CROSS_COMMANDS)
@@ -94,9 +93,6 @@ class MiniHackPutOnLevitationRing(MiniHackSkill):
     """PutOn a ring in a random location"""
 
     def __init__(self, *args, **kwargs):
-        kwargs["options"] = kwargs.pop("options", [])
-        kwargs["options"].append("autopickup")
-
         # Limit Action Space
         kwargs["actions"] = kwargs.pop("actions", RING_LAVA_CROSS_COMMANDS)
 
@@ -120,11 +116,9 @@ class MiniHackPutOnLevitationRing(MiniHackSkill):
         )
 
 
-class MiniHackLCLevitateRingPickupComposed(MiniHackSkill):
+class MiniHackLCWandPickup(MiniHackSkill):
     def __init__(self, *args, **kwargs):
         kwargs["max_episode_steps"] = kwargs.pop("max_episode_steps", 400)
-        # kwargs["options"] = kwargs.pop("options", [])
-        # kwargs["options"].append("autopickup")
         # Limit Action Space
         kwargs["actions"] = kwargs.pop("actions", RING_LAVA_CROSS_COMMANDS)
         des_file = """
@@ -144,7 +138,7 @@ ENDMAP
 REGION:(0,0,12,6),lit,"ordinary"
 $left_bank = selection:fillrect (1,1,5,5)
 $right_bank = selection:fillrect (7,1,11,5)
-OBJECT:('=',"levitation"),rndcoord($left_bank),blessed
+OBJECT:('/',"cold"),rndcoord($left_bank),blessed
 BRANCH:(1,1,5,5),(0,0,0,0)
 STAIR:rndcoord($right_bank),down
 """
@@ -164,7 +158,7 @@ registration.register(
 )
 
 registration.register(
-    id="MiniHack-LavaCross-Ring-PickUp-Composed-v0",
+    id="MiniHack-LavaCross-Wand-PickUp-v0",
     entry_point="nle.minihack.envs.skill_transfer.skills_lavacross:"
-    "MiniHackLCLevitateRingPickupComposed",
+    "MiniHackLCWandPickup",
 )
