@@ -53,7 +53,15 @@ RING_NAMES = [(a_or_an(pref) + " " + pref + " ring") for pref in RING_PREFIXES]
 MOVE_ACTIONS = tuple(nethack.CompassDirection)
 
 RING_LAVA_CROSS_COMMANDS = tuple(
-    [*MOVE_ACTIONS, nethack.Command.PUTON, ord("r"), ord("l"), ord("f"), ord("g")]
+    [
+        *MOVE_ACTIONS,
+        nethack.Command.PUTON,
+        ord("r"),
+        ord("l"),
+        ord("f"),
+        ord("g"),
+        ord(","),
+    ]
 )
 
 
