@@ -8,51 +8,50 @@ from gym.envs import registration
 from nle import nethack
 
 
-RING_PREFIXES = [
-    "pearl",
-    "iron",
-    "twisted",
-    "steel",
-    "wire",
-    "engagement",
-    "shiny",
-    "bronze",
+WAND_PREFIXES = [
+    "glass",
+    "balsa",
+    "crystal",
+    "maple",
+    "pine",
+    "oak",
+    "ebony",
+    "marble",
+    "tin",
     "brass",
     "copper",
     "silver",
-    "gold",
-    "wooden",
-    "granite",
-    "opal",
-    "clay",
-    "coral",
-    "black",
-    "onyx",
-    "moonstone",
-    "tiger",
-    "eye",
-    "jade",
-    "agate",
-    "topaz",
-    "sapphire",
-    "ruby",
-    "diamond",
-    "ivory",
-    "emerald",
+    "platinum",
+    "iridium",
+    "zinc",
+    "aluminum",
+    "uranium",
+    "iron",
+    "steel",
+    "hexagonal",
+    "short",
+    "runed",
+    "long",
+    "curved",
+    "forked",
+    "spiked",
+    "jeweled",
 ]
 
 
 def a_or_an(adj):
+    if adj == "uranium":  # ...
+        return "a"
     if adj[0] in ["a", "e", "i", "o", "u"]:
         return "an"
     return "a"
 
 
-RING_NAMES = [(a_or_an(pref) + " " + pref + " ring") for pref in RING_PREFIXES]
+WAND_NAMES = [("- " + a_or_an(pref) + " " + pref + " wand") for pref in WAND_PREFIXES]
 
 MOVE_ACTIONS = tuple(nethack.CompassDirection)
 
-RING_LAVA_CROSS_COMMANDS = tuple(
+WAND_LAVA_CROSS_COMMANDS = tuple(
     [
         *MOVE_ACTIONS,
         nethack.Command.PUTON,
@@ -64,101 +63,89 @@ RING_LAVA_CROSS_COMMANDS = tuple(
 )
 
 
-class MiniHackPickUpLevitationRing(MiniHackSkill):
-    """PickUp a ring in a random location"""
+class MiniHackPickUpWand(MiniHackSkill):
+    """PickUp a wand in a random location"""
 
     def __init__(self, *args, **kwargs):
-        # kwargs["options"] = kwargs.pop("options", [])
-        # kwargs["options"].append("autopickup")
-
         # Limit Action Space
-        kwargs["actions"] = kwargs.pop("actions", RING_LAVA_CROSS_COMMANDS)
+        kwargs["actions"] = kwargs.pop("actions", WAND_LAVA_CROSS_COMMANDS)
 
         lvl_gen = LevelGenerator(w=10, h=10, lit=True)
-        lvl_gen.add_object("levitation", "=")
+        lvl_gen.add_object("cold", "/")
         # Add distractions to make skill more generalisable
         lvl_gen.add_monster()
         lvl_gen.add_object()
         des_file = lvl_gen.get_des()
 
         reward_manager = RewardManager()
-        reward_manager.add_message_event(RING_PREFIXES)
+        reward_manager.add_message_event(WAND_NAMES)
 
         super().__init__(
             *args, des_file=des_file, reward_manager=reward_manager, **kwargs
         )
 
 
-class MiniHackPutOnLevitationRing(MiniHackSkill):
-    """PutOn a ring in a random location"""
+class MiniHackZapColdWand(MiniHackSkill):
+    """Zap a wand of cold and put out some lava"""
+
+    def __init__(self, *args, **kwargs):
+        # Enable autopickup, so we start with the wand in inventory
+        kwargs["options"] = kwargs.pop("options", [])
+        kwargs["options"].append("autopickup")
+        # Limit Action Space
+        kwargs["actions"] = kwargs.pop("actions", WAND_LAVA_CROSS_COMMANDS)
+
+        des_file = "skill_transfer/cold_wand_zap.des"
+
+        reward_manager = RewardManager()
+        reward_manager.add_message_event(["The lava cools and solidifies."])
+
+        super().__init__(
+            *args, des_file=des_file, reward_manager=reward_manager, **kwargs
+        )
+
+
+class MiniHackNavigateLava(MiniHackSkill):
+    """Navigate past random lava patches to the staircase"""
 
     def __init__(self, *args, **kwargs):
         # Limit Action Space
-        kwargs["actions"] = kwargs.pop("actions", RING_LAVA_CROSS_COMMANDS)
+        kwargs["actions"] = kwargs.pop("actions", WAND_LAVA_CROSS_COMMANDS)
 
-        lvl_gen = LevelGenerator(w=10, h=10, lit=True)
-        lvl_gen.add_object("levitation", "=")
-        # Add distractions to make skill more generalisable
-        # lvl_gen.add_monster()
-        lvl_gen.add_object()
-        des_file = lvl_gen.get_des()
-
-        reward_manager = RewardManager()
-        reward_manager.add_message_event(
-            [
-                "a ring of levitation (on right hand)",
-                "a ring of levitation (on left hand)",
-            ]
-        )
-
-        super().__init__(
-            *args, des_file=des_file, reward_manager=reward_manager, **kwargs
-        )
+        super().__init__(*args, des_file="skill_transfer/navigate_lava.des", **kwargs)
 
 
 class MiniHackLCWandPickup(MiniHackSkill):
     def __init__(self, *args, **kwargs):
         kwargs["max_episode_steps"] = kwargs.pop("max_episode_steps", 400)
         # Limit Action Space
-        kwargs["actions"] = kwargs.pop("actions", RING_LAVA_CROSS_COMMANDS)
-        des_file = """
-MAZE: "mylevel", ' '
-FLAGS:hardfloor
-INIT_MAP: solidfill,' '
-GEOMETRY:center,center
-MAP
--------------
-|.....L.....|
-|.....L.....|
-|.....L.....|
-|.....L.....|
-|.....L.....|
--------------
-ENDMAP
-REGION:(0,0,12,6),lit,"ordinary"
-$left_bank = selection:fillrect (1,1,5,5)
-$right_bank = selection:fillrect (7,1,11,5)
-OBJECT:('/',"cold"),rndcoord($left_bank),blessed
-BRANCH:(1,1,5,5),(0,0,0,0)
-STAIR:rndcoord($right_bank),down
-"""
-        super().__init__(*args, des_file=des_file, **kwargs)
+        kwargs["actions"] = kwargs.pop("actions", WAND_LAVA_CROSS_COMMANDS)
+
+        super().__init__(
+            *args, des_file="skill_transfer/lavacross_wand_pick.des", **kwargs
+        )
 
 
 registration.register(
-    id="MiniHack-PickUpLevitationRing-v0",
+    id="MiniHack-PickUpWand-v0",
     entry_point="nle.minihack.envs.skill_transfer.skills_lavacross:"
-    "MiniHackPickUpLevitationRing",
+    "MiniHackPickUpWand",
 )
 
 registration.register(
-    id="MiniHack-PutOnLevitationRing-v0",
+    id="MiniHack-ZapColdWand-v0",
     entry_point="nle.minihack.envs.skill_transfer.skills_lavacross:"
-    "MiniHackPutOnLevitationRing",
+    "MiniHackZapColdWand",
 )
 
 registration.register(
     id="MiniHack-LavaCross-Wand-PickUp-v0",
     entry_point="nle.minihack.envs.skill_transfer.skills_lavacross:"
     "MiniHackLCWandPickup",
+)
+
+registration.register(
+    id="MiniHack-NavigateLava-v0",
+    entry_point="nle.minihack.envs.skill_transfer.skills_lavacross:"
+    "MiniHackNavigateLava",
 )

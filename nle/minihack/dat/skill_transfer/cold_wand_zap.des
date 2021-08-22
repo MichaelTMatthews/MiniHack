@@ -1,0 +1,18 @@
+MAZE: "mylevel",' '
+INIT_MAP:solidfill,' '
+GEOMETRY:center,center
+MAP
+-------------
+|...........|
+|...........|
+|...........|
+|...........|
+|...........|
+-------------
+ENDMAP
+REGION:(0,0,12,6),lit,"ordinary"
+$all_map = selection:fillrect (1,1,11,11)
+
+BRANCH:(2,2,2,2),(0,0,0,0)
+OBJECT:('/',"cold"),(2,2),blessed
+REPLACE_TERRAIN:(0,0,12,12), '.', 'L', 15%
