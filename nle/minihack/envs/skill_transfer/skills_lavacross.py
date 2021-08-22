@@ -115,8 +115,8 @@ class MiniHackPutOnLevitationRing(MiniHackSkill):
 class MiniHackLCLevitateRingPickupComposed(MiniHackSkill):
     def __init__(self, *args, **kwargs):
         kwargs["max_episode_steps"] = kwargs.pop("max_episode_steps", 400)
-        kwargs["options"] = kwargs.pop("options", [])
-        kwargs["options"].append("autopickup")
+        # kwargs["options"] = kwargs.pop("options", [])
+        # kwargs["options"].append("autopickup")
         # Limit Action Space
         kwargs["actions"] = kwargs.pop("actions", RING_LAVA_CROSS_COMMANDS)
         des_file = """
