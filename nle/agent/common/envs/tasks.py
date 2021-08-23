@@ -147,6 +147,7 @@ ENVS = dict(
     mini_eat_and_pray=skills_composed.MiniHackEatAndPray,
     mini_pick_up_wand=skills_lavacross.MiniHackPickUpWand,
     mini_zap_cold_wand=skills_lavacross.MiniHackZapColdWand,
+    mini_zap_cold_wand1=skills_lavacross.MiniHackZapColdWand1,
     mini_navigate_lava=skills_lavacross.MiniHackNavigateLava,
     mini_lava_wand_pick=skills_lavacross.MiniHackLCWandPickup,
     mini_lava_wand_pick_ic=skills_lavacross.MiniHackLCWandPickupSkillsIC,
