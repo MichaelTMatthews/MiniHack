@@ -59,7 +59,6 @@ WAND_LAVA_CROSS_COMMANDS = tuple(
         ord("f"),
         ord("g"),
         ord(","),
-        ord("r"),
     ]
 )
 
