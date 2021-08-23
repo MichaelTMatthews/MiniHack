@@ -6,10 +6,12 @@ from nle.agent.polybeast.skill_transfer.skill_transfer import load_model
 
 class FOCNet(BaseNet):
     def __init__(self, observation_shape, num_actions, flags, device):
-        options_path = flags.foc_options_path.split(" ")
-        configs_path = flags.foc_options_config_path.split(" ")
+        options_path = flags.foc_options_path.split("-")
+        configs_path = flags.foc_options_config_path.split("-")
 
         if len(options_path) != len(configs_path):
+            print(options_path)
+            print(configs_path)
             raise ValueError(
                 "options_path length does not equal configs_length "
                 + str(len(options_path))

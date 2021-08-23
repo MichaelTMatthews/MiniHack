@@ -105,6 +105,26 @@ class MiniHackZapColdWand(MiniHackSkill):
         )
 
 
+class MiniHackZapColdWand1(MiniHackSkill):
+    """Zap a wand of cold and put out some lava"""
+
+    def __init__(self, *args, **kwargs):
+        # Enable autopickup, so we start with the wand in inventory
+        kwargs["options"] = kwargs.pop("options", [])
+        kwargs["options"].append("autopickup")
+        # Limit Action Space
+        kwargs["actions"] = kwargs.pop("actions", WAND_LAVA_CROSS_COMMANDS)
+
+        des_file = "skill_transfer/cold_wand_zap1.des"
+
+        reward_manager = RewardManager()
+        reward_manager.add_message_event(["The lava cools and solidifies."])
+
+        super().__init__(
+            *args, des_file=des_file, reward_manager=reward_manager, **kwargs
+        )
+
+
 class MiniHackNavigateLava(MiniHackSkill):
     """Navigate past random lava patches to the staircase"""
 
@@ -173,6 +193,12 @@ registration.register(
     id="MiniHack-ZapColdWand-v0",
     entry_point="nle.minihack.envs.skill_transfer.skills_lavacross:"
     "MiniHackZapColdWand",
+)
+
+registration.register(
+    id="MiniHack-ZapColdWand-v1",
+    entry_point="nle.minihack.envs.skill_transfer.skills_lavacross:"
+    "MiniHackZapColdWand1",
 )
 
 registration.register(
