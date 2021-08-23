@@ -6,7 +6,7 @@ from nle.minihack import (
 from gym.envs import registration
 
 from nle import nethack
-
+from nle.minihack.envs.skill_transfer.interleaved_curriculum import MiniHackIC
 
 WAND_PREFIXES = [
     "glass",
@@ -59,6 +59,7 @@ WAND_LAVA_CROSS_COMMANDS = tuple(
         ord("f"),
         ord("g"),
         ord(","),
+        ord("r"),
     ]
 )
 
@@ -126,6 +127,43 @@ class MiniHackLCWandPickup(MiniHackSkill):
         )
 
 
+class MiniHackLCWandPickupSkillsIC(MiniHackIC):
+    """Environment that will either generate a robe or an apple."""
+
+    def __init__(self, *args, **kwargs):
+        # Limit Action Space
+        kwargs["actions"] = kwargs.pop("actions", WAND_LAVA_CROSS_COMMANDS)
+
+        lvl_gen = LevelGenerator(w=10, h=10, lit=True)
+        lvl_gen.add_object("cold", "/")
+        lvl_gen.add_monster()
+        lvl_gen.add_object()
+        des_file_pick = lvl_gen.get_des()
+
+        reward_manager_pick = RewardManager()
+        reward_manager_pick.add_message_event(WAND_NAMES)
+
+        reward_manager_zap = RewardManager()
+        reward_manager_zap.add_message_event(["The lava cools and solidifies."])
+
+        reward_manager_navigate = None
+
+        super().__init__(
+            *args,
+            des_files=[
+                des_file_pick,
+                "skill_transfer/cold_wand_zap.des",
+                "skill_transfer/navigate_lava.des",
+            ],
+            reward_managers=[
+                reward_manager_pick,
+                reward_manager_zap,
+                reward_manager_navigate,
+            ],
+            **kwargs,
+        )
+
+
 registration.register(
     id="MiniHack-PickUpWand-v0",
     entry_point="nle.minihack.envs.skill_transfer.skills_lavacross:"
@@ -148,4 +186,10 @@ registration.register(
     id="MiniHack-NavigateLava-v0",
     entry_point="nle.minihack.envs.skill_transfer.skills_lavacross:"
     "MiniHackNavigateLava",
+)
+
+registration.register(
+    id="MiniHack-LavaCross-Wand-PickUp-IC-v0",
+    entry_point="nle.minihack.envs.skill_transfer.skills_lavacross:"
+    "MiniHackLCWandPickupSkillsIC",
 )
