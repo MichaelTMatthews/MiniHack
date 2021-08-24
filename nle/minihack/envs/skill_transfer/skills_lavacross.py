@@ -142,7 +142,11 @@ class MiniHackLCWandPickup(MiniHackSkill):
         kwargs["actions"] = kwargs.pop("actions", WAND_LAVA_CROSS_COMMANDS)
 
         super().__init__(
-            *args, des_file="skill_transfer/lavacross_wand_pick.des", **kwargs
+            *args,
+            des_file="skill_transfer/lavacross_wand_pick.des",
+            reward_win=2,
+            reward_lose=-1,
+            **kwargs,
         )
 
 

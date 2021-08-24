@@ -45,6 +45,8 @@ class FOCNet(BaseNet):
         for i in range(batch_size):
             for j in range(num_actors):
                 ind = output["action"][i][j]
+
+                # Select action according to Policy Over Options
                 action[i, j] = option_outs[ind][0]["action"][i][j]
 
         return (
