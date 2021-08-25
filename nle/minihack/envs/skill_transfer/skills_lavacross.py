@@ -145,7 +145,6 @@ class MiniHackLCWandPickup(MiniHackSkill):
             *args,
             des_file="skill_transfer/lavacross_wand_pick.des",
             reward_win=2,
-            reward_lose=-1,
             **kwargs,
         )
 
