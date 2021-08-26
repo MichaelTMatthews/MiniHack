@@ -19,7 +19,6 @@ import argparse
 import collections
 import logging
 
-import numpy as np
 import omegaconf
 import os
 import threading
@@ -455,11 +454,11 @@ def learn(
 
         # Success rate
 
-        done_masked = env_outputs.done.numpy()
+        done_masked = env_outputs.done.detach().clone()
         done_masked[0, :] = False
 
-        false_fill = np.zeros((1, done_masked.shape[1]), dtype=np.bool)
-        done_m1 = np.concatenate((done_masked[1:, :], false_fill), axis=0)
+        false_fill = torch.zeros((1, done_masked.shape[1]), dtype=torch.bool)
+        done_m1 = torch.cat((done_masked[1:, :], false_fill), dim=0)
 
         masked_returns = env_outputs.episode_return[done_masked]
         masked_returns_m1 = env_outputs.episode_return[done_m1]
