@@ -1,0 +1,32 @@
+MAZE: "mylevel",' '
+INIT_MAP:solidfill,' '
+GEOMETRY:center,center
+MAP
+-------------------------------------------------
+|...........|...........|...........|...........|
+|...........|...........|...........|...........|
+|...........+...........+...........+...........|
+|...........|...........|...........|...........|
+|...........|...........|...........|...........|
+-------------------------------------------------
+ENDMAP
+REGION:(0,0,48,6),lit,"ordinary"
+BRANCH:(1,1,6,5),(0,0,0,0)
+$room_a = selection:fillrect (1,1,11,5)
+$room_b = selection:fillrect (13,1,23,5)
+$room_c = selection:fillrect (25,1,35,5)
+$room_d = selection:fillrect (37,1,47,5)
+DOOR:closed,(12,3)
+DOOR:closed,(24,3)
+DOOR:closed,(36,3)
+
+# Room A
+OBJECT:(')', "silver saber"),rndcoord($room_a),uncursed
+OBJECT:(')', "halberd"),rndcoord($room_a),uncursed
+
+# Central Rooms
+MONSTER: ('e', "floating eye"), rndcoord($room_b), hostile
+MONSTER: ('i', "imp"), rndcoord($room_c), hostile
+
+# Room D
+STAIR:rndcoord($room_d),down

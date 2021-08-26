@@ -41,7 +41,7 @@ group: scrap  # defines a group name for the experiment
 
 # Skill transfer settings
 state_dict_path: none
-foc_options_path: "/home/mikey/Project/saved_models/mini_pick_up_wand_no_lstm.tar-/home/mikey/Project/saved_models/mini_navigate_lava_no_lstm.tar-/home/mikey/Project/saved_models/mini_zap_cold_wand1_no_lstm.tar"
+foc_options_path: "/home/mikey/Project/saved_models/mini_pick_up_wand_no_lstm.tar-/home/mikey/Project/saved_models/mini_navigate_lava_no_lstm.tar-/home/mikey/Project/saved_models/mini_zap_cold_wand2_no_lstm.tar"
 foc_options_config_path: "/home/mikey/Project/MiniHack/nle/agent/polybeast/skill_transfer/option_config.yaml-/home/mikey/Project/MiniHack/nle/agent/polybeast/skill_transfer/option_config.yaml-/home/mikey/Project/MiniHack/nle/agent/polybeast/skill_transfer/option_config.yaml"
 teacher_path: none
 teacher_config_path: none
