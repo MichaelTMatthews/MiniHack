@@ -454,7 +454,7 @@ def learn(
 
         # Success rate
 
-        done_masked = env_outputs.done.detach().clone()
+        done_masked = env_outputs.done.cpu()
         done_masked[0, :] = False
 
         false_fill = torch.zeros((1, done_masked.shape[1]), dtype=torch.bool)
