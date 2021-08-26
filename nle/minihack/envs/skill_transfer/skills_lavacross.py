@@ -1,5 +1,4 @@
 from nle.minihack import (
-    MiniHackSkill,
     LevelGenerator,
     RewardManager,
 )
@@ -7,6 +6,7 @@ from gym.envs import registration
 
 from nle import nethack
 from nle.minihack.envs.skill_transfer.interleaved_curriculum import MiniHackIC
+from nle.minihack.envs.skill_transfer.mini_skill_transfer import MiniHackSkillTransfer
 
 WAND_PREFIXES = [
     "glass",
@@ -63,7 +63,7 @@ WAND_LAVA_CROSS_COMMANDS = tuple(
 )
 
 
-class MiniHackPickUpWand(MiniHackSkill):
+class MiniHackPickUpWand(MiniHackSkillTransfer):
     """PickUp a wand in a random location"""
 
     def __init__(self, *args, **kwargs):
@@ -85,7 +85,7 @@ class MiniHackPickUpWand(MiniHackSkill):
         )
 
 
-class MiniHackZapColdWand(MiniHackSkill):
+class MiniHackZapColdWand(MiniHackSkillTransfer):
     """Zap a wand of cold and put out some lava"""
 
     def __init__(self, *args, **kwargs):
@@ -105,7 +105,7 @@ class MiniHackZapColdWand(MiniHackSkill):
         )
 
 
-class MiniHackZapColdWand1(MiniHackSkill):
+class MiniHackZapColdWand1(MiniHackSkillTransfer):
     """Zap a wand of cold and put out some lava"""
 
     def __init__(self, *args, **kwargs):
@@ -125,7 +125,7 @@ class MiniHackZapColdWand1(MiniHackSkill):
         )
 
 
-class MiniHackZapColdWand2(MiniHackSkill):
+class MiniHackZapColdWand2(MiniHackSkillTransfer):
     """Zap a wand of cold and put out some lava"""
 
     def __init__(self, *args, **kwargs):
@@ -145,7 +145,7 @@ class MiniHackZapColdWand2(MiniHackSkill):
         )
 
 
-class MiniHackNavigateLava(MiniHackSkill):
+class MiniHackNavigateLava(MiniHackSkillTransfer):
     """Navigate past random lava patches to the staircase"""
 
     def __init__(self, *args, **kwargs):
@@ -155,7 +155,7 @@ class MiniHackNavigateLava(MiniHackSkill):
         super().__init__(*args, des_file="skill_transfer/navigate_lava.des", **kwargs)
 
 
-class MiniHackLCWandPickup(MiniHackSkill):
+class MiniHackLCWandPickup(MiniHackSkillTransfer):
     def __init__(self, *args, **kwargs):
         kwargs["max_episode_steps"] = kwargs.pop("max_episode_steps", 400)
         # Limit Action Space

@@ -1,10 +1,11 @@
 from random import random
 
-from nle.minihack import MiniHackSkill
 import numpy as np
 
+from nle.minihack.envs.skill_transfer.mini_skill_transfer import MiniHackSkillTransfer
 
-class MiniHackIC(MiniHackSkill):
+
+class MiniHackIC(MiniHackSkillTransfer):
     """The base class for interleaved curriculum.  Pass it a list of des files
     and on each environment reset a random one will be selected."""
 

@@ -18,6 +18,8 @@
 import argparse
 import collections
 import logging
+
+import numpy as np
 import omegaconf
 import os
 import threading
@@ -446,6 +448,37 @@ def learn(
         actor_model.load_state_dict(model.state_dict())
 
         # LOGGING
+        # episode_rewards = env_outputs.rewards
+        # print('!', episode_rewards)
+        # print('?', env_outputs.episode_return)
+        # print('@', env_outputs.done)
+
+        # Success rate
+
+        done_masked = env_outputs.done.numpy()
+        done_masked[0, :] = False
+
+        false_fill = np.zeros((1, done_masked.shape[1]), dtype=np.bool)
+        done_m1 = np.concatenate((done_masked[1:, :], false_fill), axis=0)
+
+        masked_returns = env_outputs.episode_return[done_masked]
+        masked_returns_m1 = env_outputs.episode_return[done_m1]
+
+        diff = masked_returns - masked_returns_m1
+        n_wins = len(diff[diff > 0.5])
+        n_losses = len(diff[diff < -0.5])
+
+        if n_wins + n_losses != len(diff):
+            print("Invalid runs, some did not end in a win or a loss:")
+            print(diff)
+
+        if len(diff) == 0:
+            success_rate = None
+        else:
+            success_rate = n_wins / len(diff)
+        stats["success_rate"] = success_rate
+
+        # Other stats
         episode_returns = env_outputs.episode_return[env_outputs.done]
         stats["step"] = stats.get("step", 0) + flags.unroll_length * flags.batch_size
         stats["mean_episode_return"] = torch.mean(episode_returns).item()

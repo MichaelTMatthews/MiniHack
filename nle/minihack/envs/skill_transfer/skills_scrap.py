@@ -1,7 +1,7 @@
-from nle.minihack import MiniHackSkill
 from gym.envs import registration
 
 from nle import nethack
+from nle.minihack.envs.skill_transfer.mini_skill_transfer import MiniHackSkillTransfer
 
 MOVE_ACTIONS = tuple(nethack.CompassDirection)
 
@@ -17,7 +17,7 @@ COMMANDS = tuple(
 )
 
 
-class MiniHackSeaMonsters(MiniHackSkill):
+class MiniHackSeaMonsters(MiniHackSkillTransfer):
     """PickUp a wand in a random location"""
 
     def __init__(self, *args, **kwargs):
@@ -29,7 +29,7 @@ class MiniHackSeaMonsters(MiniHackSkill):
         super().__init__(*args, des_file=des_file, **kwargs)
 
 
-class MiniHackWeaponSwitch(MiniHackSkill):
+class MiniHackWeaponSwitch(MiniHackSkillTransfer):
     """PickUp a wand in a random location"""
 
     def __init__(self, *args, **kwargs):
