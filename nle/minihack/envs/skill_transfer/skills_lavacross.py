@@ -164,7 +164,6 @@ class MiniHackLCWandPickup(MiniHackSkillTransfer):
         super().__init__(
             *args,
             des_file="skill_transfer/lavacross_wand_pick.des",
-            reward_win=2,
             **kwargs,
         )
 
