@@ -5,7 +5,7 @@ MAP
 ------------------------
 |......}}}}}}}}}}......|
 |......}}}}}}}}}}......|
-|......................|
+|......}}}}}}}}}}......|
 |......}}}}}}}}}}......|
 |......}}}}}}}}}}......|
 ------------------------
@@ -16,9 +16,10 @@ $right_bank = selection:fillrect (17,1,22,5)
 BRANCH:(1,1,6,5),(0,0,0,0)
 STAIR:rndcoord(filter('.',$right_bank)),down
 
-OBJECT:('(', "can of grease"),(2,2),blessed
-OBJECT:('[', "oilskin cloak"),(3,3),blessed
-MONSTER: (';', "giant eel"), (8,4), hostile
-MONSTER: (';', "giant eel"), (12,1), hostile
-MONSTER: (';', "giant eel"), (11,1), hostile
-MONSTER: (';', "giant eel"), (10,1), hostile
+TERRAIN: randline (6, 4), (17, 4), 3, '.'
+
+OBJECT:('[', "green dragon scale mail"),rndcoord($left_bank),blessed,14
+MONSTER: (';', "piranha"), (8,4), hostile
+MONSTER: (';', "piranha"), (12,1), hostile
+MONSTER: (';', "piranha"), (11,1), hostile
+MONSTER: (';', "piranha"), (10,1), hostile

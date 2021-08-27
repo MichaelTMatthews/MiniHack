@@ -1,0 +1,26 @@
+MAZE: "mylevel",' '
+INIT_MAP:solidfill,' '
+GEOMETRY:center,center
+MAP
+-------------
+|...........|
+|...........|
+|...........|
+|...........|
+|...........|
+-------------
+ENDMAP
+REGION:(0,0,12,6),lit,"ordinary"
+$all_map = selection:fillrect (1,1,11,5)
+
+BRANCH:(2,2,2,2),(0,0,0,0)
+OBJECT:('"', "amulet of ESP"), rndcoord($all_map), uncursed
+
+MONSTER: ('m', "large mimic"), rndcoord($all_map), hostile
+
+OBJECT:('`',"statue"),rndcoord($all_map)
+OBJECT:('`',"statue"),rndcoord($all_map)
+
+OBJECT:('$', "gold piece"),rndcoord(filter('.', $all_map)),uncursed
+OBJECT:('$', "gold piece"),rndcoord(filter('.', $all_map)),uncursed
+OBJECT:('$', "gold piece"),rndcoord(filter('.', $all_map)),uncursed

@@ -134,5 +134,5 @@ registration.register(
 )
 registration.register(
     id="MiniHack-WoD-Pro-v0",
-    entry_point="nle.minihack.envs.skills_wod:MiniHackWoDExtreme",
+    entry_point="nle.minihack.envs.skills_wod:MiniHackWoDPro",
 )

@@ -20,7 +20,12 @@ from nle.minihack.envs import (
     skills_quest,
     skills_composed,
 )
-from nle.minihack.envs.skill_transfer import skills_lavacross
+from nle.minihack.envs.skill_transfer import (
+    task_lavacross,
+    task_medusa,
+    task_mimic,
+    task_seamonsters,
+)
 from nle.agent.common.envs.wrapper import CounterWrapper, CropWrapper, PrevWrapper
 
 
@@ -145,13 +150,12 @@ ENVS = dict(
     mini_eat_or_wear=skills_composed.MiniHackEatOrWearFixed,
     mini_eat_or_wear2=skills_composed.MiniHackEatOrWearFixed2,
     mini_eat_and_pray=skills_composed.MiniHackEatAndPray,
-    mini_pick_up_wand=skills_lavacross.MiniHackPickUpWand,
-    mini_zap_cold_wand=skills_lavacross.MiniHackZapColdWand,
-    mini_zap_cold_wand1=skills_lavacross.MiniHackZapColdWand1,
-    mini_zap_cold_wand2=skills_lavacross.MiniHackZapColdWand2,
-    mini_navigate_lava=skills_lavacross.MiniHackNavigateLava,
-    mini_lava_wand_pick=skills_lavacross.MiniHackLCWandPickup,
-    mini_lava_wand_pick_ic=skills_lavacross.MiniHackLCWandPickupSkillsIC,
+    # Skills
+    # Tasks
+    mini_lc_freeze=task_lavacross.MiniHackLCFreeze,
+    mini_medusa=task_medusa.MiniHackMedusa,
+    mini_mimic=task_mimic.MiniHackMimic,
+    mini_seamonsters=task_seamonsters.MiniHackSeaMonsters,
     # WoD
     wod_easy=skills_wod.MiniHackWoDEasy,
     wod_medium=skills_wod.MiniHackWoDMedium,
