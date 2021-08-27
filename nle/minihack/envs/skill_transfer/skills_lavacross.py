@@ -193,7 +193,7 @@ class MiniHackLCWandPickupSkillsIC(MiniHackIC):
             *args,
             des_files=[
                 des_file_pick,
-                "skill_transfer/cold_wand_zap.des",
+                "skill_transfer/cold_wand_zap1.des",
                 "skill_transfer/navigate_lava.des",
             ],
             reward_managers=[
