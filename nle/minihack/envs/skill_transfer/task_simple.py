@@ -16,7 +16,7 @@ class MiniHackSimpleSeq(MiniHackSkillTransfer):
 
         reward_manager = RewardManager()
         reward_manager.add_message_event(
-            ["You destroy"],
+            ["You kill the wumpus!"],
         )
 
         super().__init__(
