@@ -2,22 +2,24 @@ MAZE: "mylevel",' '
 INIT_MAP:solidfill,' '
 GEOMETRY:center,center
 MAP
--------------
-|...........|
-|...........|
-|...........|
-|...........|
-|...........|
--------------
+------------------
+|...........LLLLL|
+|...........LLLLL|
+|...........LLLLL|
+|...........LLL..|
+|...........LLL..|
+-----------------|
 ENDMAP
-REGION:(0,0,12,6),lit,"ordinary"
+REGION:(0,0,17,6),lit,"ordinary"
 $all_map = selection:fillrect (1,1,11,5)
 
 BRANCH:(2,2,2,2),(0,0,0,0)
-OBJECT:('"', "amulet of ESP"), rndcoord($all_map), uncursed
+
+OBJECT:('"', "amulet of ESP"), (16,5), uncursed
+TERRAIN: randline (11, 2), (16, 4), 3, '.'
+TERRAIN: randline (11, 2), (16, 4), 3, '.'
 
 MONSTER: ('m', "large mimic"), rndcoord($all_map), hostile
-
 OBJECT:('`',"statue"),rndcoord($all_map)
 OBJECT:('`',"statue"),rndcoord($all_map)
 
