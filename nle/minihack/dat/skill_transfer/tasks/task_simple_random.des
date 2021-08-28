@@ -2,23 +2,25 @@ MAZE: "mylevel",' '
 INIT_MAP:solidfill,' '
 GEOMETRY:center,center
 MAP
--------------
-|...........|
-|...........|
-|...........|
-|...........|
-|...........|
--------------
+----------------
+|............L.|
+|............L.|
+|............L.|
+|............L.|
+|............L.|
+----------------
 ENDMAP
-REGION:(0,0,12,6),lit,"ordinary"
-$all_map = selection:fillrect (1,1,11,5)
+REGION:(0,0,15,6),lit,"ordinary"
+$left_bank = selection:fillrect (1,1,12,5)
+$right_bank = selection:fillrect (14,1,14,5)
 
 BRANCH:(2,2,2,2),(0,0,0,0)
-OBJECT:('"', "amulet of ESP"),(2,2),uncursed
-OBJECT:('$', "gold piece"),rndcoord($all_map),uncursed
-OBJECT:('$', "gold piece"),rndcoord($all_map),uncursed
-OBJECT:('$', "gold piece"),rndcoord($all_map),uncursed
-OBJECT:('$', "gold piece"),rndcoord($all_map),uncursed
-OBJECT:('$', "gold piece"),rndcoord($all_map),uncursed
 
-MONSTER: ('m', "large mimic"), rndcoord($all_map), hostile
+IF [50%] {
+    OBJECT:('/', "death"),rndcoord($left_bank),uncursed
+}
+ELSE {
+    OBJECT:(')', "dagger"),rndcoord($left_bank),uncursed,50,quantity:10
+}
+
+MONSTER: ('o', "orc"), rndcoord($right_bank), hostile

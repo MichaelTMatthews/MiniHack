@@ -25,6 +25,7 @@ from nle.minihack.envs.skill_transfer import (
     task_medusa,
     task_mimic,
     task_seamonsters,
+    task_simple,
 )
 from nle.agent.common.envs.wrapper import CounterWrapper, CropWrapper, PrevWrapper
 
@@ -156,6 +157,10 @@ ENVS = dict(
     mini_medusa=task_medusa.MiniHackMedusa,
     mini_mimic=task_mimic.MiniHackMimic,
     mini_seamonsters=task_seamonsters.MiniHackSeaMonsters,
+    mini_simple_seq=task_simple.MiniHackSimpleSeq,
+    mini_simple_intersection=task_simple.MiniHackSimpleIntersection,
+    mini_simple_union=task_simple.MiniHackSimpleUnion,
+    mini_simple_random=task_simple.MiniHackSimpleRandom,
     # WoD
     wod_easy=skills_wod.MiniHackWoDEasy,
     wod_medium=skills_wod.MiniHackWoDMedium,

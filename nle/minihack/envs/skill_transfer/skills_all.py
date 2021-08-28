@@ -23,6 +23,7 @@ COMMANDS = tuple(
         nethack.Command.ESC,
         nethack.Command.EAT,
         nethack.Command.APPLY,
+        nethack.Command.WIELD,
         ord("$"),
         ord("f"),
         ord("g"),

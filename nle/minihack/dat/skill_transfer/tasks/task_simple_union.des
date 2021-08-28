@@ -4,21 +4,19 @@ GEOMETRY:center,center
 MAP
 -------------
 |...........|
-|...........|
-|...........|
-|...........|
-|...........|
+|.........|.|
+|.........L.|
+|.........L.|
+|.........L.|
 -------------
 ENDMAP
 REGION:(0,0,12,6),lit,"ordinary"
-$all_map = selection:fillrect (1,1,11,5)
+$main_section = selection:fillrect (1,1,9,5)
 
 BRANCH:(2,2,2,2),(0,0,0,0)
-OBJECT:('"', "amulet of ESP"),(2,2),uncursed
-OBJECT:('$', "gold piece"),rndcoord($all_map),uncursed
-OBJECT:('$', "gold piece"),rndcoord($all_map),uncursed
-OBJECT:('$', "gold piece"),rndcoord($all_map),uncursed
-OBJECT:('$', "gold piece"),rndcoord($all_map),uncursed
-OBJECT:('$', "gold piece"),rndcoord($all_map),uncursed
+OBJECT:('=',"levitation"),rndcoord($main_section),blessed
+OBJECT:('(',"skeleton key"),rndcoord($main_section),blessed,0
 
-MONSTER: ('m', "large mimic"), rndcoord($all_map), hostile
+DOOR:locked,(10,1)
+
+STAIR:(11, 5),down
