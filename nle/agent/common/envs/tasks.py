@@ -26,6 +26,7 @@ from nle.minihack.envs.skill_transfer import (
     task_mimic,
     task_seamonsters,
     task_simple,
+    skills_all,
 )
 from nle.agent.common.envs.wrapper import CounterWrapper, CropWrapper, PrevWrapper
 
@@ -152,6 +153,13 @@ ENVS = dict(
     mini_eat_or_wear2=skills_composed.MiniHackEatOrWearFixed2,
     mini_eat_and_pray=skills_composed.MiniHackEatAndPray,
     # Skills
+    mini_skill_apply_frost_horn=skills_all.MiniHackSkillApplyFrostHorn,
+    mini_skill_eat=skills_all.MiniHackSkillEat,
+    mini_skill_fight=skills_all.MiniHackSkillFight,
+    mini_skill_nav_blind=skills_all.MiniHackSkillNavigateBlind,
+    mini_skill_nav_lava=skills_all.MiniHackSkillNavigateLava,
+    mini_skill_nav_lava_to_amulet=skills_all.MiniHackSkillNavigateLavaToAmulet,
+    mini_skill_nav_over_lava=skills_all.MiniHackSkillNavigateOverLava,
     # Tasks
     mini_lc_freeze=task_lavacross.MiniHackLCFreeze,
     mini_medusa=task_medusa.MiniHackMedusa,
