@@ -2,31 +2,29 @@ MAZE: "mylevel",' '
 INIT_MAP:solidfill,' '
 GEOMETRY:center,center
 MAP
-------------------
-|.L............L.|
-|.L............L.|
-|.L............L.|
-|.L............L.|
-|.L............L.|
-------------------
+--------------------
+|................L.|
+|................L.|
+|................L.|
+|................L.|
+|................L.|
+|................L.|
+|................L.|
+|................L.|
+|................L.|
+--------------------
 ENDMAP
-REGION:(0,0,17,6),lit,"ordinary"
-$left_bank = selection:fillrect (1,1,1,5)
-$middle_bank = selection:fillrect (3,1,15,5)
-$right_bank = selection:fillrect (16,1,16,5)
+REGION:(0,0,19,10),lit,"ordinary"
+$left_bank = selection:fillrect (1,1,16,9)
+$right_bank = selection:fillrect (18,1,18,9)
 
 BRANCH:(2,2,2,2),(0,0,0,0)
 
 IF [50%] {
-    OBJECT:('/', "death"),rndcoord($middle_bank),uncursed
+    OBJECT:('/', "death"),rndcoord($left_bank),uncursed
 }
 ELSE {
-    OBJECT:(')', "dagger"),rndcoord($middle_bank),uncursed,50,quantity:10
+    OBJECT:(')', "dagger"),rndcoord($left_bank),uncursed,50,quantity:10
 }
 
-IF [50%] {
-    MONSTER: ('o', "orc"), rndcoord($right_bank), hostile
-}
-ELSE {
-    MONSTER: ('o', "orc"), rndcoord($left_bank), hostile
-}
+MONSTER: ('o', "orc"), rndcoord($right_bank), hostile
