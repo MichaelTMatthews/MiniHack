@@ -1,11 +1,9 @@
 from nle.minihack import (
-    LevelGenerator,
     RewardManager,
 )
 from gym.envs import registration
 
 from nle import nethack
-from nle.minihack.envs.skill_transfer import task_lavacross
 from nle.minihack.envs.skill_transfer.mini_skill_transfer import MiniHackSkillTransfer
 
 
@@ -32,22 +30,17 @@ COMMANDS = tuple(
 )
 
 
-class MiniHackPickUpWand(MiniHackSkillTransfer):
-    """PickUp a wand in a random location"""
+class MiniHackSkillPickUp(MiniHackSkillTransfer):
+    """PickUp Item"""
 
     def __init__(self, *args, **kwargs):
         # Limit Action Space
         kwargs["actions"] = kwargs.pop("actions", COMMANDS)
 
-        lvl_gen = LevelGenerator(w=10, h=10, lit=True)
-        lvl_gen.add_object("cold", "/")
-        # Add distractions to make skill more generalisable
-        lvl_gen.add_monster()
-        lvl_gen.add_object()
-        des_file = lvl_gen.get_des()
+        des_file = "skill_transfer/skills/skill_pick_up.des"
 
         reward_manager = RewardManager()
-        reward_manager.add_message_event(task_lavacross.WAND_NAMES)
+        reward_manager.add_message_event(["The lava cools and solidifies."])
 
         super().__init__(
             *args, des_file=des_file, reward_manager=reward_manager, **kwargs
@@ -87,8 +80,8 @@ class MiniHackNavigateLava(MiniHackSkillTransfer):
 
 
 registration.register(
-    id="MiniHack-PickUpWand-v0",
-    entry_point="nle.minihack.envs.skill_transfer.skills_all:" "MiniHackPickUpWand",
+    id="MiniHack-Skill-PickUp-v0",
+    entry_point="nle.minihack.envs.skill_transfer.skills_all:" "MiniHackSkillPickUp",
 )
 
 registration.register(
