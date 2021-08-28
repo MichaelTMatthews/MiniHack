@@ -12,5 +12,9 @@ MAP
 ENDMAP
 REGION:(0,0,12,6),lit,"ordinary"
 $all_map = selection:fillrect (1,1,11,5)
-REPLACE_TERRAIN:(0,0,12,12), '.', 'L', 15%
+
+BRANCH:(2,2,2,2),(0,0,0,0)
+OBJECT:('!',"levitation"),(2,2),blessed
+
+REPLACE_TERRAIN:(0,0,12,12), '.', 'L', 50%
 STAIR:rndcoord(filter('.',$all_map)),down

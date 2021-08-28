@@ -12,5 +12,5 @@ MAP
 ENDMAP
 REGION:(0,0,12,6),lit,"ordinary"
 $all_map = selection:fillrect (1,1,11,5)
-REPLACE_TERRAIN:(0,0,12,12), '.', 'L', 15%
-STAIR:rndcoord(filter('.',$all_map)),down
+
+MONSTER: ('q', "wumpus"), rndcoord($all_map), hostile, asleep
