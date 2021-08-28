@@ -11,6 +11,6 @@ MAP
 -------------
 ENDMAP
 REGION:(0,0,12,6),lit,"ordinary"
-$all_map = selection:fillrect (1,1,11,11)
+$all_map = selection:fillrect (1,1,11,5)
 
 OBJECT:('/',"cold"),rndcoord($all_map),blessed

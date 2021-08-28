@@ -11,7 +11,7 @@ MAP
 -------------
 ENDMAP
 REGION:(0,0,12,6),lit,"ordinary"
-$all_map = selection:fillrect (1,1,11,11)
+$all_map = selection:fillrect (1,1,11,5)
 $right = selection:fillrect (11,1,11,5)
 TERRAIN:rndcoord($right), 'L'
 BRANCH:(2,2,2,2),(0,0,0,0)
