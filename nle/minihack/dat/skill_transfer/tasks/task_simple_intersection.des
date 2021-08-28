@@ -10,6 +10,7 @@ MAP
 .....
 ENDMAP
 REGION:(0,0,4,4),lit,"ordinary"
+$all_map = selection:fillrect (0,0,4,4)
 
-OBJECT:('%',"apple"),(0, 0),uncursed
-OBJECT:('[',"leather cloak"),(4, 0),uncursed
+OBJECT:('%',"apple"),rndcoord($all_map),uncursed
+OBJECT:('[',"leather cloak"),rndcoord($all_map),uncursed

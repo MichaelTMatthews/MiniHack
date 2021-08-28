@@ -34,8 +34,8 @@ class MiniHackSimpleIntersection(MiniHackSkillTransfer):
         des_file = "skill_transfer/tasks/task_simple_intersection.des"
 
         reward_manager = IntersectionRewardManager()
-        reward_manager.add_eat_event("apple")
-        reward_manager.add_wear_event("leather cloak")
+        reward_manager.add_eat_event("apple", reward=0.5)
+        reward_manager.add_wear_event("leather cloak", reward=0.5)
 
         super().__init__(
             *args, des_file=des_file, reward_manager=reward_manager, **kwargs
