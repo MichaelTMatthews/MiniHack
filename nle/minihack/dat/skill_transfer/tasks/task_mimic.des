@@ -15,7 +15,7 @@ $all_map = selection:fillrect (1,1,11,5)
 
 BRANCH:(2,2,2,2),(0,0,0,0)
 
-OBJECT:('"', "amulet of ESP"), (18,5), uncursed
+# OBJECT:('"', "amulet of ESP"), (18,5), uncursed
 TERRAIN: randline (11, 1), (18, 5), 3, '.'
 
 MONSTER: ('m', "large mimic"), rndcoord($all_map), hostile
