@@ -30,6 +30,24 @@ COMMANDS = tuple(
 )
 
 
+class MiniHackSkillApplyFrostHorn(MiniHackSkillTransfer):
+    def __init__(self, *args, **kwargs):
+        # Enable autopickup, so we start with the wand in inventory
+        kwargs["options"] = kwargs.pop("options", [])
+        kwargs["options"].append("autopickup")
+        # Limit Action Space
+        kwargs["actions"] = kwargs.pop("actions", COMMANDS)
+
+        des_file = "skill_transfer/skills/skill_apply_frost_horn.des"
+
+        reward_manager = RewardManager()
+        reward_manager.add_message_event(["The lava cools and solidifies."])
+
+        super().__init__(
+            *args, des_file=des_file, reward_manager=reward_manager, **kwargs
+        )
+
+
 class MiniHackSkillPickUp(MiniHackSkillTransfer):
     """PickUp Item"""
 
@@ -78,6 +96,12 @@ class MiniHackNavigateLava(MiniHackSkillTransfer):
             *args, des_file="skill_transfer/skills/skill_navigate_lava.des", **kwargs
         )
 
+
+registration.register(
+    id="MiniHack-Skill-ApplyFrostHorn-v0",
+    entry_point="nle.minihack.envs.skill_transfer.skills_all:"
+    "MiniHackSkillApplyFrostHorn",
+)
 
 registration.register(
     id="MiniHack-Skill-PickUp-v0",

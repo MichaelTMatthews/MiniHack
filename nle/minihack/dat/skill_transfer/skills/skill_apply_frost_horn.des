@@ -12,5 +12,7 @@ MAP
 ENDMAP
 REGION:(0,0,12,6),lit,"ordinary"
 $all_map = selection:fillrect (1,1,11,11)
-REPLACE_TERRAIN:(0,0,12,12), '.', 'L', 15%
-STAIR:rndcoord(filter('.',$all_map)),down
+$right = selection:fillrect (11,1,11,5)
+TERRAIN:rndcoord($right), 'L'
+BRANCH:(2,2,2,2),(0,0,0,0)
+OBJECT:('(',"frost horn"),(2,2),blessed
