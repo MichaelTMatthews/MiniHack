@@ -130,13 +130,13 @@ class MiniHackSkillNavigateLavaToAmulet(MiniHackSkillTransfer):
 
         reward_manager = RewardManager()
         reward_manager.add_message_event(
-            ["You see here"],
+            ["amulet"],
         )
 
         super().__init__(
             *args,
             des_file="skill_transfer/skills/skill_navigate_lava_to_amulet.des",
-            reward_manager=reward_manager,
+            # reward_manager=reward_manager,
             **kwargs,
         )
 
