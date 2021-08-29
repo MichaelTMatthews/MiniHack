@@ -136,7 +136,7 @@ class MiniHackSkillNavigateLavaToAmulet(MiniHackSkillTransfer):
         super().__init__(
             *args,
             des_file="skill_transfer/skills/skill_navigate_lava_to_amulet.des",
-            # reward_manager=reward_manager,
+            reward_manager=reward_manager,
             **kwargs,
         )
 
