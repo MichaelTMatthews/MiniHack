@@ -237,10 +237,21 @@ class MiniHackSkillNavigateWater(MiniHackSkillTransfer):
         # Limit Action Space
         kwargs["actions"] = kwargs.pop("actions", COMMANDS)
 
+        # A very hacky reward
+        # -0.1 for moving into the water
+        # +1 for reaching the staircase
+        # But we don't want termination to ever come from the reward manager
+        # So we add a dud reward which can never be completed
         reward_manager = RewardManager()
-        reward_manager.add_message_event(["You try to crawl"], reward=-0.1)
-
-        reward_manager.add_message_event(["You try dsadsato crawl"], reward=-0.1)
+        reward_manager.add_message_event(
+            ["You try to crawl"],
+            reward=-0.1,
+            terminal_sufficient=False,
+            repeatable=True,
+        )
+        reward_manager.add_message_event(
+            ["fdshfdsbyufewj"], reward=0, terminal_required=True
+        )
 
         super().__init__(
             *args,
@@ -248,6 +259,14 @@ class MiniHackSkillNavigateWater(MiniHackSkillTransfer):
             reward_manager=reward_manager,
             **kwargs,
         )
+
+    def _reward_fn(self, last_observation, observation, end_status):
+        reward = super()._reward_fn(last_observation, observation, end_status)
+
+        if end_status == self.StepStatus.TASK_SUCCESSFUL:
+            reward += self.reward_win
+
+        return reward
 
 
 class MiniHackSkillPickUp(MiniHackSkillTransfer):
@@ -281,7 +300,122 @@ class MiniHackSkillPickUp(MiniHackSkillTransfer):
         )
 
 
-class MiniHackZapColdWand(MiniHackSkillTransfer):
+class MiniHackSkillPutOn(MiniHackSkillTransfer):
+    def __init__(self, *args, **kwargs):
+        # Enable autopickup
+        kwargs["options"] = kwargs.pop("options", [])
+        kwargs["options"].append("autopickup")
+        # Limit Action Space
+        kwargs["actions"] = kwargs.pop("actions", COMMANDS)
+
+        reward_manager = RewardManager()
+        reward_manager.add_message_event(
+            ["- a ring of levitation", "You are now wearing a towel around your head."]
+        )
+
+        super().__init__(
+            *args,
+            des_file="skill_transfer/skills/skill_put_on.des",
+            reward_manager=reward_manager,
+            **kwargs,
+        )
+
+
+class MiniHackSkillTakeOff(MiniHackSkillTransfer):
+    def __init__(self, *args, **kwargs):
+        # Limit Action Space
+        kwargs["actions"] = kwargs.pop("actions", COMMANDS)
+
+        reward_manager = RewardManager()
+        reward_manager.add_message_event(["You finish taking off your suit."])
+
+        super().__init__(
+            *args,
+            des_file="skill_transfer/skills/skill_take_off.des",
+            reward_manager=reward_manager,
+            **kwargs,
+        )
+
+
+class MiniHackSkillThrow(MiniHackSkillTransfer):
+    def __init__(self, *args, **kwargs):
+        # Enable autopickup
+        kwargs["options"] = kwargs.pop("options", [])
+        kwargs["options"].append("autopickup")
+        # Limit Action Space
+        kwargs["actions"] = kwargs.pop("actions", COMMANDS)
+
+        reward_manager = RewardManager()
+        reward_manager.add_message_event(
+            ["The gold pieces miss the large mimic", "You kill the orc"]
+        )
+
+        super().__init__(
+            *args,
+            des_file="skill_transfer/skills/skill_throw.des",
+            reward_manager=reward_manager,
+            **kwargs,
+        )
+
+
+class MiniHackSkillUnlock(MiniHackSkillTransfer):
+    def __init__(self, *args, **kwargs):
+        # Enable autopickup
+        kwargs["options"] = kwargs.pop("options", [])
+        kwargs["options"].append("autopickup")
+        # Limit Action Space
+        kwargs["actions"] = kwargs.pop("actions", COMMANDS)
+
+        reward_manager = RewardManager()
+        reward_manager.add_message_event(["You succeed in unlocking the door"])
+
+        super().__init__(
+            *args,
+            des_file="skill_transfer/skills/skill_unlock.des",
+            reward_manager=reward_manager,
+            **kwargs,
+        )
+
+
+class MiniHackSkillWear(MiniHackSkillTransfer):
+    def __init__(self, *args, **kwargs):
+        # Enable autopickup
+        kwargs["options"] = kwargs.pop("options", [])
+        kwargs["options"].append("autopickup")
+        # Limit Action Space
+        kwargs["actions"] = kwargs.pop("actions", COMMANDS)
+
+        reward_manager = RewardManager()
+        reward_manager.add_message_event(["You are now wearing a robe"])
+
+        super().__init__(
+            *args,
+            des_file="skill_transfer/skills/skill_wear.des",
+            reward_manager=reward_manager,
+            **kwargs,
+        )
+
+
+class MiniHackSkillWield(MiniHackSkillTransfer):
+    def __init__(self, *args, **kwargs):
+        # Enable autopickup
+        kwargs["options"] = kwargs.pop("options", [])
+        kwargs["options"].append("autopickup")
+        # Limit Action Space
+        kwargs["actions"] = kwargs.pop("actions", COMMANDS)
+
+        reward_manager = RewardManager()
+        reward_manager.add_message_event(["- a silver saber"])
+
+        super().__init__(
+            *args,
+            des_file="skill_transfer/skills/skill_wield.des",
+            reward_manager=reward_manager,
+            **kwargs,
+        )
+
+
+class MiniHackSkillZapColdWand(MiniHackSkillTransfer):
     """Zap a wand of cold and put out some lava"""
 
     def __init__(self, *args, **kwargs):
@@ -295,6 +429,24 @@ class MiniHackZapColdWand(MiniHackSkillTransfer):
 
         reward_manager = RewardManager()
         reward_manager.add_message_event(["The lava cools and solidifies."])
+
+        super().__init__(
+            *args, des_file=des_file, reward_manager=reward_manager, **kwargs
+        )
+
+
+class MiniHackSkillZapDeathWand(MiniHackSkillTransfer):
+    def __init__(self, *args, **kwargs):
+        # Enable autopickup, so we start with the wand in inventory
+        kwargs["options"] = kwargs.pop("options", [])
+        kwargs["options"].append("autopickup")
+        # Limit Action Space
+        kwargs["actions"] = kwargs.pop("actions", COMMANDS)
+
+        des_file = "skill_transfer/skills/skill_zap_wod.des"
+
+        reward_manager = RewardManager()
+        reward_manager.add_message_event(["You kill the orc"])
 
         super().__init__(
             *args, des_file=des_file, reward_manager=reward_manager, **kwargs
@@ -347,13 +499,49 @@ registration.register(
     "MiniHackSkillNavigateWater",
 )
 
-
 registration.register(
     id="MiniHack-Skill-PickUp-v0",
     entry_point="nle.minihack.envs.skill_transfer.skills_all:" "MiniHackSkillPickUp",
 )
 
 registration.register(
-    id="MiniHack-ZapColdWand-v1",
-    entry_point="nle.minihack.envs.skill_transfer.skills_all:" "MiniHackZapColdWand",
+    id="MiniHack-Skill-PutOn-v0",
+    entry_point="nle.minihack.envs.skill_transfer.skills_all:" "MiniHackSkillPutOn",
+)
+
+registration.register(
+    id="MiniHack-Skill-TakeOff-v0",
+    entry_point="nle.minihack.envs.skill_transfer.skills_all:" "MiniHackSkillTakeOff",
+)
+
+registration.register(
+    id="MiniHack-Skill-Throw-v0",
+    entry_point="nle.minihack.envs.skill_transfer.skills_all:" "MiniHackSkillThrow",
+)
+
+registration.register(
+    id="MiniHack-Skill-Unlock-v0",
+    entry_point="nle.minihack.envs.skill_transfer.skills_all:" "MiniHackSkillUnlock",
+)
+
+registration.register(
+    id="MiniHack-Skill-Wear-v0",
+    entry_point="nle.minihack.envs.skill_transfer.skills_all:" "MiniHackSkillWear",
+)
+
+registration.register(
+    id="MiniHack-Skill-Wield-v0",
+    entry_point="nle.minihack.envs.skill_transfer.skills_all:" "MiniHackSkillWield",
+)
+
+registration.register(
+    id="MiniHack-Skill-ZapColdWand-v0",
+    entry_point="nle.minihack.envs.skill_transfer.skills_all:"
+    "MiniHackSkillZapColdWand",
+)
+
+registration.register(
+    id="MiniHack-Skill-ZapWoD-v0",
+    entry_point="nle.minihack.envs.skill_transfer.skills_all:"
+    "MiniHackSkillZapDeathWand",
 )
