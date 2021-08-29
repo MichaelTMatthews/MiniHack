@@ -160,6 +160,7 @@ ENVS = dict(
     mini_skill_nav_lava=skills_all.MiniHackSkillNavigateLava,
     mini_skill_nav_lava_to_amulet=skills_all.MiniHackSkillNavigateLavaToAmulet,
     mini_skill_nav_over_lava=skills_all.MiniHackSkillNavigateOverLava,
+    mini_skill_pick_up=skills_all.MiniHackSkillPickUp,
     # Tasks
     mini_lc_freeze=task_lavacross.MiniHackLCFreeze,
     mini_medusa=task_medusa.MiniHackMedusa,
