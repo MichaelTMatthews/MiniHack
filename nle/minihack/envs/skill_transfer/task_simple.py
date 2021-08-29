@@ -5,6 +5,47 @@ from nle.minihack.envs.skill_transfer import skills_all
 from nle.minihack.envs.skill_transfer.mini_skill_transfer import MiniHackSkillTransfer
 
 
+RING_PREFIXES = [
+    "pearl",
+    "iron",
+    "twisted",
+    "steel",
+    "wire",
+    "engagement",
+    "shiny",
+    "bronze",
+    "brass",
+    "copper",
+    "silver",
+    "gold",
+    "wooden",
+    "granite",
+    "opal",
+    "clay",
+    "coral",
+    "black onyx",
+    "moonstone",
+    "tiger eye",
+    "jade",
+    "agate",
+    "topaz",
+    "sapphire",
+    "ruby",
+    "diamond",
+    "ivory",
+    "emerald",
+]
+
+
+def a_or_an(adj):
+    if adj[0] in ["a", "e", "i", "o", "u"]:
+        return "an"
+    return "a"
+
+
+RING_NAMES = [("- " + a_or_an(pref) + " " + pref + " ring") for pref in RING_PREFIXES]
+
+
 class MiniHackSimpleSeq(MiniHackSkillTransfer):
     """Simple Sequence of skills"""
 

@@ -4,47 +4,7 @@ from gym.envs import registration
 from nle.minihack.envs.skill_transfer import skills_all
 from nle.minihack.envs.skill_transfer.interleaved_curriculum import MiniHackIC
 from nle.minihack.envs.skill_transfer.mini_skill_transfer import MiniHackSkillTransfer
-
-WAND_PREFIXES = [
-    "glass",
-    "balsa",
-    "crystal",
-    "maple",
-    "pine",
-    "oak",
-    "ebony",
-    "marble",
-    "tin",
-    "brass",
-    "copper",
-    "silver",
-    "platinum",
-    "iridium",
-    "zinc",
-    "aluminum",
-    "uranium",
-    "iron",
-    "steel",
-    "hexagonal",
-    "short",
-    "runed",
-    "long",
-    "curved",
-    "forked",
-    "spiked",
-    "jeweled",
-]
-
-
-def a_or_an(adj):
-    if adj == "uranium":  # ...
-        return "a"
-    if adj[0] in ["a", "e", "i", "o", "u"]:
-        return "an"
-    return "a"
-
-
-WAND_NAMES = [("- " + a_or_an(pref) + " " + pref + " wand") for pref in WAND_PREFIXES]
+from nle.minihack.envs.skill_transfer.skills_all import WAND_NAMES
 
 
 class MiniHackLCFreeze(MiniHackSkillTransfer):

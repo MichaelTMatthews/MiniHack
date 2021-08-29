@@ -5,6 +5,7 @@ from gym.envs import registration
 
 from nle import nethack
 from nle.minihack.envs.skill_transfer.mini_skill_transfer import MiniHackSkillTransfer
+from nle.minihack.envs.skill_transfer.task_simple import RING_NAMES
 from nle.nethack import Command
 
 MOVE_ACTIONS = tuple(nethack.CompassDirection)
@@ -29,6 +30,62 @@ COMMANDS = tuple(
         ord("h"),
     ]
 )
+
+WAND_PREFIXES = [
+    "glass",
+    "balsa",
+    "crystal",
+    "maple",
+    "pine",
+    "oak",
+    "ebony",
+    "marble",
+    "tin",
+    "brass",
+    "copper",
+    "silver",
+    "platinum",
+    "iridium",
+    "zinc",
+    "aluminum",
+    "uranium",
+    "iron",
+    "steel",
+    "hexagonal",
+    "short",
+    "runed",
+    "long",
+    "curved",
+    "forked",
+    "spiked",
+    "jeweled",
+]
+
+AMULET_PREFIXES = [
+    "circular",
+    "spherical",
+    "oval",
+    "triangular",
+    "pyramidal",
+    "square",
+    "concave",
+    "hexagonal",
+    "octagonal",
+]
+
+
+def a_or_an(adj):
+    if adj == "uranium":  # ...
+        return "a"
+    if adj[0] in ["a", "e", "i", "o", "u"]:
+        return "an"
+    return "a"
+
+
+WAND_NAMES = [("- " + a_or_an(pref) + " " + pref + " wand") for pref in WAND_PREFIXES]
+AMULET_NAMES = [
+    ("- " + a_or_an(pref) + " " + pref + " amulet") for pref in AMULET_PREFIXES
+]
 
 
 class MiniHackSkillApplyFrostHorn(MiniHackSkillTransfer):
@@ -203,7 +260,21 @@ class MiniHackSkillPickUp(MiniHackSkillTransfer):
         des_file = "skill_transfer/skills/skill_pick_up.des"
 
         reward_manager = RewardManager()
-        reward_manager.add_message_event(["The lava cools and solidifies."])
+        reward_manager.add_message_event(
+            [
+                "f - a silver saber",
+                "f - a leather cloak",
+                *RING_NAMES,
+                "f - a key",
+                *WAND_NAMES,
+                "f - a dagger",
+                "f - a horn",
+                "f - a towel",
+                "f - a green dragon scale mail",
+                "$ - a gold piece",
+                *AMULET_NAMES,
+            ]
+        )
 
         super().__init__(
             *args, des_file=des_file, reward_manager=reward_manager, **kwargs
