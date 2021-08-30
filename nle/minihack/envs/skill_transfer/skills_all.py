@@ -347,7 +347,13 @@ class MiniHackSkillThrow(MiniHackSkillTransfer):
 
         reward_manager = RewardManager()
         reward_manager.add_message_event(
-            ["The gold pieces miss the large mimic", "You kill the orc"]
+            ["You kill the large mimic", "You kill the orc"], terminal_sufficient=True
+        )
+
+        reward_manager.add_message_event(
+            ["Wait!  That's a large mimic!"],
+            terminal_required=False,
+            reward=-1.5,
         )
 
         super().__init__(
@@ -367,7 +373,15 @@ class MiniHackSkillUnlock(MiniHackSkillTransfer):
         kwargs["actions"] = kwargs.pop("actions", COMMANDS)
 
         reward_manager = RewardManager()
-        reward_manager.add_message_event(["You succeed in unlocking the door"])
+        reward_manager.add_message_event(
+            ["This door is locked"], terminal_required=False, reward=0.2
+        )
+        reward_manager.add_message_event(
+            ["Unlock it?"], terminal_required=False, reward=0.4
+        )
+        reward_manager.add_message_event(
+            ["You succeed in unlocking the door"], terminal_sufficient=True
+        )
 
         super().__init__(
             *args,

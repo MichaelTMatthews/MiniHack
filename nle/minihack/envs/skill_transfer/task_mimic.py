@@ -16,7 +16,11 @@ class MiniHackMimic(MiniHackSkillTransfer):
 
         reward_manager = RewardManager()
         reward_manager.add_message_event(
-            ["The gold piece misses the large mimic.", "amulet (being worn)"],
+            [
+                "The dagger hits the large mimic",
+                "The dagger misses",
+                "amulet (being worn)",
+            ],
             terminal_sufficient=True,
         )
 

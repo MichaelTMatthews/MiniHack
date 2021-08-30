@@ -22,6 +22,4 @@ MONSTER: ('m', "large mimic"), rndcoord($all_map), hostile
 OBJECT:('`',"statue"),rndcoord($all_map)
 OBJECT:('`',"statue"),rndcoord($all_map)
 
-OBJECT:('$', "gold piece"),rndcoord(filter('.', $all_map)),uncursed
-OBJECT:('$', "gold piece"),rndcoord(filter('.', $all_map)),uncursed
-OBJECT:('$', "gold piece"),rndcoord(filter('.', $all_map)),uncursed
+OBJECT:(')', "dagger"),rndcoord(filter('.', $all_map)),uncursed,quantity:10
