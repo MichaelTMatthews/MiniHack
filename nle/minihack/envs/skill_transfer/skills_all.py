@@ -5,7 +5,6 @@ from gym.envs import registration
 
 from nle import nethack
 from nle.minihack.envs.skill_transfer.mini_skill_transfer import MiniHackSkillTransfer
-from nle.minihack.envs.skill_transfer.task_simple import RING_NAMES
 from nle.nethack import Command
 
 MOVE_ACTIONS = tuple(nethack.CompassDirection)
@@ -73,6 +72,37 @@ AMULET_PREFIXES = [
     "octagonal",
 ]
 
+RING_PREFIXES = [
+    "pearl",
+    "iron",
+    "twisted",
+    "steel",
+    "wire",
+    "engagement",
+    "shiny",
+    "bronze",
+    "brass",
+    "copper",
+    "silver",
+    "gold",
+    "wooden",
+    "granite",
+    "opal",
+    "clay",
+    "coral",
+    "black onyx",
+    "moonstone",
+    "tiger eye",
+    "jade",
+    "agate",
+    "topaz",
+    "sapphire",
+    "ruby",
+    "diamond",
+    "ivory",
+    "emerald",
+]
+
 
 def a_or_an(adj):
     if adj == "uranium":  # ...
@@ -86,6 +116,7 @@ WAND_NAMES = [("- " + a_or_an(pref) + " " + pref + " wand") for pref in WAND_PRE
 AMULET_NAMES = [
     ("- " + a_or_an(pref) + " " + pref + " amulet") for pref in AMULET_PREFIXES
 ]
+RING_NAMES = [("- " + a_or_an(pref) + " " + pref + " ring") for pref in RING_PREFIXES]
 
 
 class MiniHackSkillApplyFrostHorn(MiniHackSkillTransfer):
