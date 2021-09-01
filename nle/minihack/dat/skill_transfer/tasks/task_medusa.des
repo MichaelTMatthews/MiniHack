@@ -20,10 +20,7 @@ DOOR:closed,(12,5)
 
 # Room A
 OBJECT:('(', "towel"),rndcoord($room_a),uncursed
-# OBJECT:('[', "green dragon scale mail"),rndcoord($room_a),blessed,30
 
 # Room B
 MONSTER: ('@', "medusa"), (17,1), hostile
-
-# Room C
 STAIR:rndcoord(filter('.', $room_b)),down

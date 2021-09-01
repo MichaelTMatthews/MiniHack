@@ -427,18 +427,24 @@ def learn(
         if flags.model == "ks":
             lam = 1
 
-            teacher_log_probs = torch.log_softmax(actor_outputs.teacher_logits, 2)
+            teacher_log_probs = torch.log(actor_outputs.teacher_logits)
             policy_log_probs = torch.log_softmax(learner_outputs.policy_logits, 2)
 
             ks_loss = nn.KLDivLoss(log_target=True, reduction="batchmean")(
                 teacher_log_probs, policy_log_probs
             )
 
+            print("!", ks_loss, total_loss)
+
             total_loss += lam * ks_loss
 
         # BACKWARD STEP
         optimizer.zero_grad()
-        total_loss.backward()
+
+        if flags.model == "ks":
+            ks_loss.backward()
+        else:
+            total_loss.backward()
         if flags.grad_norm_clipping > 0:
             nn.utils.clip_grad_norm_(model.parameters(), flags.grad_norm_clipping)
         optimizer.step()
