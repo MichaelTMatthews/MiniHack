@@ -436,6 +436,8 @@ def learn(
                 teacher_log_probs, policy_log_probs
             )
 
+            print("~", timestep, "total_loss", total_loss, "ks_loss", ks_loss)
+
             total_loss += lam * ks_loss
 
         # BACKWARD STEP
