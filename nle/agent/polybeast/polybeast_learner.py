@@ -425,7 +425,9 @@ def learn(
         # KICKSTARTING LOSS
         ks_loss = 0
         if flags.model == "ks":
-            lam = 1
+            timestep = stats.get("step", 0) + flags.unroll_length * flags.batch_size
+
+            lam = max(flags.ks_max_lambda * (1 - timestep / flags.ks_max_time), 0)
 
             teacher_log_probs = torch.log(actor_outputs.teacher_logits)
             policy_log_probs = torch.log_softmax(learner_outputs.policy_logits, 2)
@@ -434,17 +436,12 @@ def learn(
                 teacher_log_probs, policy_log_probs
             )
 
-            print("!", ks_loss, total_loss)
-
             total_loss += lam * ks_loss
 
         # BACKWARD STEP
         optimizer.zero_grad()
 
-        if flags.model == "ks":
-            ks_loss.backward()
-        else:
-            total_loss.backward()
+        total_loss.backward()
         if flags.grad_norm_clipping > 0:
             nn.utils.clip_grad_norm_(model.parameters(), flags.grad_norm_clipping)
         optimizer.step()
