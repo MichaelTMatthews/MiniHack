@@ -93,6 +93,47 @@ class MiniHackSimpleIntersection(MiniHackSkillTransfer):
         )
 
 
+class MiniHackSimpleIntersectionIC(MiniHackIC):
+    def __init__(self, *args, **kwargs):
+        # Limit Action Space
+        kwargs["actions"] = kwargs.pop("actions", skills_all.COMMANDS)
+
+        des_files = [
+            "skill_transfer/skills/skill_pick_up.des",
+            "skill_transfer/skills/skill_eat.des",
+            "skill_transfer/skills/skill_wear.des",
+        ]
+
+        reward_manager_pu = RewardManager()
+        reward_manager_pu.add_message_event(
+            [
+                "f - a silver saber",
+                "f - a leather cloak",
+                *RING_NAMES,
+                "f - a key",
+                *WAND_NAMES,
+                "f - a dagger",
+                "f - a horn",
+                "f - a towel",
+                "f - a green dragon scale mail",
+                "$ - a gold piece",
+                *AMULET_NAMES,
+            ]
+        )
+
+        reward_manager_e = RewardManager()
+        reward_manager_e.add_eat_event("apple")
+
+        reward_manager_w = RewardManager()
+        reward_manager_w.add_message_event(["You are now wearing a robe"])
+
+        reward_managers = [reward_manager_pu, reward_manager_e, reward_manager_w]
+
+        super().__init__(
+            *args, des_files=des_files, reward_managers=reward_managers, **kwargs
+        )
+
+
 class MiniHackSimpleRandom(MiniHackSkillTransfer):
     """Simple Randomised sequence of skills"""
 
@@ -136,6 +177,12 @@ registration.register(
     id="MiniHack-SimpleIntersection-v0",
     entry_point="nle.minihack.envs.skill_transfer.task_simple:"
     "MiniHackSimpleIntersection",
+)
+
+registration.register(
+    id="MiniHack-SimpleIntersectionIC-v0",
+    entry_point="nle.minihack.envs.skill_transfer.task_simple:"
+    "MiniHackSimpleIntersectionIC",
 )
 
 registration.register(

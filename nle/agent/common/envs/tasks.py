@@ -181,6 +181,7 @@ ENVS = dict(
     mini_simple_random=task_simple.MiniHackSimpleRandom,
     # Interleaved Curriculum
     mini_simple_seq_ic=task_simple.MiniHackSimpleSeqIC,
+    mini_simple_intersection_ic=task_simple.MiniHackSimpleIntersectionIC,
     # WoD
     wod_easy=skills_wod.MiniHackWoDEasy,
     wod_medium=skills_wod.MiniHackWoDMedium,

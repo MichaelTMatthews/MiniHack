@@ -126,6 +126,8 @@ def play(env, mode, ngames, max_steps, seeds, savedir, no_render, render_mode, d
             obs, reward, done, info = env.step(action)
         steps += 1
 
+        print("steps", steps)
+
         if is_raw_env:
             done = done or steps >= max_steps  # NLE does this by default.
         else:
