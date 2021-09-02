@@ -428,18 +428,22 @@ def learn(
             timestep = stats.get("step", 0) + flags.unroll_length * flags.batch_size
 
             if timestep < flags.ks_max_time:
-                lam = flags.ks_max_lambda * (1 - timestep / flags.ks_max_time)
-
-                teacher_log_probs = torch.log(actor_outputs.teacher_logits)
-                policy_log_probs = torch.log_softmax(learner_outputs.policy_logits, 2)
-
-                ks_loss = nn.KLDivLoss(log_target=True, reduction="batchmean")(
-                    teacher_log_probs, policy_log_probs
+                lam = flags.ks_max_lambda * max(
+                    (1 - timestep / flags.ks_max_time), flags.ks_min_lambda_prop
                 )
+            else:
+                lam = flags.ks_min_lambda_prop * flags.ks_max_lambda
 
-                print("~", timestep, "total_loss", total_loss, "ks_loss", lam * ks_loss)
+            teacher_log_probs = torch.log(actor_outputs.teacher_logits)
+            policy_log_probs = torch.log_softmax(learner_outputs.policy_logits, 2)
 
-                total_loss += lam * ks_loss
+            ks_loss = lam * nn.KLDivLoss(log_target=True, reduction="batchmean")(
+                teacher_log_probs, policy_log_probs
+            )
+
+            print("~", timestep, "total_loss", total_loss, "ks_loss", ks_loss)
+
+            total_loss += ks_loss
 
         # BACKWARD STEP
         optimizer.zero_grad()
