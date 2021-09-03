@@ -183,6 +183,9 @@ ENVS = dict(
     mini_simple_seq_ic=task_simple.MiniHackSimpleSeqIC,
     mini_simple_intersection_ic=task_simple.MiniHackSimpleIntersectionIC,
     mini_simple_random_ic=task_simple.MiniHackSimpleRandomIC,
+    mini_lc_freeze_ic=task_lavacross.MiniHackLCFreeze,
+    mini_mimic_ic=task_mimic.MiniHackMimicIC,
+    mini_seamonsters_ic=task_seamonsters.MiniHackSeaMonstersIC,
     # WoD
     wod_easy=skills_wod.MiniHackWoDEasy,
     wod_medium=skills_wod.MiniHackWoDMedium,
