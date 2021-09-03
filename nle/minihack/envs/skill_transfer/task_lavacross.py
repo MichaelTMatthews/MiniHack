@@ -1,10 +1,14 @@
-from nle.minihack import LevelGenerator, RewardManager
+from nle.minihack import RewardManager
 from gym.envs import registration
 
 from nle.minihack.envs.skill_transfer import skills_all
 from nle.minihack.envs.skill_transfer.interleaved_curriculum import MiniHackIC
 from nle.minihack.envs.skill_transfer.mini_skill_transfer import MiniHackSkillTransfer
-from nle.minihack.envs.skill_transfer.skills_all import WAND_NAMES
+from nle.minihack.envs.skill_transfer.skills_all import (
+    WAND_NAMES,
+    RING_NAMES,
+    AMULET_NAMES,
+)
 
 
 class MiniHackLCFreeze(MiniHackSkillTransfer):
@@ -20,40 +24,44 @@ class MiniHackLCFreeze(MiniHackSkillTransfer):
         )
 
 
-class MiniHackLCWandPickupSkillsIC(MiniHackIC):
-    """Environment that will either generate a robe or an apple."""
-
+class MiniHackLCFreezeIC(MiniHackIC):
     def __init__(self, *args, **kwargs):
         # Limit Action Space
         kwargs["actions"] = kwargs.pop("actions", skills_all.COMMANDS)
 
-        lvl_gen = LevelGenerator(w=10, h=10, lit=True)
-        lvl_gen.add_object("cold", "/")
-        lvl_gen.add_monster()
-        lvl_gen.add_object()
-        des_file_pick = lvl_gen.get_des()
+        des_files = [
+            "skill_transfer/skills/skill_pick_up.des",
+            "skill_transfer/skills/skill_zap_cold.des",
+            "skill_transfer/skills/skill_apply_frost_horn.des",
+        ]
 
-        reward_manager_pick = RewardManager()
-        reward_manager_pick.add_message_event(WAND_NAMES)
+        reward_manager_pu = RewardManager()
+        reward_manager_pu.add_message_event(
+            [
+                "f - a silver saber",
+                "f - a leather cloak",
+                *RING_NAMES,
+                "f - a key",
+                *WAND_NAMES,
+                "f - a dagger",
+                "f - a horn",
+                "f - a towel",
+                "f - a green dragon scale mail",
+                "$ - a gold piece",
+                *AMULET_NAMES,
+            ]
+        )
 
-        reward_manager_zap = RewardManager()
-        reward_manager_zap.add_message_event(["The lava cools and solidifies."])
+        reward_manager_zc = RewardManager()
+        reward_manager_zc.add_message_event(["The lava cools and solidifies."])
 
-        reward_manager_navigate = None
+        reward_manager_afh = RewardManager()
+        reward_manager_afh.add_message_event(["The lava cools and solidifies."])
+
+        reward_managers = [reward_manager_pu, reward_manager_zc, reward_manager_afh]
 
         super().__init__(
-            *args,
-            des_files=[
-                des_file_pick,
-                "skill_transfer/skills/skill_zap_cold.des",
-                "skill_transfer/skills/skill_navigate_lava.des",
-            ],
-            reward_managers=[
-                reward_manager_pick,
-                reward_manager_zap,
-                reward_manager_navigate,
-            ],
-            **kwargs,
+            *args, des_files=des_files, reward_managers=reward_managers, **kwargs
         )
 
 
@@ -63,7 +71,6 @@ registration.register(
 )
 
 registration.register(
-    id="MiniHack-LavaCross-Wand-PickUp-IC-v0",
-    entry_point="nle.minihack.envs.skill_transfer.task_lavacross:"
-    "MiniHackLCWandPickupSkillsIC",
+    id="MiniHack-LavaCrossFreezeIC-v0",
+    entry_point="nle.minihack.envs.skill_transfer.task_lavacross:" "MiniHackLCFreezeIC",
 )
