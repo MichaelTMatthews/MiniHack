@@ -151,6 +151,55 @@ class MiniHackSimpleRandom(MiniHackSkillTransfer):
         )
 
 
+class MiniHackSimpleRandomIC(MiniHackIC):
+    def __init__(self, *args, **kwargs):
+        # Limit Action Space
+        kwargs["actions"] = kwargs.pop("actions", skills_all.COMMANDS)
+
+        des_files = [
+            "skill_transfer/skills/skill_pick_up.des",
+            "skill_transfer/skills/skill_zap_wod.des",
+            "skill_transfer/skills/skill_throw.des",
+        ]
+
+        reward_manager_pu = RewardManager()
+        reward_manager_pu.add_message_event(
+            [
+                "f - a silver saber",
+                "f - a leather cloak",
+                *RING_NAMES,
+                "f - a key",
+                *WAND_NAMES,
+                "f - a dagger",
+                "f - a horn",
+                "f - a towel",
+                "f - a green dragon scale mail",
+                "$ - a gold piece",
+                *AMULET_NAMES,
+            ]
+        )
+
+        reward_manager_zw = RewardManager()
+        reward_manager_zw.add_message_event(["You kill the orc"])
+
+        reward_manager_t = RewardManager()
+        reward_manager_t.add_message_event(
+            ["You kill the large mimic", "You kill the orc"], terminal_sufficient=True
+        )
+
+        reward_manager_t.add_message_event(
+            ["Wait!  That's a large mimic!"],
+            terminal_required=False,
+            reward=-1.5,
+        )
+
+        reward_managers = [reward_manager_pu, reward_manager_zw, reward_manager_t]
+
+        super().__init__(
+            *args, des_files=des_files, reward_managers=reward_managers, **kwargs
+        )
+
+
 class MiniHackSimpleUnion(MiniHackSkillTransfer):
     """Simple Union of skills"""
 
@@ -188,6 +237,12 @@ registration.register(
 registration.register(
     id="MiniHack-SimpleRandom-v0",
     entry_point="nle.minihack.envs.skill_transfer.task_simple:" "MiniHackSimpleRandom",
+)
+
+registration.register(
+    id="MiniHack-SimpleRandomIC-v0",
+    entry_point="nle.minihack.envs.skill_transfer.task_simple:"
+    "MiniHackSimpleRandomIC",
 )
 
 registration.register(
