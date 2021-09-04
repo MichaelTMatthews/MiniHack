@@ -424,7 +424,7 @@ def learn(
 
         # KICKSTARTING LOSS
         ks_loss = 0
-        if flags.model == "ks":
+        if flags.model in ["ks", "hks"]:
             timestep = stats.get("step", 0) + flags.unroll_length * flags.batch_size
 
             if timestep < flags.ks_max_time:
