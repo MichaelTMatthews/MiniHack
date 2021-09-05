@@ -17,7 +17,7 @@ $right_bank = selection:fillrect (17,1,22,5)
 BRANCH:(1,1,6,5),(0,0,0,0)
 STAIR:rndcoord($right_bank),down
 TERRAIN: randline (6, 4), (17, 4), 3, '.'
-OBJECT:('[', "green dragon scale mail"),rndcoord($left_bank),blessed,15
+OBJECT:('[', "green dragon scale mail"),rndcoord($left_bank),blessed,30
 LOOP [4] {
     MONSTER: (';', "piranha"), rndcoord(filter('W', $water)), hostile
 }
