@@ -133,6 +133,14 @@ class MessageEvent(Event):
         return 0.0
 
 
+class AlwaysEvent(Event):
+    def __init__(self, *args):
+        super().__init__(*args)
+
+    def check(self, env, previous_observation, action, observation) -> float:
+        return self._set_achieved()
+
+
 class AbstractRewardManager(ABC):
     def __init__(self):
         self.terminal_sufficient = None

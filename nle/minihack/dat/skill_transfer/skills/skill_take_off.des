@@ -13,5 +13,5 @@ ENDMAP
 REGION:(0,0,12,6),lit,"ordinary"
 $all_map = selection:fillrect (1,1,11,5)
 
-REPLACE_TERRAIN:(0,0,12,12), '.', 'L', 5%
-REPLACE_TERRAIN:(0,0,12,12), '.', 'W', 5%
+REPLACE_TERRAIN:(0,0,12,12), '.', 'L', 10%
+REPLACE_TERRAIN:(0,0,12,12), '.', 'W', 10%

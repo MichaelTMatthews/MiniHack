@@ -46,6 +46,12 @@ class FOCNet(BaseNet):
             for j in range(num_actors):
                 ind = output["action"][i][j]
 
+                # ind = input("> ")
+                # if not ind:
+                #    ind = 0
+                # else:
+                #    ind = int(ind)
+
                 # Select action according to Policy Over Options
                 action[i, j] = option_outs[ind][0]["action"][i][j]
 

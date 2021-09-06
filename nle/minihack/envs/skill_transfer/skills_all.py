@@ -5,6 +5,7 @@ from gym.envs import registration
 
 from nle import nethack
 from nle.minihack.envs.skill_transfer.mini_skill_transfer import MiniHackSkillTransfer
+from nle.minihack.reward_manager import AlwaysEvent
 from nle.nethack import Command
 
 MOVE_ACTIONS = tuple(nethack.CompassDirection)
@@ -358,7 +359,10 @@ class MiniHackSkillTakeOff(MiniHackSkillTransfer):
         kwargs["actions"] = kwargs.pop("actions", COMMANDS)
 
         reward_manager = RewardManager()
-        reward_manager.add_message_event(["You finish taking off your suit."])
+        reward_manager.add_message_event(
+            ["You finish taking off your suit."], terminal_sufficient=True
+        )
+        reward_manager.add_event(AlwaysEvent(-0.05, True, False, False))
 
         super().__init__(
             *args,
@@ -432,6 +436,7 @@ class MiniHackSkillWear(MiniHackSkillTransfer):
 
         reward_manager = RewardManager()
         reward_manager.add_message_event(["You are now wearing a robe"])
+        reward_manager.add_event(AlwaysEvent(-0.05, True, False, False))
 
         super().__init__(
             *args,
