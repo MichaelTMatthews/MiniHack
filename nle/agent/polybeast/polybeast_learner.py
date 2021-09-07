@@ -434,7 +434,7 @@ def learn(
             else:
                 lam = flags.ks_min_lambda_prop * flags.ks_max_lambda
 
-            teacher_log_probs = torch.log(actor_outputs.teacher_logits)
+            teacher_log_probs = torch.log(learner_outputs.teacher_logits)
             policy_log_probs = torch.log_softmax(learner_outputs.policy_logits, 2)
 
             ks_loss = lam * nn.KLDivLoss(log_target=True, reduction="batchmean")(
@@ -486,6 +486,11 @@ def learn(
         else:
             success_rate = n_wins / len(diff)
         stats["success_rate"] = success_rate
+
+        # Meta network entropy
+
+        # if flags.model in ["foc", "hks"]:
+        #     meta_sm = actor_outputs
 
         # Other stats
         episode_returns = env_outputs.episode_return[env_outputs.done]

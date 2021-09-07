@@ -9,6 +9,7 @@ from nle.minihack.envs.skill_transfer.skills_all import (
     WAND_NAMES,
     AMULET_NAMES,
 )
+from nle.minihack.reward_manager import AlwaysEvent
 
 
 class MiniHackSeaMonsters(MiniHackSkillTransfer):
@@ -54,9 +55,11 @@ class MiniHackSeaMonstersIC(MiniHackIC):
 
         reward_manager_to = RewardManager()
         reward_manager_to.add_message_event(["You finish taking off your suit."])
+        reward_manager_to.add_event(AlwaysEvent(-0.05, True, False, False))
 
         reward_manager_w = RewardManager()
         reward_manager_w.add_message_event(["You are now wearing a robe"])
+        reward_manager_w.add_event(AlwaysEvent(-0.05, True, False, False))
 
         reward_manager_nw = RewardManager()
         reward_manager_nw.add_message_event(
