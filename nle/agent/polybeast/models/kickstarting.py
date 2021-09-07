@@ -43,6 +43,7 @@ class KSNet(BaseNet):
                 action=output["action"],
                 chosen_option=output["action"],
                 teacher_logits=teacher_output_avg,  # TODO not actually logits anymore
+                pot_sm=output["policy_logits"],
             ),
             core_state,
         )

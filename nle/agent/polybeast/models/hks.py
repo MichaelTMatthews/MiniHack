@@ -160,6 +160,7 @@ class HKSNet(BaseNet):
             action=action,
             chosen_option=action,
             teacher_logits=policy_logits,
+            pot_sm=policy_logits,
         )
 
         #
@@ -200,6 +201,7 @@ class HKSNet(BaseNet):
                 action=output["action"],
                 chosen_option=output["action"],
                 teacher_logits=weighted_teacher,  # TODO not actually logits anymore
+                pot_sm=pot_sm,
             ),
             core_state,
         )

@@ -172,6 +172,7 @@ def inference(
                         core_outputs["baseline"],
                         core_outputs["chosen_option"],
                         core_outputs["teacher_logits"],
+                        core_outputs["pot_sm"],
                     )
                 ),
                 agent_state,
@@ -237,6 +238,7 @@ def learn(
                 output["baseline"],
                 output["chosen_option"],
                 output["teacher_logits"],
+                output["pot_sm"],
             )
         )
 
@@ -264,6 +266,7 @@ def learn(
                     actor_outputs.baseline,
                     actor_outputs.chosen_option,
                     actor_outputs.teacher_logits,
+                    actor_outputs.pot_sm,
                 )
             )
             learner_outputs = AgentOutput._make(
@@ -273,6 +276,7 @@ def learn(
                     learner_outputs.baseline,
                     learner_outputs.chosen_option,
                     learner_outputs.teacher_logits,
+                    learner_outputs.pot_sm,
                 )
             )
 
@@ -489,8 +493,12 @@ def learn(
 
         # Meta network entropy
 
-        # if flags.model in ["foc", "hks"]:
-        #     meta_sm = actor_outputs
+        if flags.model in ["hks"]:
+            meta_sm = actor_outputs.pot_sm
+            entropies = -(meta_sm * torch.log(meta_sm)).sum(dim=2)
+            avg_entropy = torch.mean(entropies)
+
+            stats["meta_entropy"] = avg_entropy
 
         # Other stats
         episode_returns = env_outputs.episode_return[env_outputs.done]

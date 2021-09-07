@@ -62,6 +62,7 @@ class FOCNet(BaseNet):
                 action=action,
                 chosen_option=output["action"],
                 teacher_logits=output["policy_logits"],
+                pot_sm=output["policy_logits"],
             ),
             core_state,
         )
