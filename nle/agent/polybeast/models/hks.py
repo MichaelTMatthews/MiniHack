@@ -171,11 +171,10 @@ class HKSNet(BaseNet):
 
         # (output, core_state) = super().forward(inputs, core_state, learning)
 
-        with torch.no_grad():
-            pot_logits = self.pot_layer(core_output)
-            pot_logits = pot_logits.view(T, B, self.num_options)
+        pot_logits = self.pot_layer(core_output)
+        pot_logits = pot_logits.view(T, B, self.num_options)
 
-            pot_sm = torch.softmax(pot_logits, 2)
+        pot_sm = torch.softmax(pot_logits, 2)
 
         with torch.no_grad():
             option_sm = [
