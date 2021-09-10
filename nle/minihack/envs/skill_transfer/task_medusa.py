@@ -23,7 +23,7 @@ class MiniHackMedusa(MiniHackSkillTransfer):
         super().__init__(*args, des_file=des_file, **kwargs)
 
 
-class MiniHackMimicIC(MiniHackIC):
+class MiniHackMedusaIC(MiniHackIC):
     def __init__(self, *args, **kwargs):
         # Limit Action Space
         kwargs["actions"] = kwargs.pop("actions", skills_all.COMMANDS)
@@ -56,7 +56,9 @@ class MiniHackMimicIC(MiniHackIC):
             ["- a ring of levitation", "You are now wearing a towel around your head."]
         )
 
-        reward_managers = []
+        reward_manager_b = None
+
+        reward_managers = [reward_manager_pu, reward_manager_po, reward_manager_b]
 
         super().__init__(
             *args, des_files=des_files, reward_managers=reward_managers, **kwargs
@@ -66,4 +68,9 @@ class MiniHackMimicIC(MiniHackIC):
 registration.register(
     id="MiniHack-Medusa-v0",
     entry_point="nle.minihack.envs.skill_transfer.task_medusa:" "MiniHackMedusa",
+)
+
+registration.register(
+    id="MiniHack-MedusaIC-v0",
+    entry_point="nle.minihack.envs.skill_transfer.task_medusa:" "MiniHackMedusaIC",
 )

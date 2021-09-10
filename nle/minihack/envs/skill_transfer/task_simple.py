@@ -212,6 +212,69 @@ class MiniHackSimpleUnion(MiniHackSkillTransfer):
         super().__init__(*args, des_file=des_file, **kwargs)
 
 
+class MiniHackSimpleUnionIC(MiniHackIC):
+    def __init__(self, *args, **kwargs):
+        # Limit Action Space
+        kwargs["actions"] = kwargs.pop("actions", skills_all.COMMANDS)
+
+        des_files = [
+            "skill_transfer/skills/skill_pick_up.des",
+            "skill_transfer/skills/skill_unlock.des",
+            "skill_transfer/skills/skill_navigate_lava.des",
+            "skill_transfer/skills/skill_put_on.des",
+            "skill_transfer/skills/skill_navigate_over_lava.des",
+        ]
+
+        reward_manager_pu = RewardManager()
+        reward_manager_pu.add_message_event(
+            [
+                "f - a silver saber",
+                "f - a leather cloak",
+                *RING_NAMES,
+                "f - a key",
+                *WAND_NAMES,
+                "f - a dagger",
+                "f - a horn",
+                "f - a towel",
+                "f - a green dragon scale mail",
+                "$ - a gold piece",
+                *AMULET_NAMES,
+            ]
+        )
+
+        reward_manager_u = RewardManager()
+        reward_manager_u.add_message_event(
+            ["This door is locked"], terminal_required=False, reward=0.2
+        )
+        reward_manager_u.add_message_event(
+            ["Unlock it?"], terminal_required=False, reward=0.4
+        )
+        reward_manager_u.add_message_event(
+            ["You succeed in unlocking the door"], terminal_sufficient=True
+        )
+
+        reward_manager_nl = None
+
+        reward_manager_po = RewardManager()
+        reward_manager_po.add_message_event(
+            ["- a ring of levitation", "You are now wearing a towel around your head."]
+        )
+
+        reward_manager_nol = None
+
+        reward_managers = [
+            reward_manager_pu,
+            reward_manager_u,
+            reward_manager_nl,
+            reward_manager_po,
+            reward_manager_nol,
+        ]
+
+        super().__init__(
+            *args, des_files=des_files, reward_managers=reward_managers, **kwargs
+        )
+
+
 registration.register(
     id="MiniHack-SimpleSeq-v0",
     entry_point="nle.minihack.envs.skill_transfer.task_simple:" "MiniHackSimpleSeq",
@@ -248,4 +311,9 @@ registration.register(
 registration.register(
     id="MiniHack-SimpleUnion-v0",
     entry_point="nle.minihack.envs.skill_transfer.task_simple:" "MiniHackSimpleUnion",
+)
+
+registration.register(
+    id="MiniHack-SimpleUnionIC-v0",
+    entry_point="nle.minihack.envs.skill_transfer.task_simple:" "MiniHackSimpleUnionIC",
 )
