@@ -18,7 +18,6 @@ from nle.minihack.envs import (
     skills_lava,
     skills_wod,
     skills_quest,
-    skills_composed,
 )
 from nle.minihack.envs.skill_transfer import (
     task_lavacross,
@@ -147,11 +146,9 @@ ENVS = dict(
     mini_puton_distr=skills_simple.MiniHackPutOnDistr,
     mini_wear_distr=skills_simple.MiniHackWearDistr,
     mini_wield_distr=skills_simple.MiniHackWieldDistr,
-    # MiniHack Composite Skills
-    mini_eat_and_wear=skills_composed.MiniHackEatAndWearFixed,
-    mini_eat_or_wear=skills_composed.MiniHackEatOrWearFixed,
-    mini_eat_or_wear2=skills_composed.MiniHackEatOrWearFixed2,
-    mini_eat_and_pray=skills_composed.MiniHackEatAndPray,
+    #
+    # Skill Transfer
+    #
     # Skills
     mini_skill_apply_frost_horn=skills_all.MiniHackSkillApplyFrostHorn,
     mini_skill_eat=skills_all.MiniHackSkillEat,
@@ -188,6 +185,9 @@ ENVS = dict(
     mini_mimic_ic=task_mimic.MiniHackMimicIC,
     mini_seamonsters_ic=task_seamonsters.MiniHackSeaMonstersIC,
     mini_medusa_ic=task_medusa.MiniHackMedusaIC,
+    #
+    # End Skill Transfer
+    #
     # WoD
     wod_easy=skills_wod.MiniHackWoDEasy,
     wod_medium=skills_wod.MiniHackWoDMedium,
